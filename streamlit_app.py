@@ -181,6 +181,83 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
     },
+    # 🟡 NEW: Kurdish (کوردی) translations
+    "ku": {
+        "page_title": "شیکردنەوەی ئاوی ژێرزەوی",
+        "dashboard_header": "شیکردنەوەی ئاوی ژێرزەوی — هەرێمی هەولێر",
+        "country": "وڵات / ناوچە",
+        "ee_init_failed": "دەستپێکردنی ئێرث ئینجین شکستی هێنا. تکایە ڕەقمەکانی خۆت بپشکنە.",
+        "ee_init_critical": "هەڵەی گەورە لە دەستپێکردنی ئێرث ئینجین",
+        "ee_init_default": "ئێرث ئینجین بە ڕەقمی بنەڕەتی دەستپێکرا",
+        "ee_verify_failed": "پشکنینی ئێرث ئینجین شکستی هێنا",
+        "ee_init_error": "دەستپێکردنی ئێرث ئینجین شکستی هێنا",
+        "control_panel": "پانێلی کۆنتڕۆڵ",
+        "location_settings": "📍 ڕێکخستنەکانی شوێن",
+        "latitude": "پانی",
+        "longitude": "درێژی",
+        "zoom_level": "ئاستی زووم",
+        "data_selection": "هەڵبژاردنی داتا",
+        "parameter": "پارامەتر",
+        "parameter_help": "پارامەتری خواست بۆ بینین هەڵبژێرە",
+        "no_assets": "هیچ ئەستێک نەدۆزرایەوە لە ڕێڕەوی دیاریکراو. تکایە ڕێڕەوەکە و مۆڵەتەکان بپشکنە.",
+        "no_dates": "هیچ بەروارێکی دروست نەدۆزرایەوە لە ئەستەکاندا",
+        "month": "مانگ",
+        "visual_settings": "🎨 ڕێکخستنەکانی بینین",
+        "layer_opacity": "ڕوونی چین",
+        "generate_map": "دروستکردنی نەخشە",
+        "error_asset": "هەڵە لە بەرکارهێنانی ئەست",
+        "interactive_map": "نەخشەی کارلێک",
+        "no_data_month": "هیچ داتایەک بۆ مانگ و پارامەتری دیاریکراو بوونی نییە",
+        "statistics": "ئامارەکان",
+        "time_series_analysis": "شیکردنەوەی زنجیرەکاتی",
+        "click_map": "لەسەر نەخشەکە کلیک بکە بۆ بینینی داتای زنجیرەکاتی بۆ ئەو شوێنە",
+        "error_map": "هەڵە لە دروستکردنی نەخشە",
+        "welcome_title": "بەخێربێیت بۆ پانێلی شیکردنەوەی ئاوی ژێرزەوی",
+        "welcome_text": "پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت",
+        "about_tool": "ℹ️ دەربارەی ئەم ئامرازە",
+        "about_text": """ئەم پانێلە توانای شیکردنەوەی گشتگیری ئاوی ژێرزەوی دابین دەکات:
+
+- 🌍 **بینینی کارلێک**: داتای ئاوی ژێرزەوی مانگانە لەسەر نەخشەی کارلێک ببینە
+- 📊 **شیکردنەوەی ئاماری**: دەستگەیشتن بە ئامارە سەرەکییەکان بۆ پارامەتری دیاریکراو
+- 📈 **شیکردنەوەی زنجیرەکاتی**: کلیک لەسەر هەر شوێنێک بکە بۆ بینینی ڕەوتە مێژووییەکان
+- 📥 **هەناردنی داتا**: دابەزاندنی زنجیرەکات و پوختەی ناوچەیی وەک CSV
+- 🎨 **پیشاندانی گونجاو**: ڕێکخستنی پارامەترەکانی بینین بەپێی پێویستییەکانی تۆ
+
+سەرچاوەکانی داتا: FAO WaPOR v3، CHIRPS، OpenLandMap، لە Google Earth Engine دا پرسەکراوە.
+
+بۆ پشتیوانی یان زانیاری زیاتر، تکایە پەیوەندی بە تیمی پەرەپێدانەوە بکە.""",
+        "layer_statistics": "ئاماری چین",
+        "minimum": "کەمترین",
+        "maximum": "زۆرترین",
+        "mean": "تێکڕا",
+        "error_statistics": "هەڵە لە ژماردنی ئامارەکان",
+        "no_data_location": "هیچ داتایەک بۆ ئەم شوێنە بوونی نییە",
+        "date": "بەروار",
+        "time_series_title": "زنجیرەکات بۆ {parameter} لە ({lat}, {lon})",
+        "legend": "ڕێنوێنی {parameter}",
+        "layer": "چین",
+        "abstraction_mm": "دەرهێنان (مم)",
+        "abstraction_m3": "دەرهێنان (م³)",
+        "recharge": "پڕبوونەوە",
+        "error_get_assets": "هەڵە لە هێنانی ئەستەکان",
+        "error_parse_date": "هەڵە لە شیکردنەوەی بەروار لە ئەست",
+        "value_label": "نرخ",
+        "download_csv": "📥 دابەزاندن وەک CSV",
+        "regional_summary": "📊 پوختەی مانگانەی ناوچەیی",
+        "compute_summary": "ژماردنی پوختەی ناوچەیی",
+        "summary_help": "تێکڕای نرخ بۆ هەموو ناوچەی لێکۆڵینەوە بۆ هەر مانگێک (لەوانەیە خولەکێک بخایەنێت)",
+        "summary_title": "تێکڕای ناوچەیی {parameter} بۆ هەر مانگێک",
+        "computing": "تێژینەوە... لەوانەیە خولەکێک بخایەنێت",
+        "raw_data": "داتای خاو",
+        "nav_abstraction_mm": "دەرهێنان (مم)",
+        "nav_abstraction_m3": "دەرهێنان (م³)",
+        "nav_recharge": "پڕبوونەوە",
+        "data_status": "دۆخی داتا",
+        "active_months": "مانگە چالاکەکان",
+        "last_update": "دوایین نوێکردنەوە",
+        "select_date": "بەروار هەڵبژێرە",
+        "generate_analysis": "دروستکردنی شیکردنەوە",
+    },
 }
 
 
@@ -544,16 +621,13 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # ---- HEADER: Using markdown with no extra spacing ----
-    # Empty markdown to force the title to the top
-    st.markdown("")
-    
+    # ---- HEADER: Title ----
     col_title, col_lang = st.columns([6, 1])
     with col_title:
         st.markdown(
             f"""
             <div style="margin-top: -2rem;">
-                <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0; padding: 0;">🌊 Groundwater Analysis Dashboard — Erbil Region</h1>
+                <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0; padding: 0;">🌊 {t('dashboard_header')}</h1>
                 <p style="font-size: 0.9rem; color: #6b7280; margin: 0; padding: 0;">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</p>
             </div>
             """,
@@ -561,7 +635,8 @@ def main():
         )
     
     with col_lang:
-        lang_options = {"English": "en", "العربية": "ar"}
+        # 🟡 UPDATED: Added Kurdish (کوردی) as third language option
+        lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
             "🌐",
@@ -658,7 +733,8 @@ def main():
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
 
-    dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
+    # 🟡 UPDATED: RTL support for Kurdish as well
+    dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
     # ---- Main content: Map + Analysis ----
     with st.container():
