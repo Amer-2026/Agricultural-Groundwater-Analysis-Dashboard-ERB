@@ -511,107 +511,6 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # CSS to remove padding at the top and fix title display
-    st.markdown(
-        """
-        <style>
-        /* Remove padding at the top of the main container */
-        .main > div {
-            padding-top: 0rem !important;
-            padding-bottom: 1rem;
-        }
-        /* Remove block container padding at top */
-        .block-container {
-            padding-top: 0rem !important;
-            padding-bottom: 1rem !important;
-        }
-        /* Remove extra space from the top of the app */
-        #root > div:first-child {
-            padding-top: 0px !important;
-        }
-        /* Style for header section */
-        .stButton>button {
-            width: 100%; background-color: #0066cc; color: white;
-            border: none; padding: 0.5rem 1rem; border-radius: 4px;
-        }
-        .nav-button {
-            background-color: #f0f2f6;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 600;
-            color: #1f2937;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .nav-button:hover {
-            background-color: #e5e7eb;
-            border-color: #0066cc;
-        }
-        .nav-button.active {
-            background-color: #0066cc;
-            color: white;
-            border-color: #0066cc;
-        }
-        /* FIXED: Title style with proper sizing and wrapping */
-        .dashboard-title {
-            font-size: 1.5rem !important;
-            font-weight: 700;
-            color: #1f2937;
-            margin: 0;
-            padding: 0;
-            word-wrap: break-word;
-            white-space: normal;
-            line-height: 1.3;
-        }
-        .dashboard-subheader {
-            font-size: 0.9rem;
-            color: #6b7280;
-            margin: 0;
-        }
-        .metric-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            text-align: center;
-            border: 1px solid #e5e7eb;
-        }
-        .metric-card .metric-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #0066cc;
-        }
-        .metric-card .metric-label {
-            font-size: 0.85rem;
-            color: #6b7280;
-        }
-        /* Remove top margin from the first element */
-        .stMarkdown:first-child {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # RTL support for Arabic
-    if st.session_state.lang == "ar":
-        st.markdown(
-            """
-            <style>
-            .main .block-container { direction: rtl; text-align: right; }
-            .stSelectbox label, .stNumberInput label, .stSlider label,
-            .stButton button, .stExpander summary, .stMetric label,
-            .stMarkdown, .stAlert { direction: rtl; text-align: right; }
-            h1, h2, h3, h4, h5, h6 { direction: rtl; text-align: right; }
-            </style>
-            """,
-            unsafe_allow_html=True,
-        )
-
     # ---- Top bar: language + country ----
     configs = load_country_configs()
 
@@ -645,25 +544,14 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # ---- Define dir_attr at the top level ----
-    dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
-
-    # ---- FIXED HEADER: Using custom HTML for better control ----
-    # Row: Title + Language toggle
-    col_title, col_lang = st.columns([4, 1])
+    # ---- SIMPLE HEADER: Using st.title and st.caption ----
+    # This is the simplest and most reliable approach
+    st.title("🌊 Groundwater Analysis Dashboard — Erbil Region")
+    st.caption(f"{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}")
     
-    with col_title:
-        st.markdown(
-            f"""
-            <div style="direction:{dir_attr};">
-                <div class="dashboard-title">🌊 Groundwater Analysis Dashboard — Erbil Region</div>
-                <div class="dashboard-subheader">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    
-    with col_lang:
+    # Language toggle in a small column
+    col1, col2 = st.columns([6, 1])
+    with col2:
         lang_options = {"English": "en", "العربية": "ar"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
@@ -761,6 +649,9 @@ def main():
         st.session_state.map_generated = False
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
+
+    # ---- Define dir_attr for RTL support ----
+    dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
 
     # ---- Main content: Map + Analysis ----
     with st.container():
