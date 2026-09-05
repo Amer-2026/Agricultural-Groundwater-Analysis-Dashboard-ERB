@@ -29,7 +29,6 @@ from streamlit_folium import st_folium
 TRANSLATIONS = {
     "en": {
         "page_title": "Groundwater Analysis",
-        # 🟡 CHANGED: Updated dashboard header with new title
         "dashboard_header": "🌊 Groundwater Analysis Dashboard — Erbil Region",
         "country": "Country / Area",
         "ee_init_failed": "Failed to initialize Earth Engine. Please check your credentials.",
@@ -96,11 +95,9 @@ For support or more information, please contact the development team.""",
         "summary_title": "Regional mean {parameter} per month",
         "computing": "Computing... this may take a minute",
         "raw_data": "View raw data",
-        # 🟡 NEW: Added top navigation button labels
         "nav_abstraction_mm": "Abstraction (mm)",
         "nav_abstraction_m3": "Abstraction (m³)",
         "nav_recharge": "Recharge",
-        # 🟡 NEW: Added user greeting
         "greeting": "👋 Hi, User!",
         "data_status": "Data Status",
         "active_months": "Active Months",
@@ -112,7 +109,6 @@ For support or more information, please contact the development team.""",
     },
     "ar": {
         "page_title": "تحليل المياه الجوفية",
-        # 🟡 CHANGED: Updated Arabic header
         "dashboard_header": "🌊 لوحة تحليل المياه الجوفية — منطقة أربيل",
         "country": "الدولة / المنطقة",
         "ee_init_failed": "فشل تهيئة محرك الأرض. يرجى التحقق من بيانات الاعتماد.",
@@ -179,11 +175,9 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "summary_title": "المتوسط الإقليمي لـ {parameter} شهرياً",
         "computing": "جارٍ الحساب... قد يستغرق دقيقة",
         "raw_data": "عرض البيانات الخام",
-        # 🟡 NEW: Added Arabic top navigation labels
         "nav_abstraction_mm": "السحب (مم)",
         "nav_abstraction_m3": "السحب (م³)",
         "nav_recharge": "التغذية الجوفية",
-        # 🟡 NEW: Added Arabic greeting
         "greeting": "👋 مرحباً، المستخدم!",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
@@ -510,11 +504,9 @@ def main():
     if "lang" not in st.session_state:
         st.session_state.lang = "en"
     
-    # 🟡 NEW: Add session state for selected parameter from top nav
     if "selected_parameter" not in st.session_state:
         st.session_state.selected_parameter = "abstraction_mm"
     
-    # 🟡 NEW: Add session state for selected date
     if "selected_date_str" not in st.session_state:
         st.session_state.selected_date_str = None
 
@@ -533,7 +525,6 @@ def main():
             width: 100%; background-color: #0066cc; color: white;
             border: none; padding: 0.5rem 1rem; border-radius: 4px;
         }
-        /* 🟡 NEW: Style for top navigation buttons to look like tabs */
         .nav-button {
             background-color: #f0f2f6;
             border: 1px solid #d1d5db;
@@ -554,7 +545,6 @@ def main():
             color: white;
             border-color: #0066cc;
         }
-        /* 🟡 NEW: Style for logo container */
         .logo-container {
             display: flex;
             align-items: center;
@@ -564,14 +554,12 @@ def main():
             max-height: 60px;
             width: auto;
         }
-        /* 🟡 NEW: User greeting style */
         .greeting-text {
             font-size: 1.1rem;
             color: #374151;
             font-weight: 500;
             margin: 0;
         }
-        /* 🟡 NEW: Dashboard header style */
         .dashboard-header {
             font-size: 1.8rem;
             font-weight: 700;
@@ -583,7 +571,6 @@ def main():
             color: #6b7280;
             margin: 0;
         }
-        /* 🟡 NEW: Announcements and dates section */
         .info-section {
             background-color: #f8fafc;
             border-radius: 8px;
@@ -608,7 +595,6 @@ def main():
             font-size: 0.8rem;
             margin-left: 0.5rem;
         }
-        /* 🟡 NEW: Metric card style */
         .metric-card {
             background: white;
             border-radius: 12px;
@@ -660,7 +646,6 @@ def main():
         )
         st.stop()
 
-    # 🟡 CHANGED: Reorganized top bar with logo, title, and navigation
     country_keys = list(configs.keys())
     if len(country_keys) == 1:
         selected_country = country_keys[0]
@@ -680,16 +665,16 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # 🟡 NEW: Create top header with logo, title, and navigation
+    # ---- Top header with logo, title, and navigation ----
     st.markdown("---")
     
     # Row 1: Logo + Title + Language toggle
     col_logo, col_title, col_lang = st.columns([1, 3, 1])
     
     with col_logo:
-        # 🟡 UPDATED: Using your Kurdistan Regional Government logo (B1.png)
         try:
-            st.image("B1.png", width=100)  # Increased width for better visibility
+            # Logo with width=100 as requested
+            st.image("B1.png", width=100)
         except Exception:
             # Fallback if logo file is not found
             st.markdown(
@@ -725,7 +710,7 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
     
-    # 🟡 NEW: Row 2 - User Greeting
+    # Row 2 - User Greeting
     st.markdown(
         f"""
         <p class="greeting-text">{t('greeting')}</p>
@@ -733,7 +718,7 @@ def main():
         unsafe_allow_html=True,
     )
     
-    # 🟡 NEW: Row 3 - Navigation Buttons (Abstraction mm, Abstraction m³, Recharge)
+    # Row 3 - Navigation Buttons (Abstraction mm, Abstraction m³, Recharge)
     st.markdown("---")
     nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
     
@@ -755,7 +740,7 @@ def main():
             st.session_state.map_generated = False
             st.rerun()
     
-    # 🟡 NEW: Row 4 - Date and Generate Map buttons on the right side
+    # Row 4 - Date and Generate Map buttons on the right side
     with nav_col4:
         # Date selector
         try:
@@ -780,7 +765,6 @@ def main():
             st.warning("Could not load dates")
     
     with nav_col5:
-        # 🟡 NEW: Generate Map button at top
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
@@ -819,10 +803,7 @@ def main():
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
 
-    # 🟡 CHANGED: Removed left column, now using full width for content
-    # The left sidebar controls are removed as we moved them to top navigation
-    
-    # 🟡 NEW: Add Announcements and Important Dates section (like MOOC style)
+    # ---- Announcements and Important Dates section ----
     col_announce, col_dates = st.columns(2)
     
     with col_announce:
@@ -869,12 +850,6 @@ def main():
     st.markdown("---")
 
     # ---- Main content: Map + Analysis ----
-    # 🟡 CHANGED: Removed left column, using full width for main content
-    
-    # 🟡 REMOVED: The original left sidebar controls are commented out below
-    # Original left column code preserved with # comments
-    
-    # 🟡 NEW: Main content area with the map
     with st.container():
         if not st.session_state.map_generated:
             st.markdown(
@@ -892,7 +867,7 @@ def main():
                 st.markdown(f"### {t('interactive_map')}")
 
                 selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
-                selected_year_month = selected_date.strftime("%Y_%m")
+                selected_year_month = selected_date.strftime("%Y__%m")
 
                 selected_asset = next(
                     (
@@ -906,7 +881,6 @@ def main():
                     st.error(t("no_data_month"))
                     return
 
-                # 🟡 CHANGED: Using cfg values for map
                 center_lat = float(cfg["center_lat"])
                 center_lon = float(cfg["center_lon"])
                 zoom = int(cfg["zoom"])
@@ -914,7 +888,6 @@ def main():
                 m = create_base_map(center_lat, center_lon, zoom)
                 ee_image = ee.Image(selected_asset)
                 
-                # Get opacity from session state or default
                 opacity = st.session_state.get("opacity", 0.7)
                 vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
                 vis_params["opacity"] = opacity
@@ -1032,50 +1005,6 @@ def main():
     with st.expander(t("about_tool")):
         st.markdown(t("about_text"))
 
-
-# ============================================================
-# 🟡 ORIGINAL LEFT COLUMN CODE - PRESERVED AND COMMENTED OUT
-# ============================================================
-"""
-ORIGINAL LEFT COLUMN CONTROLS (PRESERVED FOR REFERENCE):
-
-# left_col, right_col = st.columns([1, 3])
-# with left_col:
-#     st.markdown(f"### {t('control_panel')}")
-#     with st.expander(t("location_settings"), expanded=False):
-#         center_lat = st.number_input(
-#             t("latitude"), value=float(cfg["center_lat"]), min_value=-90.0, max_value=90.0
-#         )
-#         center_lon = st.number_input(
-#             t("longitude"), value=float(cfg["center_lon"]), min_value=-180.0, max_value=180.0
-#         )
-#         zoom = st.slider(t("zoom_level"), min_value=5, max_value=15, value=int(cfg["zoom"]))
-# 
-#     st.markdown(f"#### {t('data_selection')}")
-#     parameters = ["abstraction_mm", "abstraction_m3", "recharge"]
-#     selected_parameter = st.selectbox(
-#         t("parameter"), parameters, format_func=lambda x: t(x), help=t("parameter_help")
-#     )
-#     
-#     try:
-#         asset_path = cfg["asset_path"]
-#         assets = get_ee_assets(asset_path)
-#         ...
-#         
-#         with st.expander(t("visual_settings"), expanded=False):
-#             opacity = st.slider(t("layer_opacity"), 0.0, 1.0, 0.7)
-# 
-#         st.markdown("---")
-#         if st.button(t("generate_map"), type="primary"):
-#             st.session_state.map_generated = True
-#             st.session_state.current_parameter = selected_parameter
-#             st.session_state.current_date = selected_date_str
-#             st.rerun()
-#     except Exception as e:
-#         st.error(f"{t('error_asset')}: {str(e)}")
-#         st.error(traceback.format_exc())
-#         return
-"""
 
 if __name__ == "__main__":
     main()
