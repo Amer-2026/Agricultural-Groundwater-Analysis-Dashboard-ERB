@@ -640,23 +640,14 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # ---- Top header: Title + Language toggle (NO LOGO) ----
-    # Row 1: Title + Language toggle
-    col_title, col_lang = st.columns([4, 1])
+    # ---- SIMPLIFIED HEADER: Direct title display ----
+    # Using st.title and st.caption for simplicity and reliability
+    st.title("Groundwater Analysis Dashboard — Erbil Region")
+    st.caption(f"{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}")
     
-    with col_title:
-        dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
-        st.markdown(
-            f"""
-            <div style="direction:{dir_attr};">
-                <div class="dashboard-header">{t('dashboard_header')}</div>
-                <div class="dashboard-subheader">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    
-    with col_lang:
+    # Language toggle in sidebar or small column
+    lang_col1, lang_col2 = st.columns([6, 1])
+    with lang_col2:
         lang_options = {"English": "en", "العربية": "ar"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
