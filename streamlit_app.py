@@ -98,12 +98,14 @@ For support or more information, please contact the development team.""",
         "nav_abstraction_mm": "Abstraction (mm)",
         "nav_abstraction_m3": "Abstraction (m³)",
         "nav_recharge": "Recharge",
-        "greeting": "👋 Hi, User!",
+        # 🟡 COMMENTED OUT: User greeting (removed from display)
+        # "greeting": "👋 Hi, User!",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
-        "announcements": "📌 Announcements",
-        "important_dates": "📅 Important Dates",
+        # 🟡 COMMENTED OUT: Announcements and Important Dates (removed from display)
+        # "announcements": "📌 Announcements",
+        # "important_dates": "📅 Important Dates",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
     },
@@ -178,12 +180,14 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_abstraction_mm": "السحب (مم)",
         "nav_abstraction_m3": "السحب (م³)",
         "nav_recharge": "التغذية الجوفية",
-        "greeting": "👋 مرحباً، المستخدم!",
+        # 🟡 COMMENTED OUT: Arabic user greeting
+        # "greeting": "👋 مرحباً، المستخدم!",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
-        "announcements": "📌 إعلانات",
-        "important_dates": "📅 تواريخ مهمة",
+        # 🟡 COMMENTED OUT: Arabic announcements and dates
+        # "announcements": "📌 إعلانات",
+        # "important_dates": "📅 تواريخ مهمة",
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
     },
@@ -554,12 +558,15 @@ def main():
             max-height: 60px;
             width: auto;
         }
+        /* 🟡 COMMENTED OUT: User greeting style (removed from display) */
+        /*
         .greeting-text {
             font-size: 1.1rem;
             color: #374151;
             font-weight: 500;
             margin: 0;
         }
+        */
         .dashboard-header {
             font-size: 1.8rem;
             font-weight: 700;
@@ -571,6 +578,8 @@ def main():
             color: #6b7280;
             margin: 0;
         }
+        /* 🟡 COMMENTED OUT: Announcements and dates section (removed from display) */
+        /*
         .info-section {
             background-color: #f8fafc;
             border-radius: 8px;
@@ -595,6 +604,7 @@ def main():
             font-size: 0.8rem;
             margin-left: 0.5rem;
         }
+        */
         .metric-card {
             background: white;
             border-radius: 12px;
@@ -673,16 +683,17 @@ def main():
     
     with col_logo:
         try:
-            # Logo with width=100 as requested
+            # 🟡 KEEPING: Only the B1.png logo (removed emoji fallback)
             st.image("B1.png", width=100)
         except Exception:
-            # Fallback if logo file is not found
-            st.markdown(
-                """
-                <div style="font-size: 3rem; text-align: center;">🌊</div>
-                """,
-                unsafe_allow_html=True
-            )
+            # 🟡 COMMENTED OUT: Emoji fallback logo (removed from display)
+            # st.markdown(
+            #     """
+            #     <div style="font-size: 3rem; text-align: center;">🌊</div>
+            #     """,
+            #     unsafe_allow_html=True
+            # )
+            pass  # Show nothing if logo not found
     
     with col_title:
         dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
@@ -710,13 +721,13 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
     
-    # Row 2 - User Greeting
-    st.markdown(
-        f"""
-        <p class="greeting-text">{t('greeting')}</p>
-        """,
-        unsafe_allow_html=True,
-    )
+    # 🟡 COMMENTED OUT: Row 2 - User Greeting (removed from display)
+    # st.markdown(
+    #     f"""
+    #     <p class="greeting-text">{t('greeting')}</p>
+    #     """,
+    #     unsafe_allow_html=True,
+    # )
     
     # Row 3 - Navigation Buttons (Abstraction mm, Abstraction m³, Recharge)
     st.markdown("---")
@@ -803,51 +814,51 @@ def main():
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
 
-    # ---- Announcements and Important Dates section ----
-    col_announce, col_dates = st.columns(2)
-    
-    with col_announce:
-        st.markdown(
-            f"""
-            <div class="info-section">
-                <h4>📌 {t('announcements')}</h4>
-                <div class="info-item">
-                    <strong>✅ Data loaded successfully</strong>
-                    <span class="timestamp">{datetime.now().strftime('%Y-%m-%d %H:%M')}</span>
-                </div>
-                <div class="info-item">
-                    <strong>🔄 {t('data_status')}</strong>
-                    <span class="timestamp">Updated: {datetime.now().strftime('%Y-%m-%d')}</span>
-                </div>
-                <div class="info-item">
-                    <strong>📊 {t('active_months')}</strong>
-                    <span class="timestamp">12 months active</span>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    
-    with col_dates:
-        st.markdown(
-            f"""
-            <div class="info-section">
-                <h4>📅 {t('important_dates')}</h4>
-                <div class="info-item">
-                    <strong>{t('last_update')}:</strong> {datetime.now().strftime('%Y-%m-%d')}
-                </div>
-                <div class="info-item">
-                    <strong>Data range:</strong> Jan 2024 - Dec 2024
-                </div>
-                <div class="info-item">
-                    <strong>Next refresh:</strong> 2026-09-01
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    
-    st.markdown("---")
+    # 🟡 COMMENTED OUT: Announcements and Important Dates section (removed from display)
+    # col_announce, col_dates = st.columns(2)
+    # 
+    # with col_announce:
+    #     st.markdown(
+    #         f"""
+    #         <div class="info-section">
+    #             <h4>📌 {t('announcements')}</h4>
+    #             <div class="info-item">
+    #                 <strong>✅ Data loaded successfully</strong>
+    #                 <span class="timestamp">{datetime.now().strftime('%Y-%m-%d %H:%M')}</span>
+    #             </div>
+    #             <div class="info-item">
+    #                 <strong>🔄 {t('data_status')}</strong>
+    #                 <span class="timestamp">Updated: {datetime.now().strftime('%Y-%m-%d')}</span>
+    #             </div>
+    #             <div class="info-item">
+    #                 <strong>📊 {t('active_months')}</strong>
+    #                 <span class="timestamp">12 months active</span>
+    #             </div>
+    #         </div>
+    #         """,
+    #         unsafe_allow_html=True,
+    #     )
+    # 
+    # with col_dates:
+    #     st.markdown(
+    #         f"""
+    #         <div class="info-section">
+    #             <h4>📅 {t('important_dates')}</h4>
+    #             <div class="info-item">
+    #                 <strong>{t('last_update')}:</strong> {datetime.now().strftime('%Y-%m-%d')}
+    #             </div>
+    #             <div class="info-item">
+    #                 <strong>Data range:</strong> Jan 2024 - Dec 2024
+    #             </div>
+    #             <div class="info-item">
+    #                 <strong>Next refresh:</strong> 2026-09-01
+    #             </div>
+    #         </div>
+    #         """,
+    #         unsafe_allow_html=True,
+    #     )
+    # 
+    # st.markdown("---")
 
     # ---- Main content: Map + Analysis ----
     with st.container():
@@ -867,7 +878,7 @@ def main():
                 st.markdown(f"### {t('interactive_map')}")
 
                 selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
-                selected_year_month = selected_date.strftime("%Y__%m")
+                selected_year_month = selected_date.strftime("%Y_%m")
 
                 selected_asset = next(
                     (
