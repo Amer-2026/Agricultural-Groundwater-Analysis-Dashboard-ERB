@@ -29,7 +29,7 @@ from streamlit_folium import st_folium
 TRANSLATIONS = {
     "en": {
         "page_title": "Groundwater Analysis",
-        "dashboard_header": "🌊 Groundwater Analysis Dashboard — Erbil Region",
+        "dashboard_header": "Groundwater Analysis Dashboard — Erbil Region",
         "country": "Country / Area",
         "ee_init_failed": "Failed to initialize Earth Engine. Please check your credentials.",
         "ee_init_critical": "Critical Error Initializing Earth Engine",
@@ -98,20 +98,15 @@ For support or more information, please contact the development team.""",
         "nav_abstraction_mm": "Abstraction (mm)",
         "nav_abstraction_m3": "Abstraction (m³)",
         "nav_recharge": "Recharge",
-        # 🟡 COMMENTED OUT: User greeting (removed from display)
-        # "greeting": "👋 Hi, User!",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
-        # 🟡 COMMENTED OUT: Announcements and Important Dates (removed from display)
-        # "announcements": "📌 Announcements",
-        # "important_dates": "📅 Important Dates",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
     },
     "ar": {
         "page_title": "تحليل المياه الجوفية",
-        "dashboard_header": "🌊 لوحة تحليل المياه الجوفية — منطقة أربيل",
+        "dashboard_header": "لوحة تحليل المياه الجوفية — منطقة أربيل",
         "country": "الدولة / المنطقة",
         "ee_init_failed": "فشل تهيئة محرك الأرض. يرجى التحقق من بيانات الاعتماد.",
         "ee_init_critical": "خطأ حرج في تهيئة محرك الأرض",
@@ -180,14 +175,9 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "nav_abstraction_mm": "السحب (مم)",
         "nav_abstraction_m3": "السحب (م³)",
         "nav_recharge": "التغذية الجوفية",
-        # 🟡 COMMENTED OUT: Arabic user greeting
-        # "greeting": "👋 مرحباً، المستخدم!",
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
-        # 🟡 COMMENTED OUT: Arabic announcements and dates
-        # "announcements": "📌 إعلانات",
-        # "important_dates": "📅 تواريخ مهمة",
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
     },
@@ -521,10 +511,25 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
+    # 🟡 NEW: CSS to remove padding at the top of the page
     st.markdown(
         """
         <style>
-        .main > div { padding: 1rem 0; }
+        /* Remove padding at the top of the main container */
+        .main > div {
+            padding-top: 0rem !important;
+            padding-bottom: 1rem;
+        }
+        /* Remove block container padding at top */
+        .block-container {
+            padding-top: 0rem !important;
+            padding-bottom: 1rem !important;
+        }
+        /* Remove extra space from the top of the app */
+        #root > div:first-child {
+            padding-top: 0px !important;
+        }
+        /* Style for header section */
         .stButton>button {
             width: 100%; background-color: #0066cc; color: white;
             border: none; padding: 0.5rem 1rem; border-radius: 4px;
@@ -549,24 +554,6 @@ def main():
             color: white;
             border-color: #0066cc;
         }
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .logo-container img {
-            max-height: 60px;
-            width: auto;
-        }
-        /* 🟡 COMMENTED OUT: User greeting style (removed from display) */
-        /*
-        .greeting-text {
-            font-size: 1.1rem;
-            color: #374151;
-            font-weight: 500;
-            margin: 0;
-        }
-        */
         .dashboard-header {
             font-size: 1.8rem;
             font-weight: 700;
@@ -578,33 +565,6 @@ def main():
             color: #6b7280;
             margin: 0;
         }
-        /* 🟡 COMMENTED OUT: Announcements and dates section (removed from display) */
-        /*
-        .info-section {
-            background-color: #f8fafc;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 0.5rem;
-            border-left: 4px solid #0066cc;
-        }
-        .info-section h4 {
-            margin: 0 0 0.5rem 0;
-            color: #1f2937;
-        }
-        .info-item {
-            padding: 0.25rem 0;
-            color: #4b5563;
-            font-size: 0.9rem;
-        }
-        .info-item strong {
-            color: #1f2937;
-        }
-        .timestamp {
-            color: #9ca3af;
-            font-size: 0.8rem;
-            margin-left: 0.5rem;
-        }
-        */
         .metric-card {
             background: white;
             border-radius: 12px;
@@ -621,6 +581,11 @@ def main():
         .metric-card .metric-label {
             font-size: 0.85rem;
             color: #6b7280;
+        }
+        /* 🟡 NEW: Remove top margin from the first element */
+        .stMarkdown:first-child {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
         }
         </style>
         """,
@@ -675,25 +640,11 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # ---- Top header with logo, title, and navigation ----
-    st.markdown("---")
+    # ---- Top header: Title + Language toggle (NO LOGO) ----
+    # 🟡 REMOVED: Logo column - now using full width for title
     
-    # Row 1: Logo + Title + Language toggle
-    col_logo, col_title, col_lang = st.columns([1, 3, 1])
-    
-    with col_logo:
-        try:
-            # 🟡 KEEPING: Only the B1.png logo (removed emoji fallback)
-            st.image("B1.png", width=100)
-        except Exception:
-            # 🟡 COMMENTED OUT: Emoji fallback logo (removed from display)
-            # st.markdown(
-            #     """
-            #     <div style="font-size: 3rem; text-align: center;">🌊</div>
-            #     """,
-            #     unsafe_allow_html=True
-            # )
-            pass  # Show nothing if logo not found
+    # Row 1: Title + Language toggle (2 columns instead of 3)
+    col_title, col_lang = st.columns([4, 1])
     
     with col_title:
         dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
@@ -721,15 +672,7 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
     
-    # 🟡 COMMENTED OUT: Row 2 - User Greeting (removed from display)
-    # st.markdown(
-    #     f"""
-    #     <p class="greeting-text">{t('greeting')}</p>
-    #     """,
-    #     unsafe_allow_html=True,
-    # )
-    
-    # Row 3 - Navigation Buttons (Abstraction mm, Abstraction m³, Recharge)
+    # ---- Navigation Buttons ----
     st.markdown("---")
     nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
     
@@ -751,7 +694,7 @@ def main():
             st.session_state.map_generated = False
             st.rerun()
     
-    # Row 4 - Date and Generate Map buttons on the right side
+    # Date and Generate Map buttons on the right side
     with nav_col4:
         # Date selector
         try:
@@ -813,52 +756,6 @@ def main():
         st.session_state.map_generated = False
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
-
-    # 🟡 COMMENTED OUT: Announcements and Important Dates section (removed from display)
-    # col_announce, col_dates = st.columns(2)
-    # 
-    # with col_announce:
-    #     st.markdown(
-    #         f"""
-    #         <div class="info-section">
-    #             <h4>📌 {t('announcements')}</h4>
-    #             <div class="info-item">
-    #                 <strong>✅ Data loaded successfully</strong>
-    #                 <span class="timestamp">{datetime.now().strftime('%Y-%m-%d %H:%M')}</span>
-    #             </div>
-    #             <div class="info-item">
-    #                 <strong>🔄 {t('data_status')}</strong>
-    #                 <span class="timestamp">Updated: {datetime.now().strftime('%Y-%m-%d')}</span>
-    #             </div>
-    #             <div class="info-item">
-    #                 <strong>📊 {t('active_months')}</strong>
-    #                 <span class="timestamp">12 months active</span>
-    #             </div>
-    #         </div>
-    #         """,
-    #         unsafe_allow_html=True,
-    #     )
-    # 
-    # with col_dates:
-    #     st.markdown(
-    #         f"""
-    #         <div class="info-section">
-    #             <h4>📅 {t('important_dates')}</h4>
-    #             <div class="info-item">
-    #                 <strong>{t('last_update')}:</strong> {datetime.now().strftime('%Y-%m-%d')}
-    #             </div>
-    #             <div class="info-item">
-    #                 <strong>Data range:</strong> Jan 2024 - Dec 2024
-    #             </div>
-    #             <div class="info-item">
-    #                 <strong>Next refresh:</strong> 2026-09-01
-    #             </div>
-    #         </div>
-    #         """,
-    #         unsafe_allow_html=True,
-    #     )
-    # 
-    # st.markdown("---")
 
     # ---- Main content: Map + Analysis ----
     with st.container():
