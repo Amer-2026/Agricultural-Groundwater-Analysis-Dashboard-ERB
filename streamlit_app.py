@@ -640,6 +640,9 @@ def main():
         )
     cfg = configs[selected_country]
 
+    # ---- FIXED: Define dir_attr at the top level ----
+    dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
+
     # ---- SIMPLIFIED HEADER: Direct title display ----
     # Using st.title and st.caption for simplicity and reliability
     st.title("Groundwater Analysis Dashboard — Erbil Region")
