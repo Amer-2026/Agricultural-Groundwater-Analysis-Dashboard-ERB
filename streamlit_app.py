@@ -511,7 +511,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # 🟡 NEW: CSS to remove padding at the top of the page
+    # CSS to remove padding at the top of the page
     st.markdown(
         """
         <style>
@@ -582,7 +582,7 @@ def main():
             font-size: 0.85rem;
             color: #6b7280;
         }
-        /* 🟡 NEW: Remove top margin from the first element */
+        /* Remove top margin from the first element */
         .stMarkdown:first-child {
             margin-top: 0 !important;
             padding-top: 0 !important;
@@ -641,9 +641,7 @@ def main():
     cfg = configs[selected_country]
 
     # ---- Top header: Title + Language toggle (NO LOGO) ----
-    # 🟡 REMOVED: Logo column - now using full width for title
-    
-    # Row 1: Title + Language toggle (2 columns instead of 3)
+    # Row 1: Title + Language toggle
     col_title, col_lang = st.columns([4, 1])
     
     with col_title:
