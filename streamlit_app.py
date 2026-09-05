@@ -687,11 +687,11 @@ def main():
     col_logo, col_title, col_lang = st.columns([1, 3, 1])
     
     with col_logo:
-        # 🟡 NEW: Logo placeholder - replace 'logo.png' with your actual logo file
+        # 🟡 UPDATED: Using your Kurdistan Regional Government logo (B1.png)
         try:
-            st.image("logo.png", width=80)
-        except:
-            # If logo file doesn't exist yet, show a placeholder
+            st.image("B1.png", width=100)  # Increased width for better visibility
+        except Exception:
+            # Fallback if logo file is not found
             st.markdown(
                 """
                 <div style="font-size: 3rem; text-align: center;">🌊</div>
