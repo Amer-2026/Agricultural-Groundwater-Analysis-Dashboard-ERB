@@ -511,7 +511,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # CSS to remove padding at the top of the page
+    # CSS to remove padding at the top and fix title display
     st.markdown(
         """
         <style>
@@ -554,11 +554,16 @@ def main():
             color: white;
             border-color: #0066cc;
         }
-        .dashboard-header {
-            font-size: 1.8rem;
+        /* FIXED: Title style with proper sizing and wrapping */
+        .dashboard-title {
+            font-size: 1.5rem !important;
             font-weight: 700;
             color: #1f2937;
             margin: 0;
+            padding: 0;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.3;
         }
         .dashboard-subheader {
             font-size: 0.9rem;
@@ -640,17 +645,25 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # ---- FIXED: Define dir_attr at the top level ----
+    # ---- Define dir_attr at the top level ----
     dir_attr = "rtl" if st.session_state.lang == "ar" else "ltr"
 
-    # ---- SIMPLIFIED HEADER: Direct title display ----
-    # Using st.title and st.caption for simplicity and reliability
-    st.title("Groundwater Analysis Dashboard — Erbil Region")
-    st.caption(f"{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}")
+    # ---- FIXED HEADER: Using custom HTML for better control ----
+    # Row: Title + Language toggle
+    col_title, col_lang = st.columns([4, 1])
     
-    # Language toggle in sidebar or small column
-    lang_col1, lang_col2 = st.columns([6, 1])
-    with lang_col2:
+    with col_title:
+        st.markdown(
+            f"""
+            <div style="direction:{dir_attr};">
+                <div class="dashboard-title">🌊 Groundwater Analysis Dashboard — Erbil Region</div>
+                <div class="dashboard-subheader">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    
+    with col_lang:
         lang_options = {"English": "en", "العربية": "ar"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
