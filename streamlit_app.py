@@ -358,9 +358,6 @@ def create_base_map(center_lat, center_lon, zoom):
     """Base map: satellite imagery default, OSM alternative, fullscreen control"""
     m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom, control_scale=True)
 
-    # 🟡 HIDE ATTRIBUTION: Remove the default attribution text
-    # m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom, control_scale=True, attr='')
-
     folium.TileLayer(
         tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         attr="",
@@ -389,7 +386,7 @@ def create_base_map(center_lat, center_lon, zoom):
         lng_formatter=formatter,
     ).add_to(m)
 
-    # 🟡 HIDE ATTRIBUTION: Remove the attribution control
+    # Remove attribution
     m.attribution_control = None
 
     return m
