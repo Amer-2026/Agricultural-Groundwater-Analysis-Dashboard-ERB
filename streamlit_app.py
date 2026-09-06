@@ -360,7 +360,7 @@ def create_base_map(center_lat, center_lon, zoom):
 
     folium.TileLayer(
         tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        attr="",
+        attr="Esri",
         name="Satellite",
         overlay=False,
         control=True,
@@ -368,7 +368,7 @@ def create_base_map(center_lat, center_lon, zoom):
 
     folium.TileLayer(
         tiles="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        attr="",
+        attr="OpenStreetMap",
         name="OpenStreetMap",
         overlay=False,
         control=True,
@@ -386,9 +386,6 @@ def create_base_map(center_lat, center_lon, zoom):
         lng_formatter=formatter,
     ).add_to(m)
 
-    # Remove attribution
-    m.attribution_control = None
-
     return m
 
 
@@ -397,7 +394,7 @@ def add_ee_layer(map_obj, ee_image, vis_params, name):
     map_id_dict = ee_image.getMapId(vis_params)
     folium.TileLayer(
         tiles=map_id_dict["tile_fetcher"].url_format,
-        attr="",
+        attr="Google Earth Engine",
         name=name,
         overlay=True,
         control=True,
@@ -591,6 +588,23 @@ def main():
         page_icon="💧",
         layout="wide",
         initial_sidebar_state="collapsed",
+    )
+
+    # ---- CSS to hide map attribution ----
+    st.markdown(
+        """
+        <style>
+        /* Hide the attribution text on the map */
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+        /* Also hide any other attribution elements */
+        .folium-map .leaflet-control-attribution {
+            display: none !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
 
     # ---- TOP BAR: language + country ----
@@ -825,7 +839,7 @@ def main():
                         max_val = stats.get(f"{prefix}_max")
                         mean_val = stats.get(f"{prefix}_mean")
                         
-                        # 🟡 HORIZONTAL STATISTICS: Display in 3 columns
+                        # HORIZONTAL STATISTICS: Display in 3 columns
                         stat_cols = st.columns(3)
                         with stat_cols[0]:
                             st.metric(
