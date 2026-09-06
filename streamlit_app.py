@@ -103,6 +103,7 @@ For support or more information, please contact the development team.""",
         "last_update": "Last Update",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
+        "welcome_subtitle": "Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
     },
     "ar": {
         "page_title": "تحليل المياه الجوفية",
@@ -180,8 +181,8 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "آخر تحديث",
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
+        "welcome_subtitle": "مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
     },
-    # 🟡 NEW: Kurdish (کوردی) translations
     "ku": {
         "page_title": "شیکردنەوەی ئاوی ژێرزەوی",
         "dashboard_header": "شیکردنەوەی ئاوی ژێرزەوی — هەرێمی هەولێر",
@@ -257,6 +258,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "دوایین نوێکردنەوە",
         "select_date": "بەروار هەڵبژێرە",
         "generate_analysis": "دروستکردنی شیکردنەوە",
+        "welcome_subtitle": "بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
     },
 }
 
@@ -621,7 +623,10 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # ---- HEADER: Title ----
+    # ---- RTL support for Arabic and Kurdish ----
+    dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
+
+    # ---- HEADER: Title + Welcome Subtitle ----
     col_title, col_lang = st.columns([6, 1])
     with col_title:
         st.markdown(
@@ -629,13 +634,13 @@ def main():
             <div style="margin-top: -2rem;">
                 <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0; padding: 0;">🌊 {t('dashboard_header')}</h1>
                 <p style="font-size: 0.9rem; color: #6b7280; margin: 0; padding: 0;">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</p>
+                <p style="font-size: 0.85rem; color: #6b7280; margin: 0.25rem 0 0 0; padding: 0; font-style: italic;">✨ {t('welcome_subtitle')}</p>
             </div>
             """,
             unsafe_allow_html=True,
         )
     
     with col_lang:
-        # 🟡 UPDATED: Added Kurdish (کوردی) as third language option
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
@@ -733,25 +738,27 @@ def main():
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
 
-    # 🟡 UPDATED: RTL support for Kurdish as well
-    dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
-
     # ---- Main content: Map + Analysis ----
     with st.container():
         if not st.session_state.map_generated:
-            st.markdown(
-                f"""
-                <div style='text-align:center; padding:2rem; background-color:#f8f9fa;
-                            border-radius:8px; direction:{dir_attr};'>
-                    <h3 style='color:#666;'>{t('welcome_title')}</h3>
-                    <p style='color:#888;'>{t('welcome_text')}</p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            # 🟡 CHANGED: Show Statistics section in the old welcome message position
+            st.markdown(f"### 📊 {t('statistics')}")
+            st.info("📌 " + t('welcome_text'))
+            
+            # Show sample stats or placeholder
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric(t('minimum'), "—")
+            with col2:
+                st.metric(t('maximum'), "—")
+            with col3:
+                st.metric(t('mean'), "—")
+            
+            st.caption(t('click_map'))
+            
         else:
             try:
-                st.markdown(f"### {t('interactive_map')}")
+                st.markdown(f"### 🗺️ {t('interactive_map')}")
 
                 selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                 selected_year_month = selected_date.strftime("%Y_%m")
@@ -798,8 +805,8 @@ def main():
                         assets=tuple(assets),
                     )
 
-                # ---- Statistics ----
-                st.markdown(f"### {t('statistics')}")
+                # ---- Statistics (now in the main area) ----
+                st.markdown(f"### 📊 {t('statistics')}")
                 try:
                     stats = ee_image.reduceRegion(
                         reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
@@ -824,7 +831,7 @@ def main():
                     st.error(f"{t('error_statistics')}: {str(e)}")
 
                 # ---- Time series (point) ----
-                st.markdown(f"### {t('time_series_analysis')}")
+                st.markdown(f"### 📈 {t('time_series_analysis')}")
                 if st.session_state.time_series_data:
                     clicked_lat = st.session_state.last_clicked["lat"]
                     clicked_lng = st.session_state.last_clicked["lng"]
@@ -850,7 +857,7 @@ def main():
                     st.info(t("click_map"))
 
                 # ---- Regional monthly summary ----
-                st.markdown(f"### {t('regional_summary')}")
+                st.markdown(f"### 📊 {t('regional_summary')}")
                 if st.button(t("compute_summary"), help=t("summary_help")):
                     with st.spinner(t("computing")):
                         summary = get_regional_summary(
