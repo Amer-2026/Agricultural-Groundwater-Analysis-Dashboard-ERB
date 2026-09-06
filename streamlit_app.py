@@ -101,7 +101,7 @@ For support or more information, please contact the development team.""",
         "data_status": "Data Status",
         "active_months": "Active Months",
         "last_update": "Last Update",
-        "select_date": "📅 Select Date",
+        "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
         "welcome_subtitle": "✨ Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
     },
@@ -179,7 +179,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "data_status": "حالة البيانات",
         "active_months": "الأشهر النشطة",
         "last_update": "آخر تحديث",
-        "select_date": "📅 اختر التاريخ",
+        "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
         "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
     },
@@ -256,7 +256,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "data_status": "دۆخی داتا",
         "active_months": "مانگە چالاکەکان",
         "last_update": "دوایین نوێکردنەوە",
-        "select_date": "📅 بەروار هەڵبژێرە",
+        "select_date": "بەروار هەڵبژێرە",
         "generate_analysis": "دروستکردنی شیکردنەوە",
         "welcome_subtitle": "✨ بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
     },
@@ -774,34 +774,6 @@ def main():
         .stCaption {
             color: #9ca3af !important;
         }
-        
-        /* 🟡 NEW: Date selector styling - matches buttons */
-        .date-selector-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.5rem 0;
-        }
-        
-        .date-selector-container label {
-            color: #e0e0e0 !important;
-            font-weight: 500 !important;
-        }
-        
-        /* Style for the date selectbox */
-        .date-selector-container .stSelectbox {
-            flex: 1;
-        }
-        
-        .date-selector-container .stSelectbox > div > div {
-            background-color: #0066cc !important;
-            color: white !important;
-            border-radius: 8px !important;
-            border: none !important;
-            height: 38px !important;
-            display: flex !important;
-            align-items: center !important;
-        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -871,9 +843,9 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
     
-    # ---- Navigation Buttons (4 columns, no date selector) ----
+    # ---- Navigation Buttons (5 columns with date selector) ----
     st.markdown("---")
-    nav_col1, nav_col2, nav_col3, nav_col4 = st.columns([1.5, 1.5, 1.5, 2])
+    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
     
     with nav_col1:
         if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
@@ -893,59 +865,35 @@ def main():
             st.session_state.map_generated = False
             st.rerun()
     
+    # 🟡 DATE SELECTOR - Back in its original place
     with nav_col4:
+        try:
+            asset_path = cfg["asset_path"]
+            assets = get_ee_assets(asset_path)
+            if assets:
+                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+                if asset_dates:
+                    min_date, max_date = min(asset_dates), max(asset_dates)
+                    months = pd.date_range(start=min_date, end=max_date, freq="MS")
+                    date_options = [date.strftime("%Y-%m") for date in months]
+                    
+                    selected_date_str = st.selectbox(
+                        t("select_date"),
+                        options=date_options,
+                        index=len(date_options) - 1,
+                        key="top_date_selector",
+                        label_visibility="collapsed",
+                    )
+                    st.session_state.selected_date_str = selected_date_str
+        except Exception as e:
+            st.warning("Could not load dates")
+    
+    with nav_col5:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
-            # Use the selected date from session state or default
-            if st.session_state.selected_date_str is None:
-                # If no date is selected, use the latest available date
-                try:
-                    asset_path = cfg["asset_path"]
-                    assets = get_ee_assets(asset_path)
-                    if assets:
-                        asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
-                        if asset_dates:
-                            latest_date = max(asset_dates)
-                            st.session_state.selected_date_str = latest_date.strftime("%Y-%m")
-                except:
-                    pass
-            
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
             st.session_state.current_date = st.session_state.selected_date_str
             st.rerun()
-    
-    st.markdown("---")
-
-    # ---- 🟡 NEW: Date Selector (placed below navigation buttons) ----
-    # This is a fresh implementation, separate from the previous problematic code
-    st.markdown(f"### {t('select_date')}")
-    
-    # Get available dates from assets
-    date_options = []
-    try:
-        asset_path = cfg["asset_path"]
-        assets = get_ee_assets(asset_path)
-        if assets:
-            asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
-            if asset_dates:
-                min_date, max_date = min(asset_dates), max(asset_dates)
-                months = pd.date_range(start=min_date, end=max_date, freq="MS")
-                date_options = [date.strftime("%Y-%m") for date in months]
-    except Exception as e:
-        st.warning("Could not load dates")
-    
-    if date_options:
-        # Use a fresh selectbox with a unique key
-        selected_date = st.selectbox(
-            "Select a month to analyze",
-            options=date_options,
-            index=len(date_options) - 1,  # Default to latest
-            key="date_selector_new",  # Unique key to avoid conflicts
-            label_visibility="collapsed",
-        )
-        st.session_state.selected_date_str = selected_date
-    else:
-        st.info("No date options available. Please check your data source.")
     
     st.markdown("---")
 
@@ -980,8 +928,17 @@ def main():
         st.session_state.time_series_data = None
 
     # ---- If no date is selected, set to latest available ----
-    if st.session_state.selected_date_str is None and date_options:
-        st.session_state.selected_date_str = date_options[-1]
+    if st.session_state.selected_date_str is None:
+        try:
+            asset_path = cfg["asset_path"]
+            assets = get_ee_assets(asset_path)
+            if assets:
+                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+                if asset_dates:
+                    latest_date = max(asset_dates)
+                    st.session_state.selected_date_str = latest_date.strftime("%Y-%m")
+        except:
+            pass
 
     # ---- Main content ----
     with st.container():
