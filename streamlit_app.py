@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with matching colors ----
+    # ---- DARK THEME CSS with white text for selectors ----
     st.markdown(
         """
         <style>
@@ -615,10 +615,9 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 FIXED: Date and Language selectors - match Recharge button */
+        /* 🟡 FIXED: Date and Language selectors - white text on blue background */
         .stSelectbox > div > div {
             background-color: #0066cc !important;
-            color: white !important;
             border-radius: 8px !important;
             border: none !important;
         }
@@ -627,16 +626,15 @@ def main():
             background-color: #0055aa !important;
         }
         
+        /* Force white text for the select box */
         .stSelectbox > div > div > div {
             color: white !important;
         }
         
-        /* 🟡 FIXED: Selectbox label text - white */
-        .stSelectbox > label {
+        .stSelectbox > div > div > div[data-baseweb="select"] {
             color: white !important;
         }
         
-        /* 🟡 FIXED: Selectbox placeholder and selected text */
         .stSelectbox > div > div > div[data-baseweb="select"] > div {
             color: white !important;
         }
@@ -645,21 +643,26 @@ def main():
             color: white !important;
         }
         
+        /* Force white text for the selected value */
         .stSelectbox [data-testid="stMarkdownContainer"] p {
             color: white !important;
         }
         
-        /* Language selector specific styling */
-        .stSelectbox[data-testid="stSelectbox"] > div > div {
-            background-color: #0066cc !important;
+        /* Force white text for the select box label */
+        .stSelectbox > label {
             color: white !important;
         }
         
-        .stSelectbox[data-testid="stSelectbox"] > div > div > div {
+        /* White text for the select box value */
+        .st-bb {
             color: white !important;
         }
         
-        /* 🟡 FIXED: Dropdown menu items - white text */
+        .st-c4 {
+            color: white !important;
+        }
+        
+        /* Dropdown menu items - white text */
         .stSelectbox > div > div ul {
             background-color: #1e2430 !important;
         }
@@ -842,7 +845,7 @@ def main():
             st.rerun()
     
     with nav_col4:
-        # 🟡 UPDATED: Date selector - matches Recharge button
+        # Date selector
         try:
             asset_path = cfg["asset_path"]
             assets = get_ee_assets(asset_path)
