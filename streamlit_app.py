@@ -756,8 +756,8 @@ def main():
             
         else:
             try:
-                # 🟡 NEW: Two-column layout - Map on left, empty on right
-                map_col, empty_col = st.columns([2, 1])
+                # 🟡 UPDATED: Map column reduced to 1.5 (60%) and empty column 1 (40%)
+                map_col, empty_col = st.columns([1.5, 1])
                 
                 with map_col:
                     st.markdown(f"### 🗺️ {t('interactive_map')}")
@@ -892,7 +892,7 @@ def main():
                                 key="dl_summary",
                             )
                 
-                # 🟡 NEW: Empty column on the right (reserved for future content)
+                # ---- Empty column on the right (reserved for future content) ----
                 with empty_col:
                     st.markdown("""
                         <div style="height: 500px; display: flex; align-items: center; justify-content: center; 
