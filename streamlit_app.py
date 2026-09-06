@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with Full-Width Banner ----
+    # ---- DARK THEME CSS with Cosmic Bloom Banner ----
     st.markdown(
         """
         <style>
@@ -610,24 +610,61 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* 🟡 NEW: Full-width banner at the top */
+        /* 🟡 COSMIC BLOOM: Full-width banner at the top */
         .banner {
             background: linear-gradient(135deg, 
-                #FF6B6B 0%, 
-                #FF8E53 15%, 
-                #FECA57 30%, 
-                #48DBFB 45%, 
-                #0ABDE3 55%, 
-                #10AC84 70%, 
-                #EE5A24 85%, 
-                #5F27CD 100%
+                #0c0c1d 0%,
+                #1a0a2e 10%,
+                #2d1b4e 20%,
+                #4a1942 30%,
+                #6b2fa0 40%,
+                #8b3a8a 50%,
+                #b85a9a 60%,
+                #d47b9e 70%,
+                #a85a9a 80%,
+                #6b2fa0 85%,
+                #3d1b5e 90%,
+                #1a0a2e 95%,
+                #0c0c1d 100%
             );
-            padding: 2rem 2rem 1.5rem 2rem;
-            margin: -1rem -3rem 1rem -3rem;
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin: -1rem -3rem 1.5rem -3rem;
             border-radius: 0;
             color: white;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 30px rgba(107, 47, 160, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Cosmic sparkle overlay */
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(200, 100, 255, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 50%, rgba(100, 50, 200, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        
+        /* Cosmic star particles */
+        .banner::after {
+            content: '✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.06);
+            letter-spacing: 0.5rem;
+            text-align: center;
+            pointer-events: none;
+            white-space: nowrap;
+            overflow: hidden;
         }
         
         .banner h1 {
@@ -636,23 +673,29 @@ def main():
             margin: 0;
             padding: 0;
             color: white;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            text-shadow: 0 2px 20px rgba(139, 58, 138, 0.5);
+            position: relative;
+            z-index: 1;
         }
         
         .banner .subtitle {
             font-size: 1rem;
-            color: rgba(255,255,255,0.9);
+            color: rgba(255,255,255,0.85);
             margin: 0.25rem 0 0 0;
             padding: 0;
+            position: relative;
+            z-index: 1;
         }
         
         .banner .welcome {
             font-size: 0.95rem;
             font-weight: 500;
-            color: rgba(255,255,255,0.95);
+            color: rgba(255,255,255,0.9);
             margin: 0.5rem 0 0 0;
             padding: 0;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 10px rgba(139, 58, 138, 0.3);
+            position: relative;
+            z-index: 1;
         }
         
         /* Dark background for all containers */
@@ -667,7 +710,7 @@ def main():
         
         /* ALL BUTTONS - consistent styling */
         .stButton > button {
-            background-color: #0066cc !important;
+            background-color: #6b2fa0 !important;
             color: white !important;
             border: none !important;
             border-radius: 8px !important;
@@ -686,10 +729,10 @@ def main():
         }
         
         .stButton > button:hover {
-            background-color: #0055aa !important;
+            background-color: #8b3a8a !important;
             color: white !important;
             border: none !important;
-            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.4) !important;
+            box-shadow: 0 2px 15px rgba(107, 47, 160, 0.5) !important;
             transform: translateY(-1px) !important;
         }
         
@@ -699,7 +742,7 @@ def main():
         
         /* LANGUAGE SELECTOR - match buttons exactly */
         .stSelectbox > div > div {
-            background-color: #0066cc !important;
+            background-color: #6b2fa0 !important;
             color: white !important;
             border-radius: 8px !important;
             border: none !important;
@@ -713,7 +756,7 @@ def main():
         }
         
         .stSelectbox > div > div:hover {
-            background-color: #0055aa !important;
+            background-color: #8b3a8a !important;
         }
         
         .stSelectbox > div > div > div {
@@ -747,7 +790,7 @@ def main():
         
         /* Dropdown menu items */
         .stSelectbox > div > div ul {
-            background-color: #1e2430 !important;
+            background-color: #1a0a2e !important;
         }
         
         .stSelectbox > div > div ul li {
@@ -755,19 +798,20 @@ def main():
         }
         
         .stSelectbox > div > div ul li:hover {
-            background-color: #0066cc !important;
+            background-color: #6b2fa0 !important;
             color: white !important;
         }
         
         /* Dark background for metric cards */
         div[data-testid="stMetric"] {
-            background-color: #1e2430 !important;
+            background-color: #1a0a2e !important;
             padding: 10px !important;
             border-radius: 8px !important;
+            border: 1px solid rgba(107, 47, 160, 0.2) !important;
         }
         
         div[data-testid="stMetric"] label {
-            color: #9ca3af !important;
+            color: #b85a9a !important;
         }
         
         div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
@@ -776,18 +820,18 @@ def main():
         
         /* Dark background for info boxes */
         .stAlert {
-            background-color: #1e2430 !important;
+            background-color: #1a0a2e !important;
             color: #e0e0e0 !important;
         }
         
         /* Dark background for expanders */
         .streamlit-expanderHeader {
-            background-color: #1e2430 !important;
+            background-color: #1a0a2e !important;
             color: #e0e0e0 !important;
         }
         
         .streamlit-expanderContent {
-            background-color: #1e2430 !important;
+            background-color: #1a0a2e !important;
             color: #e0e0e0 !important;
         }
         
@@ -802,7 +846,7 @@ def main():
         
         /* Dark background for dataframes */
         .stDataFrame {
-            background-color: #1e2430 !important;
+            background-color: #1a0a2e !important;
         }
         
         /* Dark background for sidebar */
@@ -812,7 +856,7 @@ def main():
         
         /* Divider color */
         hr {
-            border-color: #2d3340 !important;
+            border-color: rgba(107, 47, 160, 0.3) !important;
         }
         
         /* Caption text */
@@ -824,17 +868,43 @@ def main():
         unsafe_allow_html=True,
     )
 
-    # ---- 🟡 NEW: Full-Width Colored Banner at the Top ----
-    # Get config for country name
+    # ---- TOP BAR: language + country ----
     configs = load_country_configs()
+
     if not configs:
-        st.error("No country configuration found.")
+        st.error(
+            "No country configuration was found.\n\n"
+            "The app expects at least one country JSON file (with a `key` and an "
+            "`asset_path`) inside a **`config/`** folder next to `streamlit_app.py`.\n\n"
+            "On GitHub: open your config file, click the ✏️ edit pencil, and rename it "
+            "to `config/yourcountry.json` (typing `config/` before the name creates the "
+            "folder). Then commit — the app will redeploy automatically."
+        )
         st.stop()
-    
+
     country_keys = list(configs.keys())
-    selected_country = country_keys[0] if len(country_keys) == 1 else country_keys[0]
+    if len(country_keys) == 1:
+        selected_country = country_keys[0]
+    else:
+        try:
+            default_key = st.query_params.get("country", country_keys[0])
+        except AttributeError:
+            default_key = st.experimental_get_query_params().get("country", [country_keys[0]])[0]
+        if default_key not in configs:
+            default_key = country_keys[0]
+        selected_country = st.selectbox(
+            t("country"),
+            options=country_keys,
+            index=country_keys.index(default_key),
+            format_func=lambda k: country_label(configs[k]),
+            label_visibility="collapsed",
+        )
     cfg = configs[selected_country]
-    
+
+    # ---- RTL support ----
+    dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
+
+    # ---- 🟡 COSMIC BLOOM BANNER ----
     st.markdown(
         f"""
         <div class="banner">
@@ -1106,7 +1176,7 @@ def main():
                         df = pd.DataFrame(summary)
                         months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
                         fig = go.Figure(
-                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#0066cc")
+                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#6b2fa0")
                         )
                         fig.update_layout(
                             title=t(
