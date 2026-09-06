@@ -615,7 +615,7 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 UPDATED: Date and Language selectors - match Recharge button */
+        /* 🟡 FIXED: Date and Language selectors - match Recharge button */
         .stSelectbox > div > div {
             background-color: #0066cc !important;
             color: white !important;
@@ -631,12 +631,12 @@ def main():
             color: white !important;
         }
         
-        /* 🟡 UPDATED: Selectbox label text color */
+        /* 🟡 FIXED: Selectbox label text - white */
         .stSelectbox > label {
             color: white !important;
         }
         
-        /* 🟡 UPDATED: Selectbox placeholder text */
+        /* 🟡 FIXED: Selectbox placeholder and selected text */
         .stSelectbox > div > div > div[data-baseweb="select"] > div {
             color: white !important;
         }
@@ -645,7 +645,6 @@ def main():
             color: white !important;
         }
         
-        /* 🟡 UPDATED: Selected value text */
         .stSelectbox [data-testid="stMarkdownContainer"] p {
             color: white !important;
         }
@@ -660,13 +659,13 @@ def main():
             color: white !important;
         }
         
-        /* Dropdown menu items */
+        /* 🟡 FIXED: Dropdown menu items - white text */
         .stSelectbox > div > div ul {
             background-color: #1e2430 !important;
         }
         
         .stSelectbox > div > div ul li {
-            color: #e0e0e0 !important;
+            color: white !important;
         }
         
         .stSelectbox > div > div ul li:hover {
