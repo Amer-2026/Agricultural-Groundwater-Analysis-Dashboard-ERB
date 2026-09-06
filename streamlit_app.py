@@ -358,9 +358,12 @@ def create_base_map(center_lat, center_lon, zoom):
     """Base map: satellite imagery default, OSM alternative, fullscreen control"""
     m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom, control_scale=True)
 
+    # 🟡 HIDE ATTRIBUTION: Remove the default attribution text
+    # m = folium.Map(location=[center_lat, center_lon], zoom_start=zoom, control_scale=True, attr='')
+
     folium.TileLayer(
         tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-        attr="Esri",
+        attr="",
         name="Satellite",
         overlay=False,
         control=True,
@@ -368,7 +371,7 @@ def create_base_map(center_lat, center_lon, zoom):
 
     folium.TileLayer(
         tiles="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        attr="OpenStreetMap",
+        attr="",
         name="OpenStreetMap",
         overlay=False,
         control=True,
@@ -386,6 +389,9 @@ def create_base_map(center_lat, center_lon, zoom):
         lng_formatter=formatter,
     ).add_to(m)
 
+    # 🟡 HIDE ATTRIBUTION: Remove the attribution control
+    m.attribution_control = None
+
     return m
 
 
@@ -394,7 +400,7 @@ def add_ee_layer(map_obj, ee_image, vis_params, name):
     map_id_dict = ee_image.getMapId(vis_params)
     folium.TileLayer(
         tiles=map_id_dict["tile_fetcher"].url_format,
-        attr="Google Earth Engine",
+        attr="",
         name=name,
         overlay=True,
         control=True,
@@ -752,7 +758,7 @@ def main():
             st.caption(t('click_map'))
         else:
             try:
-                # 🟡 TWO-COLUMN LAYOUT: Map on left, Statistics on right
+                # TWO-COLUMN LAYOUT: Map on left, Statistics on right
                 map_col, stats_col = st.columns([2, 1])
 
                 # ---- LEFT COLUMN: MAP ----
@@ -804,7 +810,7 @@ def main():
                             assets=tuple(assets),
                         )
 
-                # ---- RIGHT COLUMN: STATISTICS ----
+                # ---- RIGHT COLUMN: STATISTICS (HORIZONTAL) ----
                 with stats_col:
                     st.markdown(f"### 📊 {t('statistics')}")
                     try:
@@ -818,26 +824,27 @@ def main():
                             (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
                         )
                         
-                        # Display stats in a card-like format
                         min_val = stats.get(f"{prefix}_min")
                         max_val = stats.get(f"{prefix}_max")
                         mean_val = stats.get(f"{prefix}_mean")
                         
-                        st.metric(
-                            t('minimum'),
-                            f"{min_val:.2f}" if isinstance(min_val, (int, float)) else "N/A",
-                            delta=None,
-                        )
-                        st.metric(
-                            t('maximum'),
-                            f"{max_val:.2f}" if isinstance(max_val, (int, float)) else "N/A",
-                            delta=None,
-                        )
-                        st.metric(
-                            t('mean'),
-                            f"{mean_val:.2f}" if isinstance(mean_val, (int, float)) else "N/A",
-                            delta=None,
-                        )
+                        # 🟡 HORIZONTAL STATISTICS: Display in 3 columns
+                        stat_cols = st.columns(3)
+                        with stat_cols[0]:
+                            st.metric(
+                                t('minimum'),
+                                f"{min_val:.2f}" if isinstance(min_val, (int, float)) else "N/A",
+                            )
+                        with stat_cols[1]:
+                            st.metric(
+                                t('maximum'),
+                                f"{max_val:.2f}" if isinstance(max_val, (int, float)) else "N/A",
+                            )
+                        with stat_cols[2]:
+                            st.metric(
+                                t('mean'),
+                                f"{mean_val:.2f}" if isinstance(mean_val, (int, float)) else "N/A",
+                            )
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
                     
