@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- TOP BAR: language + country ----
+    # ---- Top bar: language + country ----
     configs = load_country_configs()
 
     if not configs:
@@ -623,10 +623,10 @@ def main():
         )
     cfg = configs[selected_country]
 
-    # ---- RTL support ----
+    # ---- RTL support for Arabic and Kurdish ----
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
-    # ---- HEADER ----
+    # ---- HEADER: Title + Welcome Subtitle (BOLD & COLORED) ----
     col_title, col_lang = st.columns([6, 1])
     with col_title:
         st.markdown(
@@ -738,10 +738,12 @@ def main():
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
 
-    # ---- Main content ----
+    # ---- Main content: Map + Analysis ----
     with st.container():
         if not st.session_state.map_generated:
             st.markdown(f"### 📊 {t('statistics')}")
+            
+            # Show sample stats or placeholder
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(t('minimum'), "—")
@@ -749,152 +751,157 @@ def main():
                 st.metric(t('maximum'), "—")
             with col3:
                 st.metric(t('mean'), "—")
+            
             st.caption(t('click_map'))
+            
         else:
             try:
-                # 🟡 ADD RIGHT SIDEBAR - EMPTY SPACE
-                with st.sidebar:
-                    st.markdown("### 🔜 Reserved for Future Content")
-                    st.markdown("---")
-                    st.info("This space is reserved for additional features.")
-                    st.markdown("**Coming soon:**")
-                    st.markdown("- 📊 Additional charts")
-                    st.markdown("- 📈 Data tables")
-                    st.markdown("- 🔍 Advanced filters")
+                # 🟡 NEW: Two-column layout - Map on left, empty on right
+                map_col, empty_col = st.columns([2, 1])
                 
-                # 🟡 MAIN CONTENT - MAP FULL WIDTH
-                st.markdown(f"### 🗺️ {t('interactive_map')}")
+                with map_col:
+                    st.markdown(f"### 🗺️ {t('interactive_map')}")
 
-                selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
-                selected_year_month = selected_date.strftime("%Y_%m")
+                    selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
+                    selected_year_month = selected_date.strftime("%Y_%m")
 
-                selected_asset = next(
-                    (
-                        a
-                        for a in assets
-                        if st.session_state.current_parameter in a and selected_year_month in a
-                    ),
-                    None,
-                )
-                if not selected_asset:
-                    st.error(t("no_data_month"))
-                    return
-
-                center_lat = float(cfg["center_lat"])
-                center_lon = float(cfg["center_lon"])
-                zoom = int(cfg["zoom"])
-                
-                m = create_base_map(center_lat, center_lon, zoom)
-                ee_image = ee.Image(selected_asset)
-                
-                opacity = st.session_state.get("opacity", 0.7)
-                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                vis_params["opacity"] = opacity
-
-                add_ee_layer(
-                    m,
-                    ee_image,
-                    vis_params,
-                    f"{t(st.session_state.current_parameter)} {t('layer')}",
-                )
-                add_colormap(m, vis_params, st.session_state.current_parameter)
-                folium.LayerControl().add_to(m)
-
-                # 🟡 DISPLAY MAP
-                map_data = st_folium(m, width=None, height=500, returned_objects=["last_clicked"])
-
-                if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
-                    st.session_state.last_clicked = map_data["last_clicked"]
-                    st.session_state.time_series_data = get_time_series_data(
-                        point=[map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]],
-                        parameter=st.session_state.current_parameter,
-                        assets=tuple(assets),
+                    selected_asset = next(
+                        (
+                            a
+                            for a in assets
+                            if st.session_state.current_parameter in a and selected_year_month in a
+                        ),
+                        None,
                     )
+                    if not selected_asset:
+                        st.error(t("no_data_month"))
+                        return
 
-                # ---- Statistics ----
-                st.markdown(f"### 📊 {t('statistics')}")
-                try:
-                    stats = ee_image.reduceRegion(
-                        reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
-                        geometry=ee_image.geometry(),
-                        scale=1000,
-                        maxPixels=1e9,
-                    ).getInfo()
-                    prefix = next(
-                        (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
+                    center_lat = float(cfg["center_lat"])
+                    center_lon = float(cfg["center_lon"])
+                    zoom = int(cfg["zoom"])
+                    
+                    m = create_base_map(center_lat, center_lon, zoom)
+                    ee_image = ee.Image(selected_asset)
+                    
+                    opacity = st.session_state.get("opacity", 0.7)
+                    vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                    vis_params["opacity"] = opacity
+
+                    add_ee_layer(
+                        m,
+                        ee_image,
+                        vis_params,
+                        f"{t(st.session_state.current_parameter)} {t('layer')}",
                     )
-                    cols = st.columns(3)
-                    for col, stat_key, label in zip(
-                        cols, ["min", "max", "mean"], ["minimum", "maximum", "mean"]
-                    ):
-                        with col:
-                            val = stats.get(f"{prefix}_{stat_key}")
-                            st.metric(
-                                t(label),
-                                f"{val:.2f}" if isinstance(val, (int, float)) else "N/A",
-                            )
-                except Exception as e:
-                    st.error(f"{t('error_statistics')}: {str(e)}")
+                    add_colormap(m, vis_params, st.session_state.current_parameter)
+                    folium.LayerControl().add_to(m)
 
-                # ---- Time series ----
-                st.markdown(f"### 📈 {t('time_series_analysis')}")
-                if st.session_state.time_series_data:
-                    clicked_lat = st.session_state.last_clicked["lat"]
-                    clicked_lng = st.session_state.last_clicked["lng"]
+                    map_data = st_folium(m, width=None, height=500, returned_objects=["last_clicked"])
 
-                    fig = create_time_series_plot(
-                        st.session_state.time_series_data,
-                        st.session_state.current_parameter,
-                        clicked_lat,
-                        clicked_lng,
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
+                    if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
+                        st.session_state.last_clicked = map_data["last_clicked"]
+                        st.session_state.time_series_data = get_time_series_data(
+                            point=[map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]],
+                            parameter=st.session_state.current_parameter,
+                            assets=tuple(assets),
+                        )
 
-                    st.download_button(
-                        t("download_csv"),
-                        data=to_csv_bytes(st.session_state.time_series_data),
-                        file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                        f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
-                        mime="text/csv",
-                    )
-                    with st.expander(t("raw_data")):
-                        st.dataframe(pd.DataFrame(st.session_state.time_series_data))
-                else:
-                    st.info(t("click_map"))
+                    # ---- Statistics (under the map in the left column) ----
+                    st.markdown(f"### 📊 {t('statistics')}")
+                    try:
+                        stats = ee_image.reduceRegion(
+                            reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
+                            geometry=ee_image.geometry(),
+                            scale=1000,
+                            maxPixels=1e9,
+                        ).getInfo()
+                        prefix = next(
+                            (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
+                        )
+                        cols = st.columns(3)
+                        for col, stat_key, label in zip(
+                            cols, ["min", "max", "mean"], ["minimum", "maximum", "mean"]
+                        ):
+                            with col:
+                                val = stats.get(f"{prefix}_{stat_key}")
+                                st.metric(
+                                    t(label),
+                                    f"{val:.2f}" if isinstance(val, (int, float)) else "N/A",
+                                )
+                    except Exception as e:
+                        st.error(f"{t('error_statistics')}: {str(e)}")
 
-                # ---- Regional summary ----
-                st.markdown(f"### 📊 {t('regional_summary')}")
-                if st.button(t("compute_summary"), help=t("summary_help")):
-                    with st.spinner(t("computing")):
-                        summary = get_regional_summary(
+                    # ---- Time series (point) ----
+                    st.markdown(f"### 📈 {t('time_series_analysis')}")
+                    if st.session_state.time_series_data:
+                        clicked_lat = st.session_state.last_clicked["lat"]
+                        clicked_lng = st.session_state.last_clicked["lng"]
+
+                        fig = create_time_series_plot(
+                            st.session_state.time_series_data,
                             st.session_state.current_parameter,
-                            tuple(assets),
-                            int(cfg.get("native_scale_m", 20)),
-                        )
-                    if summary:
-                        df = pd.DataFrame(summary)
-                        months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-                        fig = go.Figure(
-                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#0066cc")
-                        )
-                        fig.update_layout(
-                            title=t(
-                                "summary_title",
-                                parameter=t(st.session_state.current_parameter),
-                            ),
-                            xaxis=dict(tickangle=45),
-                            template="plotly_white",
-                            height=350,
+                            clicked_lat,
+                            clicked_lng,
                         )
                         st.plotly_chart(fig, use_container_width=True)
+
                         st.download_button(
                             t("download_csv"),
-                            data=to_csv_bytes(summary, value_col="mean"),
+                            data=to_csv_bytes(st.session_state.time_series_data),
                             file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                            f"_regional_summary.csv",
+                            f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
                             mime="text/csv",
-                            key="dl_summary",
                         )
+                        with st.expander(t("raw_data")):
+                            st.dataframe(pd.DataFrame(st.session_state.time_series_data))
+                    else:
+                        st.info(t("click_map"))
+
+                    # ---- Regional monthly summary ----
+                    st.markdown(f"### 📊 {t('regional_summary')}")
+                    if st.button(t("compute_summary"), help=t("summary_help")):
+                        with st.spinner(t("computing")):
+                            summary = get_regional_summary(
+                                st.session_state.current_parameter,
+                                tuple(assets),
+                                int(cfg.get("native_scale_m", 20)),
+                            )
+                        if summary:
+                            df = pd.DataFrame(summary)
+                            months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
+                            fig = go.Figure(
+                                go.Bar(x=months_lbl, y=df["mean"], marker_color="#0066cc")
+                            )
+                            fig.update_layout(
+                                title=t(
+                                    "summary_title",
+                                    parameter=t(st.session_state.current_parameter),
+                                ),
+                                xaxis=dict(tickangle=45),
+                                template="plotly_white",
+                                height=350,
+                            )
+                            st.plotly_chart(fig, use_container_width=True)
+                            st.download_button(
+                                t("download_csv"),
+                                data=to_csv_bytes(summary, value_col="mean"),
+                                file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
+                                f"_regional_summary.csv",
+                                mime="text/csv",
+                                key="dl_summary",
+                            )
+                
+                # 🟡 NEW: Empty column on the right (reserved for future content)
+                with empty_col:
+                    st.markdown("""
+                        <div style="height: 500px; display: flex; align-items: center; justify-content: center; 
+                                    background-color: #f8f9fa; border-radius: 8px; border: 2px dashed #d1d5db;">
+                            <p style="color: #9ca3af; font-style: italic; text-align: center;">
+                                🔜 Reserved for<br>future content
+                            </p>
+                        </div>
+                    """, unsafe_allow_html=True)
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
