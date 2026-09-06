@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with white text for selectors ----
+    # ---- DARK THEME CSS with consistent buttons ----
     st.markdown(
         """
         <style>
@@ -615,18 +615,46 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 FIXED: Date and Language selectors - white text on blue background */
+        /* 🟡 FIXED: ALL BUTTONS - consistent styling */
+        .stButton > button {
+            background-color: #0066cc !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+        }
+        
+        .stButton > button:hover {
+            background-color: #0055aa !important;
+            color: white !important;
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.4) !important;
+            transform: translateY(-1px) !important;
+        }
+        
+        .stButton > button:active {
+            transform: translateY(0px) !important;
+        }
+        
+        /* 🟡 FIXED: Selectors match button style */
         .stSelectbox > div > div {
             background-color: #0066cc !important;
             border-radius: 8px !important;
             border: none !important;
+            padding: 0.5rem 1rem !important;
+            color: white !important;
+            font-size: 1rem !important;
         }
         
         .stSelectbox > div > div:hover {
             background-color: #0055aa !important;
         }
         
-        /* Force white text for the select box */
         .stSelectbox > div > div > div {
             color: white !important;
         }
@@ -643,17 +671,14 @@ def main():
             color: white !important;
         }
         
-        /* Force white text for the selected value */
         .stSelectbox [data-testid="stMarkdownContainer"] p {
             color: white !important;
         }
         
-        /* Force white text for the select box label */
         .stSelectbox > label {
             color: white !important;
         }
         
-        /* White text for the select box value */
         .st-bb {
             color: white !important;
         }
@@ -662,7 +687,7 @@ def main():
             color: white !important;
         }
         
-        /* Dropdown menu items - white text */
+        /* Dropdown menu items */
         .stSelectbox > div > div ul {
             background-color: #1e2430 !important;
         }
@@ -674,18 +699,6 @@ def main():
         .stSelectbox > div > div ul li:hover {
             background-color: #0066cc !important;
             color: white !important;
-        }
-        
-        /* Dark background for buttons */
-        .stButton > button {
-            background-color: #0066cc !important;
-            color: white !important;
-            border: none !important;
-            border-radius: 8px !important;
-        }
-        
-        .stButton > button:hover {
-            background-color: #0055aa !important;
         }
         
         /* Dark background for metric cards */
