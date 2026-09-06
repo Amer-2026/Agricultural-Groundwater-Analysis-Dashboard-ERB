@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS ----
+    # ---- DARK THEME CSS with matching colors ----
     st.markdown(
         """
         <style>
@@ -615,10 +615,40 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* Dark background for select boxes */
+        /* 🟡 UPDATED: Date and Language selectors - match Recharge button color */
         .stSelectbox > div > div {
+            background-color: #0066cc !important;
+            color: white !important;
+            border-radius: 8px !important;
+            border: none !important;
+        }
+        
+        .stSelectbox > div > div:hover {
+            background-color: #0055aa !important;
+        }
+        
+        .stSelectbox > div > div > div {
+            color: white !important;
+        }
+        
+        /* Language selector specific styling */
+        .stSelectbox[data-testid="stSelectbox"] > div > div {
+            background-color: #0066cc !important;
+            color: white !important;
+        }
+        
+        /* Dropdown menu items */
+        .stSelectbox > div > div ul {
             background-color: #1e2430 !important;
+        }
+        
+        .stSelectbox > div > div ul li {
             color: #e0e0e0 !important;
+        }
+        
+        .stSelectbox > div > div ul li:hover {
+            background-color: #0066cc !important;
+            color: white !important;
         }
         
         /* Dark background for buttons */
@@ -626,6 +656,7 @@ def main():
             background-color: #0066cc !important;
             color: white !important;
             border: none !important;
+            border-radius: 8px !important;
         }
         
         .stButton > button:hover {
@@ -789,7 +820,7 @@ def main():
             st.rerun()
     
     with nav_col4:
-        # Date selector
+        # 🟡 UPDATED: Date selector - now matches Recharge button color
         try:
             asset_path = cfg["asset_path"]
             assets = get_ee_assets(asset_path)
