@@ -103,6 +103,7 @@ For support or more information, please contact the development team.""",
         "last_update": "Last Update",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
+        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
     },
     "ar": {
@@ -181,6 +182,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "آخر تحديث",
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
+        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
     },
     "ku": {
@@ -258,6 +260,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "دوایین نوێکردنەوە",
         "select_date": "بەروار هەڵبژێرە",
         "generate_analysis": "دروستکردنی شیکردنەوە",
+        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
     },
 }
@@ -634,8 +637,8 @@ def main():
             <div style="margin-top: -2rem;">
                 <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0; padding: 0;">🌊 {t('dashboard_header')}</h1>
                 <p style="font-size: 0.9rem; color: #6b7280; margin: 0; padding: 0;">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</p>
-                <!-- 🟡 UPDATED: Bold and colored welcome text -->
-                <p style="font-size: 0.9rem; font-weight: 700; color: #0066cc; margin: 0.25rem 0 0 0; padding: 0;">✨ {t('welcome_subtitle')}</p>
+                <!-- 🟡 UPDATED: Bold and colored welcome text (only one star) -->
+                <p style="font-size: 0.9rem; font-weight: 700; color: #0066cc; margin: 0.25rem 0 0 0; padding: 0;">{t('welcome_subtitle')}</p>
             </div>
             """,
             unsafe_allow_html=True,
@@ -742,9 +745,10 @@ def main():
     # ---- Main content: Map + Analysis ----
     with st.container():
         if not st.session_state.map_generated:
-            # 🟡 CHANGED: Show Statistics section in the old welcome message position
             st.markdown(f"### 📊 {t('statistics')}")
-            st.info("📌 " + t('welcome_text'))
+            
+            # 🟡 COMMENTED OUT: Duplicate welcome text under Statistics (preserved for future use)
+            # st.info("📌 " + t('welcome_text'))
             
             # Show sample stats or placeholder
             col1, col2, col3 = st.columns(3)
