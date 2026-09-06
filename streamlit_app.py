@@ -756,7 +756,7 @@ def main():
             
         else:
             try:
-                # 🟡 FIXED: Map column with proper ratio and empty column
+                # 🟡 TWO-COLUMN LAYOUT: Map on left, empty on right
                 map_col, empty_col = st.columns([1.5, 1])
                 
                 with map_col:
@@ -797,6 +797,7 @@ def main():
                     add_colormap(m, vis_params, st.session_state.current_parameter)
                     folium.LayerControl().add_to(m)
 
+                    # 🟡 DISPLAY THE MAP
                     map_data = st_folium(m, width=None, height=500, returned_objects=["last_clicked"])
 
                     if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
@@ -892,9 +893,9 @@ def main():
                                 key="dl_summary",
                             )
                 
-                # ---- Empty column on the right (completely empty) ----
+                # ---- Empty column on the right ----
                 with empty_col:
-                    # 🟡 FIXED: Completely empty column - no placeholder text
+                    # Completely empty - reserved for future content
                     pass
 
             except Exception as e:
