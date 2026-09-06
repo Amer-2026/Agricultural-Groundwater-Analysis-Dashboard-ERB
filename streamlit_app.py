@@ -1,7 +1,7 @@
 """
 Agricultural Groundwater Analysis Dashboard
 ============================================
-A clean, simple version with two-column layout.
+A clean, simple version with two-column layout using HTML flexbox.
 """
 
 import json
@@ -329,48 +329,103 @@ def main():
         st.caption(t('click_map'))
     else:
         try:
-            # 🟡 TWO-COLUMN LAYOUT: Map (2/3) + Empty (1/3)
-            map_col, empty_col = st.columns([2, 1])
+            # ---- GET MAP DATA ----
+            selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
+            selected_year_month = selected_date.strftime("%Y_%m")
 
-            with map_col:
-                st.markdown(f"### 🗺️ {t('interactive_map')}")
+            selected_asset = None
+            for a in assets:
+                if st.session_state.current_parameter in a and selected_year_month in a:
+                    selected_asset = a
+                    break
 
-                selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
-                selected_year_month = selected_date.strftime("%Y_%m")
+            if not selected_asset:
+                st.error(t("no_data_month"))
+                return
 
-                selected_asset = None
-                for a in assets:
-                    if st.session_state.current_parameter in a and selected_year_month in a:
-                        selected_asset = a
-                        break
+            center_lat = float(cfg["center_lat"])
+            center_lon = float(cfg["center_lon"])
+            zoom = int(cfg["zoom"])
 
-                if not selected_asset:
-                    st.error(t("no_data_month"))
-                    return
+            # ---- CREATE MAP ----
+            m = create_base_map(center_lat, center_lon, zoom)
+            ee_image = ee.Image(selected_asset)
+            vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+            vis_params["opacity"] = 0.7
 
-                center_lat = float(cfg["center_lat"])
-                center_lon = float(cfg["center_lon"])
-                zoom = int(cfg["zoom"])
+            add_ee_layer(m, ee_image, vis_params, f"{st.session_state.current_parameter} Layer")
+            add_colormap(m, vis_params, st.session_state.current_parameter)
+            folium.LayerControl().add_to(m)
 
-                m = create_base_map(center_lat, center_lon, zoom)
-                ee_image = ee.Image(selected_asset)
-                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
-                vis_params["opacity"] = 0.7
+            # 🟡 TWO-COLUMN LAYOUT USING HTML FLEXBOX
+            st.markdown(f"### 🗺️ {t('interactive_map')}")
 
-                add_ee_layer(m, ee_image, vis_params, f"{st.session_state.current_parameter} Layer")
-                add_colormap(m, vis_params, st.session_state.current_parameter)
-                folium.LayerControl().add_to(m)
+            # Use HTML with flexbox for two-column layout
+            st.markdown("""
+            <style>
+            .map-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            .map-column {
+                flex: 2;
+                min-width: 300px;
+            }
+            .empty-column {
+                flex: 1;
+                min-width: 150px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                border: 2px dashed #d1d5db;
+                min-height: 500px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #9ca3af;
+                font-style: italic;
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-                # 🟡 DISPLAY THE MAP
-                st_folium(m, width=None, height=500)
+            # Start the flex container
+            st.markdown('<div class="map-container">', unsafe_allow_html=True)
 
-            # 🟡 Empty column on the right
-            with empty_col:
-                # Reserved for future content
-                pass
+            # Left column - Map
+            st.markdown('<div class="map-column">', unsafe_allow_html=True)
+            
+            # 🟡 DISPLAY THE MAP
+            st_folium(m, width=None, height=500)
+            
+            # Statistics under map
+            st.markdown(f"### 📊 {t('statistics')}")
+            try:
+                stats = ee_image.reduceRegion(
+                    reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
+                    geometry=ee_image.geometry(),
+                    scale=1000,
+                    maxPixels=1e9,
+                ).getInfo()
+                prefix = next((k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1")
+                cols = st.columns(3)
+                for col, stat_key, label in zip(cols, ["min", "max", "mean"], ["minimum", "maximum", "mean"]):
+                    with col:
+                        val = stats.get(f"{prefix}_{stat_key}")
+                        st.metric(t(label), f"{val:.2f}" if isinstance(val, (int, float)) else "N/A")
+            except Exception as e:
+                st.error(f"Error calculating statistics: {e}")
+
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            # Right column - Empty (reserved for future)
+            st.markdown('<div class="empty-column">🔜 Reserved for future content</div>', unsafe_allow_html=True)
+
+            # Close the flex container
+            st.markdown('</div>', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"{t('error_map')}: {str(e)}")
+            st.error(traceback.format_exc())
 
     # ---- Footer ----
     st.markdown("---")
