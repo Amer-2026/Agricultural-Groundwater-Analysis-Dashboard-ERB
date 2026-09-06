@@ -647,7 +647,7 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* 🟡 FIXED: LANGUAGE SELECTOR - match buttons exactly */
+        /* 🟡 FIXED: DATE AND LANGUAGE SELECTORS - match buttons exactly */
         .stSelectbox > div > div {
             background-color: #0066cc !important;
             color: white !important;
@@ -690,7 +690,7 @@ def main():
             color: white !important;
         }
         
-        /* Language selector dropdown arrow */
+        /* Selector dropdown arrows */
         .stSelectbox svg {
             fill: white !important;
             color: white !important;
@@ -852,10 +852,10 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
     
-    # ---- Navigation Buttons (Date selector removed) ----
+    # ---- Navigation Buttons (Date selector added back) ----
     st.markdown("---")
-    # 🟡 CHANGED: Only 4 columns now (removed date selector)
-    nav_col1, nav_col2, nav_col3, nav_col4 = st.columns([1.5, 1.5, 1.5, 2])
+    # 🟡 CHANGED: 5 columns now (date selector added back)
+    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
     
     with nav_col1:
         if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
@@ -875,25 +875,31 @@ def main():
             st.session_state.map_generated = False
             st.rerun()
     
-    # 🟡 REMOVED: Date selector column (nav_col4)
-    # The Generate button now takes the rightmost position
-    
+    # 🟡 ADDED: Date selector back
     with nav_col4:
+        try:
+            asset_path = cfg["asset_path"]
+            assets = get_ee_assets(asset_path)
+            if assets:
+                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+                if asset_dates:
+                    min_date, max_date = min(asset_dates), max(asset_dates)
+                    months = pd.date_range(start=min_date, end=max_date, freq="MS")
+                    date_options = [date.strftime("%Y-%m") for date in months]
+                    
+                    selected_date_str = st.selectbox(
+                        t("select_date"),
+                        options=date_options,
+                        index=len(date_options) - 1,
+                        key="top_date_selector",
+                        label_visibility="collapsed",
+                    )
+                    st.session_state.selected_date_str = selected_date_str
+        except Exception as e:
+            st.warning("Could not load dates")
+    
+    with nav_col5:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
-            # 🟡 FIXED: Use the selected date from session state or default
-            if st.session_state.selected_date_str is None:
-                # If no date is selected, use the latest available date
-                try:
-                    asset_path = cfg["asset_path"]
-                    assets = get_ee_assets(asset_path)
-                    if assets:
-                        asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
-                        if asset_dates:
-                            latest_date = max(asset_dates)
-                            st.session_state.selected_date_str = latest_date.strftime("%Y-%m")
-                except:
-                    pass
-            
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
             st.session_state.current_date = st.session_state.selected_date_str
