@@ -615,44 +615,18 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 NEW: Theme color bar under header */
+        /* 🟡 UPDATED: Wider theme color bar under header */
         .theme-bar {
             display: flex;
-            height: 6px;
+            height: 10px;
             width: 100%;
-            margin: 0.5rem 0 1rem 0;
-            border-radius: 3px;
+            margin: 0.75rem 0 1.5rem 0;
+            border-radius: 5px;
             overflow: hidden;
-            background: linear-gradient(to right, 
-                #FF6B6B 0%, 
-                #FFA94D 15%, 
-                #FFD93D 30%, 
-                #6BCB77 45%, 
-                #4D96FF 60%, 
-                #9B59B6 75%, 
-                #FF6B6B 100%
-            );
-            background-size: 200% 100%;
-            animation: gradientMove 4s ease-in-out infinite;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        /* Alternative: Static colored segments like MOOC */
-        .theme-bar-static {
-            display: flex;
-            height: 6px;
-            width: 100%;
-            margin: 0.5rem 0 1rem 0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        
-        .theme-bar-static .segment {
+        .theme-bar .segment {
             flex: 1;
             height: 100%;
         }
@@ -885,15 +859,18 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
     
-    # ---- 🟡 NEW: Colorful Theme Bar (like MOOC dashboard) ----
+    # ---- 🟡 UPDATED: Wider Theme Color Bar (10px height) ----
     st.markdown("""
-        <div class="theme-bar-static">
+        <div class="theme-bar">
             <div class="segment" style="background-color: #FF6B6B;"></div>
-            <div class="segment" style="background-color: #FFA94D;"></div>
-            <div class="segment" style="background-color: #FFD93D;"></div>
-            <div class="segment" style="background-color: #6BCB77;"></div>
-            <div class="segment" style="background-color: #4D96FF;"></div>
-            <div class="segment" style="background-color: #9B59B6;"></div>
+            <div class="segment" style="background-color: #FF8E53;"></div>
+            <div class="segment" style="background-color: #FECA57;"></div>
+            <div class="segment" style="background-color: #48DBFB;"></div>
+            <div class="segment" style="background-color: #0ABDE3;"></div>
+            <div class="segment" style="background-color: #10AC84;"></div>
+            <div class="segment" style="background-color: #EE5A24;"></div>
+            <div class="segment" style="background-color: #5F27CD;"></div>
+            <div class="segment" style="background-color: #341F97;"></div>
             <div class="segment" style="background-color: #FF6B6B;"></div>
         </div>
     """, unsafe_allow_html=True)
