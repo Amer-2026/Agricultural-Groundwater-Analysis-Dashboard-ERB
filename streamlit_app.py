@@ -615,6 +615,48 @@ def main():
             color: #e0e0e0 !important;
         }
         
+        /* 🟡 NEW: Theme color bar under header */
+        .theme-bar {
+            display: flex;
+            height: 6px;
+            width: 100%;
+            margin: 0.5rem 0 1rem 0;
+            border-radius: 3px;
+            overflow: hidden;
+            background: linear-gradient(to right, 
+                #FF6B6B 0%, 
+                #FFA94D 15%, 
+                #FFD93D 30%, 
+                #6BCB77 45%, 
+                #4D96FF 60%, 
+                #9B59B6 75%, 
+                #FF6B6B 100%
+            );
+            background-size: 200% 100%;
+            animation: gradientMove 4s ease-in-out infinite;
+        }
+        
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Alternative: Static colored segments like MOOC */
+        .theme-bar-static {
+            display: flex;
+            height: 6px;
+            width: 100%;
+            margin: 0.5rem 0 1rem 0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .theme-bar-static .segment {
+            flex: 1;
+            height: 100%;
+        }
+        
         /* ALL BUTTONS - consistent styling */
         .stButton > button {
             background-color: #0066cc !important;
@@ -843,6 +885,19 @@ def main():
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
     
+    # ---- 🟡 NEW: Colorful Theme Bar (like MOOC dashboard) ----
+    st.markdown("""
+        <div class="theme-bar-static">
+            <div class="segment" style="background-color: #FF6B6B;"></div>
+            <div class="segment" style="background-color: #FFA94D;"></div>
+            <div class="segment" style="background-color: #FFD93D;"></div>
+            <div class="segment" style="background-color: #6BCB77;"></div>
+            <div class="segment" style="background-color: #4D96FF;"></div>
+            <div class="segment" style="background-color: #9B59B6;"></div>
+            <div class="segment" style="background-color: #FF6B6B;"></div>
+        </div>
+    """, unsafe_allow_html=True)
+    
     # ---- Navigation Buttons (5 columns with date selector) ----
     st.markdown("---")
     nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
@@ -865,7 +920,7 @@ def main():
             st.session_state.map_generated = False
             st.rerun()
     
-    # 🟡 DATE SELECTOR - Back in its original place
+    # Date selector
     with nav_col4:
         try:
             asset_path = cfg["asset_path"]
