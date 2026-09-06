@@ -615,7 +615,7 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 UPDATED: Date and Language selectors - match Recharge button color */
+        /* 🟡 UPDATED: Date and Language selectors - match Recharge button */
         .stSelectbox > div > div {
             background-color: #0066cc !important;
             color: white !important;
@@ -631,9 +631,32 @@ def main():
             color: white !important;
         }
         
+        /* 🟡 UPDATED: Selectbox label text color */
+        .stSelectbox > label {
+            color: white !important;
+        }
+        
+        /* 🟡 UPDATED: Selectbox placeholder text */
+        .stSelectbox > div > div > div[data-baseweb="select"] > div {
+            color: white !important;
+        }
+        
+        .stSelectbox > div > div > div[data-baseweb="select"] > div > div {
+            color: white !important;
+        }
+        
+        /* 🟡 UPDATED: Selected value text */
+        .stSelectbox [data-testid="stMarkdownContainer"] p {
+            color: white !important;
+        }
+        
         /* Language selector specific styling */
         .stSelectbox[data-testid="stSelectbox"] > div > div {
             background-color: #0066cc !important;
+            color: white !important;
+        }
+        
+        .stSelectbox[data-testid="stSelectbox"] > div > div > div {
             color: white !important;
         }
         
@@ -820,7 +843,7 @@ def main():
             st.rerun()
     
     with nav_col4:
-        # 🟡 UPDATED: Date selector - now matches Recharge button color
+        # 🟡 UPDATED: Date selector - matches Recharge button
         try:
             asset_path = cfg["asset_path"]
             assets = get_ee_assets(asset_path)
