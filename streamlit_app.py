@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with consistent buttons ----
+    # ---- DARK THEME CSS with consistent elements ----
     st.markdown(
         """
         <style>
@@ -627,6 +627,12 @@ def main():
             width: 100% !important;
             transition: all 0.3s ease !important;
             cursor: pointer !important;
+            text-align: center !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+            height: 38px !important;
+            line-height: 1.2 !important;
         }
         
         .stButton > button:hover {
@@ -641,14 +647,19 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* 🟡 FIXED: Selectors match button style */
+        /* 🟡 FIXED: LANGUAGE SELECTOR - match buttons exactly */
         .stSelectbox > div > div {
             background-color: #0066cc !important;
+            color: white !important;
             border-radius: 8px !important;
             border: none !important;
             padding: 0.5rem 1rem !important;
-            color: white !important;
+            min-height: 38px !important;
+            height: 38px !important;
+            display: flex !important;
+            align-items: center !important;
             font-size: 1rem !important;
+            font-weight: 500 !important;
         }
         
         .stSelectbox > div > div:hover {
@@ -676,6 +687,12 @@ def main():
         }
         
         .stSelectbox > label {
+            color: white !important;
+        }
+        
+        /* Language selector dropdown arrow */
+        .stSelectbox svg {
+            fill: white !important;
             color: white !important;
         }
         
