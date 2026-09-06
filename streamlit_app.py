@@ -590,17 +590,112 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- CSS to hide map attribution ----
+    # ---- DARK THEME CSS ----
     st.markdown(
         """
         <style>
-        /* Hide the attribution text on the map */
+        /* Dark background for the entire app */
+        .stApp {
+            background-color: #0e1117 !important;
+        }
+        
+        /* Dark background for the main content */
+        .main .block-container {
+            background-color: #0e1117 !important;
+            padding-top: 1rem !important;
+        }
+        
+        /* Dark background for all containers */
+        div[data-testid="stVerticalBlock"] {
+            background-color: #0e1117 !important;
+        }
+        
+        /* Light text for headers and labels */
+        h1, h2, h3, h4, h5, h6, label, .stMarkdown, .stText {
+            color: #e0e0e0 !important;
+        }
+        
+        /* Dark background for select boxes */
+        .stSelectbox > div > div {
+            background-color: #1e2430 !important;
+            color: #e0e0e0 !important;
+        }
+        
+        /* Dark background for buttons */
+        .stButton > button {
+            background-color: #0066cc !important;
+            color: white !important;
+            border: none !important;
+        }
+        
+        .stButton > button:hover {
+            background-color: #0055aa !important;
+        }
+        
+        /* Dark background for metric cards */
+        div[data-testid="stMetric"] {
+            background-color: #1e2430 !important;
+            padding: 10px !important;
+            border-radius: 8px !important;
+        }
+        
+        div[data-testid="stMetric"] label {
+            color: #9ca3af !important;
+        }
+        
+        div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
+            color: #e0e0e0 !important;
+        }
+        
+        /* Dark background for info boxes */
+        .stAlert {
+            background-color: #1e2430 !important;
+            color: #e0e0e0 !important;
+        }
+        
+        /* Dark background for expanders */
+        .streamlit-expanderHeader {
+            background-color: #1e2430 !important;
+            color: #e0e0e0 !important;
+        }
+        
+        .streamlit-expanderContent {
+            background-color: #1e2430 !important;
+            color: #e0e0e0 !important;
+        }
+        
+        /* Hide map attribution */
         .leaflet-control-attribution {
             display: none !important;
         }
-        /* Also hide any other attribution elements */
+        
         .folium-map .leaflet-control-attribution {
             display: none !important;
+        }
+        
+        /* Dark background for dataframes */
+        .stDataFrame {
+            background-color: #1e2430 !important;
+        }
+        
+        /* Dark background for sidebar */
+        .stSidebar {
+            background-color: #0e1117 !important;
+        }
+        
+        /* Dark background for the header area */
+        .st-emotion-cache-16idsys p {
+            color: #e0e0e0 !important;
+        }
+        
+        /* Divider color */
+        hr {
+            border-color: #2d3340 !important;
+        }
+        
+        /* Caption text */
+        .stCaption {
+            color: #9ca3af !important;
         }
         </style>
         """,
@@ -649,9 +744,9 @@ def main():
         st.markdown(
             f"""
             <div style="margin-top: -2rem;">
-                <h1 style="font-size: 2rem; font-weight: 700; color: #1f2937; margin: 0; padding: 0;">🌊 {t('dashboard_header')}</h1>
-                <p style="font-size: 0.9rem; color: #6b7280; margin: 0; padding: 0;">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</p>
-                <p style="font-size: 0.9rem; font-weight: 700; color: #0066cc; margin: 0.25rem 0 0 0; padding: 0;">{t('welcome_subtitle')}</p>
+                <h1 style="font-size: 2rem; font-weight: 700; color: #e0e0e0; margin: 0; padding: 0;">🌊 {t('dashboard_header')}</h1>
+                <p style="font-size: 0.9rem; color: #9ca3af; margin: 0; padding: 0;">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</p>
+                <p style="font-size: 0.9rem; font-weight: 700; color: #60a5fa; margin: 0.25rem 0 0 0; padding: 0;">{t('welcome_subtitle')}</p>
             </div>
             """,
             unsafe_allow_html=True,
