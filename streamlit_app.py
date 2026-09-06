@@ -622,7 +622,7 @@ def main():
                 #6b2fa0 85%,
                 #3d1b5e 100%
             );
-            padding: 2.5rem 2rem 2rem 2rem;
+            padding: 2rem 2rem 1.5rem 2rem;
             margin: -1rem -3rem 1.5rem -3rem;
             border-radius: 0;
             color: white;
@@ -646,47 +646,54 @@ def main():
             pointer-events: none;
         }
         
-        .banner h1 {
+        .banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .banner-title {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .banner-title h1 {
             font-size: 2.2rem;
             font-weight: 700;
             margin: 0;
             padding: 0;
             color: white;
             text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5);
-            position: relative;
-            z-index: 1;
         }
         
-        .banner .subtitle {
+        .banner-title .subtitle {
             font-size: 1rem;
             color: rgba(255,255,255,0.85);
             margin: 0.25rem 0 0 0;
             padding: 0;
-            position: relative;
-            z-index: 1;
         }
         
-        .banner .welcome {
+        .banner-title .welcome {
             font-size: 0.95rem;
             font-weight: 500;
             color: rgba(255,255,255,0.9);
             margin: 0.5rem 0 0 0;
             padding: 0;
             text-shadow: 0 1px 10px rgba(180, 41, 249, 0.3);
-            position: relative;
-            z-index: 1;
         }
         
-        /* Language selector inside banner - left side */
+        /* Language selector in banner - left aligned */
         .banner-language {
-            position: relative;
-            z-index: 2;
-            margin-top: 0.5rem;
-            display: inline-block;
+            flex-shrink: 0;
+            min-width: 120px;
         }
         
         .banner-language .stSelectbox > div > div {
-            background-color: rgba(255,255,255,0.15) !important;
+            background: rgba(255,255,255,0.15) !important;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2) !important;
             color: white !important;
@@ -698,7 +705,7 @@ def main():
         }
         
         .banner-language .stSelectbox > div > div:hover {
-            background-color: rgba(255,255,255,0.25) !important;
+            background: rgba(255,255,255,0.25) !important;
         }
         
         .banner-language .stSelectbox > div > div > div {
@@ -921,36 +928,38 @@ def main():
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
     # ---- 🟡 DIGITAL BERRY BANNER with Language Selector on Left ----
-    # Create language options
     lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
     current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
     
-    # Custom HTML banner with language selector positioned left
-    st.markdown(
-        f"""
-        <div class="banner">
-            <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-                <div style="flex: 1;">
-                    <h1>🌊 {t('dashboard_header')}</h1>
-                    <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-                    <div class="welcome">✨ {t('welcome_subtitle')}</div>
+    # Use columns to place language selector inside the banner
+    banner_col1, banner_col2 = st.columns([5, 1])
+    
+    with banner_col1:
+        st.markdown(
+            f"""
+            <div class="banner">
+                <div class="banner-content">
+                    <div class="banner-title">
+                        <h1>🌊 {t('dashboard_header')}</h1>
+                        <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+                        <div class="welcome">✨ {t('welcome_subtitle')}</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
     
-    # Place language selector directly below banner on left side
-    lang_col = st.columns([1])[0]
-    with lang_col:
+    with banner_col2:
+        # Language selector inside banner
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
-            "🌐 Language",
+            "🌐",
             options=list(lang_options.keys()),
             index=list(lang_options.keys()).index(current_label),
-            key="lang_selector_top",
+            key="lang_selector_banner",
+            label_visibility="collapsed",
         )
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
