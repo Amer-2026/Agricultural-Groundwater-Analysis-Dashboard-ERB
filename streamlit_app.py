@@ -756,7 +756,7 @@ def main():
             
         else:
             try:
-                # 🟡 UPDATED: Map column reduced to 1.5 (60%) and empty column 1 (40%)
+                # 🟡 FIXED: Map column with proper ratio and empty column
                 map_col, empty_col = st.columns([1.5, 1])
                 
                 with map_col:
@@ -892,16 +892,10 @@ def main():
                                 key="dl_summary",
                             )
                 
-                # ---- Empty column on the right (reserved for future content) ----
+                # ---- Empty column on the right (completely empty) ----
                 with empty_col:
-                    st.markdown("""
-                        <div style="height: 500px; display: flex; align-items: center; justify-content: center; 
-                                    background-color: #f8f9fa; border-radius: 8px; border: 2px dashed #d1d5db;">
-                            <p style="color: #9ca3af; font-style: italic; text-align: center;">
-                                🔜 Reserved for<br>future content
-                            </p>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    # 🟡 FIXED: Completely empty column - no placeholder text
+                    pass
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
