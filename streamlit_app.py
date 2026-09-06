@@ -1,7 +1,7 @@
 """
 Agricultural Groundwater Analysis Dashboard
 ============================================
-A clean, simple version with two-column layout using HTML flexbox.
+Simple version with map full width and right sidebar.
 """
 
 import json
@@ -357,47 +357,28 @@ def main():
             add_colormap(m, vis_params, st.session_state.current_parameter)
             folium.LayerControl().add_to(m)
 
-            # 🟡 TWO-COLUMN LAYOUT USING HTML FLEXBOX
+            # ---- DISPLAY MAP WITH RIGHT SIDEBAR ----
             st.markdown(f"### 🗺️ {t('interactive_map')}")
 
-            # Use HTML with flexbox for two-column layout
-            st.markdown("""
-            <style>
-            .map-container {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-            }
-            .map-column {
-                flex: 2;
-                min-width: 300px;
-            }
-            .empty-column {
-                flex: 1;
-                min-width: 150px;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                border: 2px dashed #d1d5db;
-                min-height: 500px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #9ca3af;
-                font-style: italic;
-            }
-            </style>
-            """, unsafe_allow_html=True)
-
-            # Start the flex container
-            st.markdown('<div class="map-container">', unsafe_allow_html=True)
-
-            # Left column - Map
-            st.markdown('<div class="map-column">', unsafe_allow_html=True)
+            # Use sidebar for empty space (reserved for future content)
+            # Main content shows the map full width
+            # The sidebar will appear on the right
             
-            # 🟡 DISPLAY THE MAP
+            # 🟡 Create a right sidebar for empty space
+            with st.sidebar:
+                st.markdown("### 🔜 Reserved for Future Content")
+                st.markdown("---")
+                st.info("This space is reserved for additional features, charts, or data visualizations that will be added in the future.")
+                st.markdown("**Coming soon:**")
+                st.markdown("- 📊 Additional charts")
+                st.markdown("- 📈 Data tables")
+                st.markdown("- 🔍 Advanced filters")
+                st.markdown("- 📥 Export options")
+            
+            # 🟡 Display the map full width in the main area
             st_folium(m, width=None, height=500)
-            
-            # Statistics under map
+
+            # ---- Statistics under map ----
             st.markdown(f"### 📊 {t('statistics')}")
             try:
                 stats = ee_image.reduceRegion(
@@ -414,14 +395,6 @@ def main():
                         st.metric(t(label), f"{val:.2f}" if isinstance(val, (int, float)) else "N/A")
             except Exception as e:
                 st.error(f"Error calculating statistics: {e}")
-
-            st.markdown('</div>', unsafe_allow_html=True)
-
-            # Right column - Empty (reserved for future)
-            st.markdown('<div class="empty-column">🔜 Reserved for future content</div>', unsafe_allow_html=True)
-
-            # Close the flex container
-            st.markdown('</div>', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"{t('error_map')}: {str(e)}")
