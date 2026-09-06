@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with consistent elements ----
+    # ---- DARK THEME CSS with Full-Width Banner ----
     st.markdown(
         """
         <style>
@@ -599,10 +599,60 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* Dark background for the main content */
+        /* Remove default padding at the top */
         .main .block-container {
+            padding-top: 0rem !important;
+            padding-bottom: 1rem !important;
+        }
+        
+        /* Dark background for all containers */
+        div[data-testid="stVerticalBlock"] {
             background-color: #0e1117 !important;
-            padding-top: 1rem !important;
+        }
+        
+        /* 🟡 NEW: Full-width banner at the top */
+        .banner {
+            background: linear-gradient(135deg, 
+                #FF6B6B 0%, 
+                #FF8E53 15%, 
+                #FECA57 30%, 
+                #48DBFB 45%, 
+                #0ABDE3 55%, 
+                #10AC84 70%, 
+                #EE5A24 85%, 
+                #5F27CD 100%
+            );
+            padding: 2rem 2rem 1.5rem 2rem;
+            margin: -1rem -3rem 1rem -3rem;
+            border-radius: 0;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        .banner h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        
+        .banner .subtitle {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+            margin: 0.25rem 0 0 0;
+            padding: 0;
+        }
+        
+        .banner .welcome {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.95);
+            margin: 0.5rem 0 0 0;
+            padding: 0;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.3);
         }
         
         /* Dark background for all containers */
@@ -613,22 +663,6 @@ def main():
         /* Light text for headers and labels */
         h1, h2, h3, h4, h5, h6, label, .stMarkdown, .stText {
             color: #e0e0e0 !important;
-        }
-        
-        /* 🟡 UPDATED: Wider theme color bar under header */
-        .theme-bar {
-            display: flex;
-            height: 10px;
-            width: 100%;
-            margin: 0.75rem 0 1.5rem 0;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        
-        .theme-bar .segment {
-            flex: 1;
-            height: 100%;
         }
         
         /* ALL BUTTONS - consistent styling */
@@ -776,11 +810,6 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* Dark background for the header area */
-        .st-emotion-cache-16idsys p {
-            color: #e0e0e0 !important;
-        }
-        
         /* Divider color */
         hr {
             border-color: #2d3340 !important;
@@ -795,56 +824,30 @@ def main():
         unsafe_allow_html=True,
     )
 
-    # ---- TOP BAR: language + country ----
+    # ---- 🟡 NEW: Full-Width Colored Banner at the Top ----
+    # Get config for country name
     configs = load_country_configs()
-
     if not configs:
-        st.error(
-            "No country configuration was found.\n\n"
-            "The app expects at least one country JSON file (with a `key` and an "
-            "`asset_path`) inside a **`config/`** folder next to `streamlit_app.py`.\n\n"
-            "On GitHub: open your config file, click the ✏️ edit pencil, and rename it "
-            "to `config/yourcountry.json` (typing `config/` before the name creates the "
-            "folder). Then commit — the app will redeploy automatically."
-        )
+        st.error("No country configuration found.")
         st.stop()
-
-    country_keys = list(configs.keys())
-    if len(country_keys) == 1:
-        selected_country = country_keys[0]
-    else:
-        try:
-            default_key = st.query_params.get("country", country_keys[0])
-        except AttributeError:
-            default_key = st.experimental_get_query_params().get("country", [country_keys[0]])[0]
-        if default_key not in configs:
-            default_key = country_keys[0]
-        selected_country = st.selectbox(
-            t("country"),
-            options=country_keys,
-            index=country_keys.index(default_key),
-            format_func=lambda k: country_label(configs[k]),
-            label_visibility="collapsed",
-        )
-    cfg = configs[selected_country]
-
-    # ---- RTL support ----
-    dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
-
-    # ---- HEADER ----
-    col_title, col_lang = st.columns([6, 1])
-    with col_title:
-        st.markdown(
-            f"""
-            <div style="margin-top: -2rem;">
-                <h1 style="font-size: 2rem; font-weight: 700; color: #e0e0e0; margin: 0; padding: 0;">🌊 {t('dashboard_header')}</h1>
-                <p style="font-size: 0.9rem; color: #9ca3af; margin: 0; padding: 0;">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</p>
-                <p style="font-size: 0.9rem; font-weight: 700; color: #60a5fa; margin: 0.25rem 0 0 0; padding: 0;">{t('welcome_subtitle')}</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
     
+    country_keys = list(configs.keys())
+    selected_country = country_keys[0] if len(country_keys) == 1 else country_keys[0]
+    cfg = configs[selected_country]
+    
+    st.markdown(
+        f"""
+        <div class="banner">
+            <h1>🌊 {t('dashboard_header')}</h1>
+            <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+            <div class="welcome">✨ {t('welcome_subtitle')}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # ---- TOP BAR: language ----
+    col_lang = st.columns([1])[0]
     with col_lang:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
@@ -858,22 +861,6 @@ def main():
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
             st.rerun()
-    
-    # ---- 🟡 UPDATED: Wider Theme Color Bar (10px height) ----
-    st.markdown("""
-        <div class="theme-bar">
-            <div class="segment" style="background-color: #FF6B6B;"></div>
-            <div class="segment" style="background-color: #FF8E53;"></div>
-            <div class="segment" style="background-color: #FECA57;"></div>
-            <div class="segment" style="background-color: #48DBFB;"></div>
-            <div class="segment" style="background-color: #0ABDE3;"></div>
-            <div class="segment" style="background-color: #10AC84;"></div>
-            <div class="segment" style="background-color: #EE5A24;"></div>
-            <div class="segment" style="background-color: #5F27CD;"></div>
-            <div class="segment" style="background-color: #341F97;"></div>
-            <div class="segment" style="background-color: #FF6B6B;"></div>
-        </div>
-    """, unsafe_allow_html=True)
     
     # ---- Navigation Buttons (5 columns with date selector) ----
     st.markdown("---")
