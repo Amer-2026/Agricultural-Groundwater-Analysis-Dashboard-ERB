@@ -675,4 +675,231 @@ def main():
         if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
             st.session_state.selected_parameter = "recharge"
             st.session_state.map_generated = False
-            st.r
+            st.rerun()
+    
+    with nav_col4:
+        # Date selector
+        try:
+            asset_path = cfg["asset_path"]
+            assets = get_ee_assets(asset_path)
+            if assets:
+                asset_dates = [d for d in (parse_asset_date(a) for a in assets) if d is not None]
+                if asset_dates:
+                    min_date, max_date = min(asset_dates), max(asset_dates)
+                    months = pd.date_range(start=min_date, end=max_date, freq="MS")
+                    date_options = [date.strftime("%Y-%m") for date in months]
+                    
+                    selected_date_str = st.selectbox(
+                        t("select_date"),
+                        options=date_options,
+                        index=len(date_options) - 1,
+                        key="top_date_selector",
+                        label_visibility="collapsed",
+                    )
+                    st.session_state.selected_date_str = selected_date_str
+        except Exception as e:
+            st.warning("Could not load dates")
+    
+    with nav_col5:
+        if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
+            st.session_state.map_generated = True
+            st.session_state.current_parameter = st.session_state.selected_parameter
+            st.session_state.current_date = st.session_state.selected_date_str
+            st.rerun()
+    
+    st.markdown("---")
+
+    # ---- Earth Engine ----
+    try:
+        if not initialize_ee():
+            st.error(t("ee_init_failed"))
+            return
+    except Exception as e:
+        st.error(f"{t('ee_init_critical')}: {str(e)}")
+        st.error(traceback.format_exc())
+        return
+
+    # ---- Session state ----
+    defaults = {
+        "last_clicked": None,
+        "map_generated": False,
+        "current_parameter": "abstraction_mm",
+        "current_date": None,
+        "time_series_data": None,
+        "current_country": selected_country,
+    }
+    for key, default in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = default
+
+    # Reset map when the country changes
+    if st.session_state.current_country != selected_country:
+        st.session_state.current_country = selected_country
+        st.session_state.map_generated = False
+        st.session_state.last_clicked = None
+        st.session_state.time_series_data = None
+
+    # ---- Main content: Map + Analysis ----
+    with st.container():
+        if not st.session_state.map_generated:
+            # 🟡 CHANGED: Show Statistics section in the old welcome message position
+            st.markdown(f"### 📊 {t('statistics')}")
+            st.info("📌 " + t('welcome_text'))
+            
+            # Show sample stats or placeholder
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric(t('minimum'), "—")
+            with col2:
+                st.metric(t('maximum'), "—")
+            with col3:
+                st.metric(t('mean'), "—")
+            
+            st.caption(t('click_map'))
+            
+        else:
+            try:
+                st.markdown(f"### 🗺️ {t('interactive_map')}")
+
+                selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
+                selected_year_month = selected_date.strftime("%Y_%m")
+
+                selected_asset = next(
+                    (
+                        a
+                        for a in assets
+                        if st.session_state.current_parameter in a and selected_year_month in a
+                    ),
+                    None,
+                )
+                if not selected_asset:
+                    st.error(t("no_data_month"))
+                    return
+
+                center_lat = float(cfg["center_lat"])
+                center_lon = float(cfg["center_lon"])
+                zoom = int(cfg["zoom"])
+                
+                m = create_base_map(center_lat, center_lon, zoom)
+                ee_image = ee.Image(selected_asset)
+                
+                opacity = st.session_state.get("opacity", 0.7)
+                vis_params = get_vis_params(st.session_state.current_parameter, selected_asset)
+                vis_params["opacity"] = opacity
+
+                add_ee_layer(
+                    m,
+                    ee_image,
+                    vis_params,
+                    f"{t(st.session_state.current_parameter)} {t('layer')}",
+                )
+                add_colormap(m, vis_params, st.session_state.current_parameter)
+                folium.LayerControl().add_to(m)
+
+                map_data = st_folium(m, width=None, height=500, returned_objects=["last_clicked"])
+
+                if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
+                    st.session_state.last_clicked = map_data["last_clicked"]
+                    st.session_state.time_series_data = get_time_series_data(
+                        point=[map_data["last_clicked"]["lat"], map_data["last_clicked"]["lng"]],
+                        parameter=st.session_state.current_parameter,
+                        assets=tuple(assets),
+                    )
+
+                # ---- Statistics (now in the main area) ----
+                st.markdown(f"### 📊 {t('statistics')}")
+                try:
+                    stats = ee_image.reduceRegion(
+                        reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
+                        geometry=ee_image.geometry(),
+                        scale=1000,
+                        maxPixels=1e9,
+                    ).getInfo()
+                    prefix = next(
+                        (k[: -len("_mean")] for k in stats if k.endswith("_mean")), "b1"
+                    )
+                    cols = st.columns(3)
+                    for col, stat_key, label in zip(
+                        cols, ["min", "max", "mean"], ["minimum", "maximum", "mean"]
+                    ):
+                        with col:
+                            val = stats.get(f"{prefix}_{stat_key}")
+                            st.metric(
+                                t(label),
+                                f"{val:.2f}" if isinstance(val, (int, float)) else "N/A",
+                            )
+                except Exception as e:
+                    st.error(f"{t('error_statistics')}: {str(e)}")
+
+                # ---- Time series (point) ----
+                st.markdown(f"### 📈 {t('time_series_analysis')}")
+                if st.session_state.time_series_data:
+                    clicked_lat = st.session_state.last_clicked["lat"]
+                    clicked_lng = st.session_state.last_clicked["lng"]
+
+                    fig = create_time_series_plot(
+                        st.session_state.time_series_data,
+                        st.session_state.current_parameter,
+                        clicked_lat,
+                        clicked_lng,
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    st.download_button(
+                        t("download_csv"),
+                        data=to_csv_bytes(st.session_state.time_series_data),
+                        file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
+                        f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
+                        mime="text/csv",
+                    )
+                    with st.expander(t("raw_data")):
+                        st.dataframe(pd.DataFrame(st.session_state.time_series_data))
+                else:
+                    st.info(t("click_map"))
+
+                # ---- Regional monthly summary ----
+                st.markdown(f"### 📊 {t('regional_summary')}")
+                if st.button(t("compute_summary"), help=t("summary_help")):
+                    with st.spinner(t("computing")):
+                        summary = get_regional_summary(
+                            st.session_state.current_parameter,
+                            tuple(assets),
+                            int(cfg.get("native_scale_m", 20)),
+                        )
+                    if summary:
+                        df = pd.DataFrame(summary)
+                        months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
+                        fig = go.Figure(
+                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#0066cc")
+                        )
+                        fig.update_layout(
+                            title=t(
+                                "summary_title",
+                                parameter=t(st.session_state.current_parameter),
+                            ),
+                            xaxis=dict(tickangle=45),
+                            template="plotly_white",
+                            height=350,
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+                        st.download_button(
+                            t("download_csv"),
+                            data=to_csv_bytes(summary, value_col="mean"),
+                            file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
+                            f"_regional_summary.csv",
+                            mime="text/csv",
+                            key="dl_summary",
+                        )
+
+            except Exception as e:
+                st.error(f"{t('error_map')}: {str(e)}")
+                st.error(traceback.format_exc())
+
+    # ---- Footer ----
+    st.markdown("---")
+    with st.expander(t("about_tool")):
+        st.markdown(t("about_text"))
+
+
+if __name__ == "__main__":
+    main()
