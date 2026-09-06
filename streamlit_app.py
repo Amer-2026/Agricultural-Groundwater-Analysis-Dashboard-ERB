@@ -626,7 +626,7 @@ def main():
     # ---- RTL support for Arabic and Kurdish ----
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
-    # ---- HEADER: Title + Welcome Subtitle (BOLD & COLORED) ----
+    # ---- HEADER: Title + Welcome Subtitle ----
     col_title, col_lang = st.columns([6, 1])
     with col_title:
         st.markdown(
@@ -738,12 +738,11 @@ def main():
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
 
-    # ---- Main content: Map + Analysis ----
+    # ---- Main content ----
     with st.container():
         if not st.session_state.map_generated:
             st.markdown(f"### 📊 {t('statistics')}")
             
-            # Show sample stats or placeholder
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric(t('minimum'), "—")
@@ -756,8 +755,8 @@ def main():
             
         else:
             try:
-                # 🟡 TWO-COLUMN LAYOUT: Map on left, empty on right
-                map_col, empty_col = st.columns([1.5, 1])
+                # 🟡 TWO-COLUMN LAYOUT: Map (2/3) + Empty (1/3)
+                map_col, empty_col = st.columns([2, 1])
                 
                 with map_col:
                     st.markdown(f"### 🗺️ {t('interactive_map')}")
@@ -797,7 +796,6 @@ def main():
                     add_colormap(m, vis_params, st.session_state.current_parameter)
                     folium.LayerControl().add_to(m)
 
-                    # 🟡 DISPLAY THE MAP
                     map_data = st_folium(m, width=None, height=500, returned_objects=["last_clicked"])
 
                     if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
@@ -808,7 +806,7 @@ def main():
                             assets=tuple(assets),
                         )
 
-                    # ---- Statistics (under the map in the left column) ----
+                    # ---- Statistics ----
                     st.markdown(f"### 📊 {t('statistics')}")
                     try:
                         stats = ee_image.reduceRegion(
@@ -833,7 +831,7 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # ---- Time series (point) ----
+                    # ---- Time series ----
                     st.markdown(f"### 📈 {t('time_series_analysis')}")
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
@@ -859,7 +857,7 @@ def main():
                     else:
                         st.info(t("click_map"))
 
-                    # ---- Regional monthly summary ----
+                    # ---- Regional summary ----
                     st.markdown(f"### 📊 {t('regional_summary')}")
                     if st.button(t("compute_summary"), help=t("summary_help")):
                         with st.spinner(t("computing")):
@@ -893,9 +891,9 @@ def main():
                                 key="dl_summary",
                             )
                 
-                # ---- Empty column on the right ----
+                # 🟡 Empty column on the right
                 with empty_col:
-                    # Completely empty - reserved for future content
+                    # Reserved for future content
                     pass
 
             except Exception as e:
