@@ -541,8 +541,8 @@ def create_time_series_plot(time_series_data, parameter, lat, lon):
             x=x_numeric,
             y=df["value"].tolist(),
             mode="lines+markers",
-            line=dict(color="royalblue", width=2),
-            marker=dict(size=8, color="royalblue"),
+            line=dict(color="#B429F9", width=2),
+            marker=dict(size=8, color="#B429F9"),
             hovertemplate="%{text}: %{y:.2f}<extra></extra>",
             text=months,
         )
@@ -590,7 +590,7 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with Cosmic Bloom Banner ----
+    # ---- DARK THEME CSS with Digital Berry Colors ----
     st.markdown(
         """
         <style>
@@ -610,34 +610,29 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* 🟡 COSMIC BLOOM: Full-width banner at the top */
+        /* 🟡 DIGITAL BERRY: Full-width banner at the top */
         .banner {
             background: linear-gradient(135deg, 
-                #0c0c1d 0%,
-                #1a0a2e 10%,
-                #2d1b4e 20%,
-                #4a1942 30%,
-                #6b2fa0 40%,
-                #8b3a8a 50%,
-                #b85a9a 60%,
-                #d47b9e 70%,
-                #a85a9a 80%,
+                #1a0a2e 0%,
+                #3d1b5e 15%,
+                #6b2fa0 30%,
+                #B429F9 45%,
+                #26C5F3 60%,
+                #B429F9 75%,
                 #6b2fa0 85%,
-                #3d1b5e 90%,
-                #1a0a2e 95%,
-                #0c0c1d 100%
+                #3d1b5e 100%
             );
             padding: 2.5rem 2rem 2rem 2rem;
             margin: -1rem -3rem 1.5rem -3rem;
             border-radius: 0;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-            box-shadow: 0 4px 30px rgba(107, 47, 160, 0.3);
+            box-shadow: 0 4px 30px rgba(180, 41, 249, 0.3);
             position: relative;
             overflow: hidden;
         }
         
-        /* Cosmic sparkle overlay */
+        /* Digital sparkle overlay */
         .banner::before {
             content: '';
             position: absolute;
@@ -645,26 +640,10 @@ def main():
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(200, 100, 255, 0.08) 0%, transparent 40%),
-                        radial-gradient(circle at 50% 50%, rgba(100, 50, 200, 0.05) 0%, transparent 60%);
+            background: radial-gradient(circle at 20% 30%, rgba(180, 41, 249, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(38, 197, 243, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 50%, rgba(107, 47, 160, 0.05) 0%, transparent 60%);
             pointer-events: none;
-        }
-        
-        /* Cosmic star particles */
-        .banner::after {
-            content: '✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧ ✦ ✧';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            font-size: 0.6rem;
-            color: rgba(255,255,255,0.06);
-            letter-spacing: 0.5rem;
-            text-align: center;
-            pointer-events: none;
-            white-space: nowrap;
-            overflow: hidden;
         }
         
         .banner h1 {
@@ -673,7 +652,7 @@ def main():
             margin: 0;
             padding: 0;
             color: white;
-            text-shadow: 0 2px 20px rgba(139, 58, 138, 0.5);
+            text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5);
             position: relative;
             z-index: 1;
         }
@@ -693,9 +672,46 @@ def main():
             color: rgba(255,255,255,0.9);
             margin: 0.5rem 0 0 0;
             padding: 0;
-            text-shadow: 0 1px 10px rgba(139, 58, 138, 0.3);
+            text-shadow: 0 1px 10px rgba(180, 41, 249, 0.3);
             position: relative;
             z-index: 1;
+        }
+        
+        /* Language selector inside banner - left side */
+        .banner-language {
+            position: relative;
+            z-index: 2;
+            margin-top: 0.5rem;
+            display: inline-block;
+        }
+        
+        .banner-language .stSelectbox > div > div {
+            background-color: rgba(255,255,255,0.15) !important;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2) !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 0.3rem 1rem !important;
+            min-height: 36px !important;
+            height: 36px !important;
+            font-size: 0.9rem !important;
+        }
+        
+        .banner-language .stSelectbox > div > div:hover {
+            background-color: rgba(255,255,255,0.25) !important;
+        }
+        
+        .banner-language .stSelectbox > div > div > div {
+            color: white !important;
+        }
+        
+        .banner-language .stSelectbox svg {
+            fill: white !important;
+            color: white !important;
+        }
+        
+        .banner-language .stSelectbox > label {
+            color: rgba(255,255,255,0.8) !important;
         }
         
         /* Dark background for all containers */
@@ -708,9 +724,9 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* ALL BUTTONS - consistent styling */
+        /* ALL BUTTONS - Digital Berry colors */
         .stButton > button {
-            background-color: #6b2fa0 !important;
+            background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
             color: white !important;
             border: none !important;
             border-radius: 8px !important;
@@ -729,10 +745,10 @@ def main():
         }
         
         .stButton > button:hover {
-            background-color: #8b3a8a !important;
+            background: linear-gradient(135deg, #9A1FD4, #1EA8D4) !important;
             color: white !important;
             border: none !important;
-            box-shadow: 0 2px 15px rgba(107, 47, 160, 0.5) !important;
+            box-shadow: 0 2px 15px rgba(180, 41, 249, 0.5) !important;
             transform: translateY(-1px) !important;
         }
         
@@ -740,9 +756,9 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* LANGUAGE SELECTOR - match buttons exactly */
+        /* LANGUAGE SELECTOR - Digital Berry colors */
         .stSelectbox > div > div {
-            background-color: #6b2fa0 !important;
+            background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
             color: white !important;
             border-radius: 8px !important;
             border: none !important;
@@ -756,7 +772,7 @@ def main():
         }
         
         .stSelectbox > div > div:hover {
-            background-color: #8b3a8a !important;
+            background: linear-gradient(135deg, #9A1FD4, #1EA8D4) !important;
         }
         
         .stSelectbox > div > div > div {
@@ -798,20 +814,20 @@ def main():
         }
         
         .stSelectbox > div > div ul li:hover {
-            background-color: #6b2fa0 !important;
+            background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
             color: white !important;
         }
         
         /* Dark background for metric cards */
         div[data-testid="stMetric"] {
-            background-color: #1a0a2e !important;
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             padding: 10px !important;
             border-radius: 8px !important;
-            border: 1px solid rgba(107, 47, 160, 0.2) !important;
+            border: 1px solid rgba(180, 41, 249, 0.2) !important;
         }
         
         div[data-testid="stMetric"] label {
-            color: #b85a9a !important;
+            color: #26C5F3 !important;
         }
         
         div[data-testid="stMetric"] div[data-testid="stMetricValue"] {
@@ -820,18 +836,18 @@ def main():
         
         /* Dark background for info boxes */
         .stAlert {
-            background-color: #1a0a2e !important;
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             color: #e0e0e0 !important;
         }
         
         /* Dark background for expanders */
         .streamlit-expanderHeader {
-            background-color: #1a0a2e !important;
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             color: #e0e0e0 !important;
         }
         
         .streamlit-expanderContent {
-            background-color: #1a0a2e !important;
+            background: linear-gradient(135deg, #1a0a2e, #2d1b4e) !important;
             color: #e0e0e0 !important;
         }
         
@@ -856,7 +872,7 @@ def main():
         
         /* Divider color */
         hr {
-            border-color: rgba(107, 47, 160, 0.3) !important;
+            border-color: rgba(180, 41, 249, 0.3) !important;
         }
         
         /* Caption text */
@@ -904,29 +920,37 @@ def main():
     # ---- RTL support ----
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
-    # ---- 🟡 COSMIC BLOOM BANNER ----
+    # ---- 🟡 DIGITAL BERRY BANNER with Language Selector on Left ----
+    # Create language options
+    lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
+    current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
+    
+    # Custom HTML banner with language selector positioned left
     st.markdown(
         f"""
         <div class="banner">
-            <h1>🌊 {t('dashboard_header')}</h1>
-            <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-            <div class="welcome">✨ {t('welcome_subtitle')}</div>
+            <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                <div style="flex: 1;">
+                    <h1>🌊 {t('dashboard_header')}</h1>
+                    <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+                    <div class="welcome">✨ {t('welcome_subtitle')}</div>
+                </div>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
-
-    # ---- TOP BAR: language ----
-    col_lang = st.columns([1])[0]
-    with col_lang:
+    
+    # Place language selector directly below banner on left side
+    lang_col = st.columns([1])[0]
+    with lang_col:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
-            "🌐",
+            "🌐 Language",
             options=list(lang_options.keys()),
             index=list(lang_options.keys()).index(current_label),
-            key="lang_selector",
-            label_visibility="collapsed",
+            key="lang_selector_top",
         )
         if lang_options[selected_label] != st.session_state.lang:
             st.session_state.lang = lang_options[selected_label]
@@ -1176,7 +1200,7 @@ def main():
                         df = pd.DataFrame(summary)
                         months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
                         fig = go.Figure(
-                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#6b2fa0")
+                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
                         )
                         fig.update_layout(
                             title=t(
