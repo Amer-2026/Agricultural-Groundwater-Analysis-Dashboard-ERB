@@ -103,6 +103,7 @@ For support or more information, please contact the development team.""",
         "last_update": "Last Update",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
+        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
     },
     "ar": {
@@ -181,6 +182,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "آخر تحديث",
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
+        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
     },
     "ku": {
@@ -258,6 +260,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "دوایین نوێکردنەوە",
         "select_date": "بەروار هەڵبژێرە",
         "generate_analysis": "دروستکردنی شیکردنەوە",
+        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
     },
 }
@@ -783,7 +786,7 @@ def main():
             width: 100% !important;
         }
         
-        /* 🟡 CHANGED: Click message font size - 0.90rem */
+        /* Click message font size - 0.90rem */
         .click-message {
             font-size: 0.90rem !important;
             color: rgba(255,255,255,0.8) !important;
@@ -1101,7 +1104,6 @@ def main():
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    # 🟡 CHANGED: Click message font size is now 0.90rem
                     st.markdown(
                         f"""
                         <h3>🗺️ {t('interactive_map')} 
