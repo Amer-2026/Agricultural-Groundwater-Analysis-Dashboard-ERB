@@ -1185,7 +1185,8 @@ def main():
                     add_colormap(m, vis_params, st.session_state.current_parameter)
                     folium.LayerControl().add_to(m)
 
-                    map_data = st_folium(m, width=None, height=500, returned_objects=["last_clicked"])
+                    # 🟡 CHANGED: Map height increased from 500 to 700px
+                    map_data = st_folium(m, width=None, height=700, returned_objects=["last_clicked"])
 
                     if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
                         st.session_state.last_clicked = map_data["last_clicked"]
@@ -1233,9 +1234,6 @@ def main():
                             )
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
-                    
-                    # 🟡 REMOVED: Divider line between Statistics and Time Series
-                    # st.markdown("---")
 
                     # Time Series Analysis
                     st.markdown(f"### 📈 {t('time_series_analysis')}")
@@ -1262,9 +1260,6 @@ def main():
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
                     else:
                         st.info(t('click_map'))
-                    
-                    # 🟡 REMOVED: Divider line between Time Series and Regional Summary
-                    # st.markdown("---")
 
                     # Regional Monthly Summary
                     st.markdown(f"### 📊 {t('regional_summary')}")
@@ -1305,7 +1300,6 @@ def main():
                 st.error(traceback.format_exc())
 
     # ---- Footer ----
-    # 🟡 REMOVED: The horizontal rule (---) from the footer
     with st.expander(t("about_tool")):
         st.markdown(t("about_text"))
 
