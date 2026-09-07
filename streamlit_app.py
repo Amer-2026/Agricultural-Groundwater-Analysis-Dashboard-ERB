@@ -1185,8 +1185,8 @@ def main():
                     add_colormap(m, vis_params, st.session_state.current_parameter)
                     folium.LayerControl().add_to(m)
 
-                    # 🟡 CHANGED: Map height increased from 500 to 700px
-                    map_data = st_folium(m, width=None, height=700, returned_objects=["last_clicked"])
+                    # 🟡 CHANGED: Map height increased to 850px
+                    map_data = st_folium(m, width=None, height=850, returned_objects=["last_clicked"])
 
                     if map_data["last_clicked"] and map_data["last_clicked"] != st.session_state.last_clicked:
                         st.session_state.last_clicked = map_data["last_clicked"]
