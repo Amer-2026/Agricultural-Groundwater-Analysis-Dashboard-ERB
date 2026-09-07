@@ -1234,7 +1234,8 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
                     
-                    st.markdown("---")
+                    # 🟡 REMOVED: Divider line between Statistics and Time Series
+                    # st.markdown("---")
 
                     # Time Series Analysis
                     st.markdown(f"### 📈 {t('time_series_analysis')}")
@@ -1262,7 +1263,8 @@ def main():
                     else:
                         st.info(t('click_map'))
                     
-                    st.markdown("---")
+                    # 🟡 REMOVED: Divider line between Time Series and Regional Summary
+                    # st.markdown("---")
 
                     # Regional Monthly Summary
                     st.markdown(f"### 📊 {t('regional_summary')}")
