@@ -784,25 +784,13 @@ def main():
         }
         
         /* 🟡 CHANGED: Generate Analysis button - special color #fc506e */
-        /* Target the specific button by its key using a more specific selector */
-        button[data-testid="baseButton-secondary"][kind="secondary"][data-testid="baseButton-secondary"] {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-        }
-        
-        /* Override specifically for the generate button using its key attribute */
-        button[kind="secondary"] {
-            background-color: #a8f368 !important;
-            color: #1a0a2e !important;
-        }
-        
-        /* Target the generate button by the text content or by being in the last column */
-        div[data-testid="stHorizontalBlock"] div[data-testid="column"]:last-child button {
+        /* Target primary buttons (the generate button is type="primary") */
+        .stButton > button[kind="primary"] {
             background-color: #fc506e !important;
             color: white !important;
         }
         
-        div[data-testid="stHorizontalBlock"] div[data-testid="column"]:last-child button:hover {
+        .stButton > button[kind="primary"]:hover {
             background-color: #e0405e !important;
             color: white !important;
             box-shadow: 0 2px 15px rgba(252, 80, 110, 0.5) !important;
@@ -1056,7 +1044,7 @@ def main():
         except Exception as e:
             st.warning("Could not load dates")
     
-    # 🟡 Generate Analysis button - same location, color changed via CSS
+    # 🟡 Generate Analysis button - type="primary" so it gets the pink color
     with nav_col5:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
