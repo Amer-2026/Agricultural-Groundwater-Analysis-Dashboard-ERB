@@ -610,7 +610,7 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* 🟡 DIGITAL BERRY: Full-width banner - FIXED */
+        /* 🟡 DIGITAL BERRY: Full-width banner */
         .banner {
             background: linear-gradient(135deg, 
                 #1a0a2e 0%,
@@ -661,9 +661,11 @@ def main():
             margin: 0 auto;
         }
         
+        /* 🟡 FIXED: Title aligned to LEFT */
         .banner-title {
             flex: 1;
             min-width: 200px;
+            text-align: left;
         }
         
         .banner-title h1 {
@@ -673,6 +675,7 @@ def main():
             padding: 0;
             color: white;
             text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5);
+            text-align: left;
         }
         
         .banner-title .subtitle {
@@ -680,6 +683,7 @@ def main():
             color: rgba(255,255,255,0.85);
             margin: 0.25rem 0 0 0;
             padding: 0;
+            text-align: left;
         }
         
         .banner-title .welcome {
@@ -689,9 +693,10 @@ def main():
             margin: 0.5rem 0 0 0;
             padding: 0;
             text-shadow: 0 1px 10px rgba(180, 41, 249, 0.3);
+            text-align: left;
         }
         
-        /* 🟡 Language selector INSIDE banner - Digital Berry style */
+        /* Language selector in banner - right side */
         .banner-language {
             flex-shrink: 0;
             min-width: 130px;
@@ -728,11 +733,6 @@ def main():
         }
         
         .banner-language .stSelectbox > label {
-            color: rgba(255,255,255,0.8) !important;
-        }
-        
-        /* Hide the default Streamlit selectbox label */
-        .banner-language .stSelectbox > label {
             display: none !important;
         }
         
@@ -746,24 +746,27 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* ALL BUTTONS - Digital Berry colors */
+        /* 🟡 FIXED: ALL BUTTONS - Shorter (narrower) width */
         .stButton > button {
             background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
             color: white !important;
             border: none !important;
             border-radius: 8px !important;
-            padding: 0.5rem 1rem !important;
-            font-size: 1rem !important;
+            padding: 0.4rem 0.8rem !important;
+            font-size: 0.85rem !important;
             font-weight: 500 !important;
-            width: 100% !important;
+            width: auto !important;
+            min-width: 80px !important;
+            max-width: 100% !important;
             transition: all 0.3s ease !important;
             cursor: pointer !important;
             text-align: center !important;
             justify-content: center !important;
             align-items: center !important;
-            display: flex !important;
-            height: 38px !important;
+            display: inline-flex !important;
+            height: 32px !important;
             line-height: 1.2 !important;
+            white-space: nowrap !important;
         }
         
         .stButton > button:hover {
@@ -776,6 +779,12 @@ def main():
         
         .stButton > button:active {
             transform: translateY(0px) !important;
+        }
+        
+        /* 🟡 FIXED: Button container - allow buttons to be narrower */
+        .stButton {
+            display: inline-block !important;
+            width: auto !important;
         }
         
         /* LANGUAGE SELECTOR - Digital Berry colors */
@@ -942,12 +951,7 @@ def main():
     # ---- RTL support ----
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
-    # ---- 🟡 DIGITAL BERRY BANNER - Full Width with Language Selector INSIDE ----
-    # We need to use a workaround to place the selectbox inside the banner HTML
-    # Since we can't put Streamlit widgets inside HTML, we'll use columns
-    # but make the banner span the full width with the language selector
-    
-    # Create a full-width banner using st.markdown
+    # ---- 🟡 DIGITAL BERRY BANNER - Full Width with Title Left ----
     st.markdown(
         f"""
         <div class="banner">
@@ -963,7 +967,7 @@ def main():
         unsafe_allow_html=True,
     )
     
-    # Place language selector in a small column on the right, inside a container that looks like part of the banner
+    # Place language selector in the top-right of the banner using columns
     lang_col1, lang_col2, lang_col3 = st.columns([4, 1, 1])
     with lang_col3:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
@@ -980,23 +984,24 @@ def main():
             st.rerun()
     
     # ---- Navigation Buttons (5 columns with date selector) ----
+    # 🟡 FIXED: Using more columns to make buttons narrower
     st.markdown("---")
-    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
+    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1, 1, 1, 1.2, 1.2])
     
     with nav_col1:
-        if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
+        if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=False):
             st.session_state.selected_parameter = "abstraction_mm"
             st.session_state.map_generated = False
             st.rerun()
     
     with nav_col2:
-        if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
+        if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=False):
             st.session_state.selected_parameter = "abstraction_m3"
             st.session_state.map_generated = False
             st.rerun()
     
     with nav_col3:
-        if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
+        if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=False):
             st.session_state.selected_parameter = "recharge"
             st.session_state.map_generated = False
             st.rerun()
@@ -1025,7 +1030,7 @@ def main():
             st.warning("Could not load dates")
     
     with nav_col5:
-        if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
+        if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=False, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
             st.session_state.current_date = st.session_state.selected_date_str
