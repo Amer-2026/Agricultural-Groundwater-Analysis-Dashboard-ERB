@@ -686,7 +686,6 @@ def main():
             text-align: left;
         }
         
-        /* 🟡 FIXED: Removed extra star from welcome message */
         .banner-title .welcome {
             font-size: 0.9rem;
             font-weight: 500;
@@ -747,15 +746,15 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* ALL BUTTONS - Restored to original size */
+        /* 🟡 CHANGED: ALL BUTTONS - New color #f4f269 */
         .stButton > button {
-            background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
-            color: white !important;
+            background-color: #f4f269 !important;
+            color: #1a0a2e !important;
             border: none !important;
             border-radius: 8px !important;
             padding: 0.5rem 1rem !important;
             font-size: 1rem !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
             width: 100% !important;
             transition: all 0.3s ease !important;
             cursor: pointer !important;
@@ -768,10 +767,10 @@ def main():
         }
         
         .stButton > button:hover {
-            background: linear-gradient(135deg, #9A1FD4, #1EA8D4) !important;
-            color: white !important;
+            background-color: #d4c94a !important;
+            color: #1a0a2e !important;
             border: none !important;
-            box-shadow: 0 2px 15px rgba(180, 41, 249, 0.5) !important;
+            box-shadow: 0 2px 15px rgba(244, 242, 105, 0.4) !important;
             transform: translateY(-1px) !important;
         }
         
@@ -791,10 +790,10 @@ def main():
             font-weight: 400 !important;
         }
         
-        /* LANGUAGE SELECTOR - Digital Berry colors */
+        /* 🟡 CHANGED: LANGUAGE SELECTOR - New color #f4f269 */
         .stSelectbox > div > div {
-            background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
-            color: white !important;
+            background-color: #f4f269 !important;
+            color: #1a0a2e !important;
             border-radius: 8px !important;
             border: none !important;
             padding: 0.5rem 1rem !important;
@@ -803,40 +802,40 @@ def main():
             display: flex !important;
             align-items: center !important;
             font-size: 1rem !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
         }
         
         .stSelectbox > div > div:hover {
-            background: linear-gradient(135deg, #9A1FD4, #1EA8D4) !important;
+            background-color: #d4c94a !important;
         }
         
         .stSelectbox > div > div > div {
-            color: white !important;
+            color: #1a0a2e !important;
         }
         
         .stSelectbox > div > div > div[data-baseweb="select"] {
-            color: white !important;
+            color: #1a0a2e !important;
         }
         
         .stSelectbox > div > div > div[data-baseweb="select"] > div {
-            color: white !important;
+            color: #1a0a2e !important;
         }
         
         .stSelectbox > div > div > div[data-baseweb="select"] > div > div {
-            color: white !important;
+            color: #1a0a2e !important;
         }
         
         .stSelectbox [data-testid="stMarkdownContainer"] p {
-            color: white !important;
+            color: #1a0a2e !important;
         }
         
         .stSelectbox > label {
-            color: white !important;
+            color: #1a0a2e !important;
         }
         
         .stSelectbox svg {
-            fill: white !important;
-            color: white !important;
+            fill: #1a0a2e !important;
+            color: #1a0a2e !important;
         }
         
         /* Dropdown menu items */
@@ -849,8 +848,8 @@ def main():
         }
         
         .stSelectbox > div > div ul li:hover {
-            background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
-            color: white !important;
+            background-color: #f4f269 !important;
+            color: #1a0a2e !important;
         }
         
         /* Dark background for metric cards */
@@ -956,13 +955,12 @@ def main():
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
     # ---- DIGITAL BERRY BANNER - Full Width with Title Left ----
-    # 🟡 FIXED: Removed the extra ✨ from the welcome message in the banner
     st.markdown(
         f"""
         <div class="banner">
             <div class="banner-inner">
                 <div class="banner-title">
-                    <h1> {t('dashboard_header')}</h1>
+                    <h1>🌊 {t('dashboard_header')}</h1>
                     <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
                     <div class="welcome">{t('welcome_subtitle')}</div>
                 </div>
