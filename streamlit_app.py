@@ -962,7 +962,7 @@ def main():
         <div class="banner">
             <div class="banner-inner">
                 <div class="banner-title">
-                    <h1>🌊 {t('dashboard_header')}</h1>
+                    <h1> {t('dashboard_header')}</h1>
                     <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
                     <div class="welcome">{t('welcome_subtitle')}</div>
                 </div>
