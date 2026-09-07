@@ -1136,8 +1136,8 @@ def main():
                 st.metric(t('mean'), "—")
         else:
             try:
-                # TWO-COLUMN LAYOUT: Map on left, Statistics on right
-                map_col, stats_col = st.columns([2, 1])
+                # 🟡 CHANGED: 50% / 50% split (1:1 ratio)
+                map_col, stats_col = st.columns([1, 1])
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
@@ -1260,7 +1260,7 @@ def main():
                     else:
                         st.info(t('click_map'))
 
-                    # 🟡 FIXED: Regional Monthly Summary - removed one chart icon
+                    # Regional Monthly Summary
                     st.markdown(f"### {t('regional_summary')}")
                     if st.button(t("compute_summary"), help=t("summary_help")):
                         with st.spinner(t("computing")):
