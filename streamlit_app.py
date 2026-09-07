@@ -1236,7 +1236,7 @@ def main():
                     
                     st.markdown("---")
 
-                    # 🟡 MOVED: Time Series Analysis (now directly under Statistics)
+                    # Time Series Analysis
                     st.markdown(f"### 📈 {t('time_series_analysis')}")
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
@@ -1264,7 +1264,7 @@ def main():
                     
                     st.markdown("---")
 
-                    # 🟡 MOVED: Regional Monthly Summary (now under Time Series)
+                    # Regional Monthly Summary
                     st.markdown(f"### 📊 {t('regional_summary')}")
                     if st.button(t("compute_summary"), help=t("summary_help")):
                         with st.spinner(t("computing")):
@@ -1303,7 +1303,7 @@ def main():
                 st.error(traceback.format_exc())
 
     # ---- Footer ----
-    st.markdown("---")
+    # 🟡 REMOVED: The horizontal rule (---) from the footer
     with st.expander(t("about_tool")):
         st.markdown(t("about_text"))
 
