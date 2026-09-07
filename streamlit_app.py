@@ -957,23 +957,20 @@ def main():
 
     # ---- DIGITAL BERRY BANNER - Full Width with Title Left ----
     # 🟡 FIXED: Removed the extra ✨ from the welcome message in the banner
-st.markdown(
-    f"""
-    <div class="banner">
-        <div class="banner-inner">
-            <div class="banner-title">
-                <h1 style="display: flex; align-items: center; gap: 10px;">
-                    <img src="water_drop.png" width="40" height="40" style="vertical-align: middle;"> 
-                    {t('dashboard_header')}
-                </h1>
-                <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-                <div class="welcome">{t('welcome_subtitle')}</div>
+    st.markdown(
+        f"""
+        <div class="banner">
+            <div class="banner-inner">
+                <div class="banner-title">
+                    <h1>🌊 {t('dashboard_header')}</h1>
+                    <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+                    <div class="welcome">{t('welcome_subtitle')}</div>
+                </div>
             </div>
         </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+        """,
+        unsafe_allow_html=True,
+    )
     
     # Place language selector in the top-right of the banner using columns
     lang_col1, lang_col2, lang_col3 = st.columns([4, 1, 1])
