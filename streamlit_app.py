@@ -957,16 +957,15 @@ def main():
 
     # ---- DIGITAL BERRY BANNER - Full Width with Title Left ----
     # 🟡 FIXED: Removed the extra ✨ from the welcome message in the banner
-import streamlit as st
-from datetime import datetime
-
-# Your existing code...
 st.markdown(
     f"""
     <div class="banner">
         <div class="banner-inner">
             <div class="banner-title">
-                <h1> 💧 {t('dashboard_header')}</h1>
+                <h1 style="display: flex; align-items: center; gap: 10px;">
+                    <img src="water_drop.png" width="40" height="40" style="vertical-align: middle;"> 
+                    {t('dashboard_header')}
+                </h1>
                 <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
                 <div class="welcome">{t('welcome_subtitle')}</div>
             </div>
