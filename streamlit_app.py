@@ -746,27 +746,24 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* ALL BUTTONS - Shorter (narrower) width */
+        /* 🟡 FIXED: ALL BUTTONS - Restored to original size (full width in columns) */
         .stButton > button {
             background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
             color: white !important;
             border: none !important;
             border-radius: 8px !important;
-            padding: 0.4rem 0.8rem !important;
-            font-size: 0.85rem !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
             font-weight: 500 !important;
-            width: auto !important;
-            min-width: 80px !important;
-            max-width: 100% !important;
+            width: 100% !important;
             transition: all 0.3s ease !important;
             cursor: pointer !important;
             text-align: center !important;
             justify-content: center !important;
             align-items: center !important;
-            display: inline-flex !important;
-            height: 32px !important;
+            display: flex !important;
+            height: 38px !important;
             line-height: 1.2 !important;
-            white-space: nowrap !important;
         }
         
         .stButton > button:hover {
@@ -781,10 +778,17 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* Button container - allow buttons to be narrower */
+        /* 🟡 FIXED: Button container - full width */
         .stButton {
-            display: inline-block !important;
-            width: auto !important;
+            display: block !important;
+            width: 100% !important;
+        }
+        
+        /* 🟡 NEW: Smaller text for the click message in the title */
+        .click-message {
+            font-size: 0.75rem !important;
+            color: rgba(255,255,255,0.7) !important;
+            font-weight: 400 !important;
         }
         
         /* LANGUAGE SELECTOR - Digital Berry colors */
@@ -985,22 +989,22 @@ def main():
     
     # ---- Navigation Buttons (5 columns with date selector) ----
     st.markdown("---")
-    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1, 1, 1, 1.2, 1.2])
+    nav_col1, nav_col2, nav_col3, nav_col4, nav_col5 = st.columns([1.2, 1.2, 1.2, 1.5, 1.5])
     
     with nav_col1:
-        if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=False):
+        if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
             st.session_state.selected_parameter = "abstraction_mm"
             st.session_state.map_generated = False
             st.rerun()
     
     with nav_col2:
-        if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=False):
+        if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
             st.session_state.selected_parameter = "abstraction_m3"
             st.session_state.map_generated = False
             st.rerun()
     
     with nav_col3:
-        if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=False):
+        if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
             st.session_state.selected_parameter = "recharge"
             st.session_state.map_generated = False
             st.rerun()
@@ -1029,7 +1033,7 @@ def main():
             st.warning("Could not load dates")
     
     with nav_col5:
-        if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=False, type="primary"):
+        if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
             st.session_state.current_date = st.session_state.selected_date_str
@@ -1091,7 +1095,6 @@ def main():
                 st.metric(t('maximum'), "—")
             with col3:
                 st.metric(t('mean'), "—")
-            # 🟡 REMOVED: The click_map caption is now part of the Interactive Map title
         else:
             try:
                 # TWO-COLUMN LAYOUT: Map on left, Statistics on right
@@ -1099,8 +1102,15 @@ def main():
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    # 🟡 CHANGED: Interactive Map title with click message combined
-                    st.markdown(f"### 🗺️ {t('interactive_map')} ({t('click_map')})")
+                    # 🟡 CHANGED: Interactive Map title with smaller click message
+                    st.markdown(
+                        f"""
+                        <h3>🗺️ {t('interactive_map')} 
+                        <span class="click-message">({t('click_map')})</span>
+                        </h3>
+                        """,
+                        unsafe_allow_html=True
+                    )
 
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
@@ -1186,7 +1196,6 @@ def main():
                         st.error(f"{t('error_statistics')}: {str(e)}")
                     
                     st.markdown("---")
-                    # 🟡 REMOVED: The caption is now in the Interactive Map title
 
                 # ---- FULL WIDTH: Time Series & Regional Summary ----
                 st.markdown("---")
@@ -1213,7 +1222,6 @@ def main():
                     with st.expander(t("raw_data")):
                         st.dataframe(pd.DataFrame(st.session_state.time_series_data))
                 else:
-                    # 🟡 CHANGED: Info message now includes the click instruction
                     st.info(t('click_map'))
 
                 # ---- Regional summary ----
