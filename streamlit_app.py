@@ -594,33 +594,22 @@ def main():
     st.markdown(
         """
         <style>
-        /* 🟡 HIDE STREAMLIT CLOUD TOP BAR BUTTONS */
-        /* Hide the Share, GitHub, Star buttons */
+        /* Hide Streamlit Cloud top bar buttons */
         .stApp > header button {
             display: none !important;
         }
-        
-        /* Hide the "Manage app" button */
         header button {
             display: none !important;
         }
-        
-        /* Hide the entire header buttons container */
         header div:has(button) {
             display: none !important;
         }
-        
-        /* Hide the Share icon specifically */
         header [data-testid="stHeader"] [data-testid="stToolbar"] {
             display: none !important;
         }
-        
-        /* Hide the top bar buttons */
         .st-emotion-cache-1h9usn1 {
             display: none !important;
         }
-        
-        /* Keep the header transparent and minimal */
         .stApp > header {
             background: transparent !important;
             box-shadow: none !important;
@@ -628,8 +617,6 @@ def main():
             min-height: 0px !important;
             padding: 0px !important;
         }
-        
-        /* Remove extra space from header */
         .stApp {
             margin-top: 0 !important;
         }
@@ -1208,8 +1195,9 @@ def main():
                             assets=tuple(assets),
                         )
 
-                # ---- RIGHT COLUMN: STATISTICS (HORIZONTAL) ----
+                # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
+                    # Statistics
                     st.markdown(f"### 📊 {t('statistics')}")
                     try:
                         stats = ee_image.reduceRegion(
@@ -1248,66 +1236,67 @@ def main():
                     
                     st.markdown("---")
 
-                # ---- FULL WIDTH: Time Series & Regional Summary ----
-                st.markdown("---")
-                st.markdown(f"### 📈 {t('time_series_analysis')}")
-                if st.session_state.time_series_data:
-                    clicked_lat = st.session_state.last_clicked["lat"]
-                    clicked_lng = st.session_state.last_clicked["lng"]
+                    # 🟡 MOVED: Time Series Analysis (now directly under Statistics)
+                    st.markdown(f"### 📈 {t('time_series_analysis')}")
+                    if st.session_state.time_series_data:
+                        clicked_lat = st.session_state.last_clicked["lat"]
+                        clicked_lng = st.session_state.last_clicked["lng"]
 
-                    fig = create_time_series_plot(
-                        st.session_state.time_series_data,
-                        st.session_state.current_parameter,
-                        clicked_lat,
-                        clicked_lng,
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
-
-                    st.download_button(
-                        t("download_csv"),
-                        data=to_csv_bytes(st.session_state.time_series_data),
-                        file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                        f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
-                        mime="text/csv",
-                    )
-                    with st.expander(t("raw_data")):
-                        st.dataframe(pd.DataFrame(st.session_state.time_series_data))
-                else:
-                    st.info(t('click_map'))
-
-                # ---- Regional summary ----
-                st.markdown(f"### 📊 {t('regional_summary')}")
-                if st.button(t("compute_summary"), help=t("summary_help")):
-                    with st.spinner(t("computing")):
-                        summary = get_regional_summary(
+                        fig = create_time_series_plot(
+                            st.session_state.time_series_data,
                             st.session_state.current_parameter,
-                            tuple(assets),
-                            int(cfg.get("native_scale_m", 20)),
-                        )
-                    if summary:
-                        df = pd.DataFrame(summary)
-                        months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-                        fig = go.Figure(
-                            go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
-                        )
-                        fig.update_layout(
-                            title=t(
-                                "summary_title",
-                                parameter=t(st.session_state.current_parameter),
-                            ),
-                            xaxis=dict(tickangle=45),
-                            template="plotly_white",
-                            height=350,
+                            clicked_lat,
+                            clicked_lng,
                         )
                         st.plotly_chart(fig, use_container_width=True)
+
                         st.download_button(
                             t("download_csv"),
-                            data=to_csv_bytes(summary, value_col="mean"),
+                            data=to_csv_bytes(st.session_state.time_series_data),
                             file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                            f"_regional_summary.csv",
+                            f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
                             mime="text/csv",
-                            key="dl_summary",
                         )
+                        with st.expander(t("raw_data")):
+                            st.dataframe(pd.DataFrame(st.session_state.time_series_data))
+                    else:
+                        st.info(t('click_map'))
+                    
+                    st.markdown("---")
+
+                    # 🟡 MOVED: Regional Monthly Summary (now under Time Series)
+                    st.markdown(f"### 📊 {t('regional_summary')}")
+                    if st.button(t("compute_summary"), help=t("summary_help")):
+                        with st.spinner(t("computing")):
+                            summary = get_regional_summary(
+                                st.session_state.current_parameter,
+                                tuple(assets),
+                                int(cfg.get("native_scale_m", 20)),
+                            )
+                        if summary:
+                            df = pd.DataFrame(summary)
+                            months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
+                            fig = go.Figure(
+                                go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
+                            )
+                            fig.update_layout(
+                                title=t(
+                                    "summary_title",
+                                    parameter=t(st.session_state.current_parameter),
+                                ),
+                                xaxis=dict(tickangle=45),
+                                template="plotly_white",
+                                height=350,
+                            )
+                            st.plotly_chart(fig, use_container_width=True)
+                            st.download_button(
+                                t("download_csv"),
+                                data=to_csv_bytes(summary, value_col="mean"),
+                                file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
+                                f"_regional_summary.csv",
+                                mime="text/csv",
+                                key="dl_summary",
+                            )
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
