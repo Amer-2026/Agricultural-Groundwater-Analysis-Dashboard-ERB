@@ -610,7 +610,7 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* 🟡 DIGITAL BERRY: Full-width banner */
+        /* 🟡 DIGITAL BERRY: Full-width banner - FIXED */
         .banner {
             background: linear-gradient(135deg, 
                 #1a0a2e 0%,
@@ -623,15 +623,16 @@ def main():
                 #3d1b5e 90%,
                 #1a0a2e 100%
             );
-            padding: 2rem 2rem 1.5rem 2rem;
-            margin: -1rem 0rem 1.5rem 0rem;
+            padding: 2rem 4rem 1.5rem 4rem;
+            margin: 0 !important;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.4);
             box-shadow: 0 4px 30px rgba(180, 41, 249, 0.3);
             position: relative;
             overflow: hidden;
-            width: 100%;
+            width: 100% !important;
             border-radius: 0;
+            display: block;
         }
         
         /* Digital sparkle overlay */
@@ -648,7 +649,7 @@ def main():
             pointer-events: none;
         }
         
-        .banner-content {
+        .banner-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -656,6 +657,8 @@ def main():
             gap: 1rem;
             position: relative;
             z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .banner-title {
@@ -688,26 +691,31 @@ def main():
             text-shadow: 0 1px 10px rgba(180, 41, 249, 0.3);
         }
         
-        /* Language selector in banner - right side */
+        /* 🟡 Language selector INSIDE banner - Digital Berry style */
         .banner-language {
             flex-shrink: 0;
-            min-width: 120px;
+            min-width: 130px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 10px;
+            padding: 0.2rem 0.2rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
         }
         
         .banner-language .stSelectbox > div > div {
-            background: rgba(255,255,255,0.15) !important;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2) !important;
+            background: transparent !important;
+            border: none !important;
             color: white !important;
             border-radius: 8px !important;
             padding: 0.3rem 1rem !important;
-            min-height: 36px !important;
-            height: 36px !important;
+            min-height: 34px !important;
+            height: 34px !important;
             font-size: 0.9rem !important;
+            box-shadow: none !important;
         }
         
         .banner-language .stSelectbox > div > div:hover {
-            background: rgba(255,255,255,0.25) !important;
+            background: rgba(255,255,255,0.1) !important;
         }
         
         .banner-language .stSelectbox > div > div > div {
@@ -721,6 +729,11 @@ def main():
         
         .banner-language .stSelectbox > label {
             color: rgba(255,255,255,0.8) !important;
+        }
+        
+        /* Hide the default Streamlit selectbox label */
+        .banner-language .stSelectbox > label {
+            display: none !important;
         }
         
         /* Dark background for all containers */
@@ -929,31 +942,30 @@ def main():
     # ---- RTL support ----
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
-    # ---- 🟡 DIGITAL BERRY BANNER ----
-    lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
-    current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
+    # ---- 🟡 DIGITAL BERRY BANNER - Full Width with Language Selector INSIDE ----
+    # We need to use a workaround to place the selectbox inside the banner HTML
+    # Since we can't put Streamlit widgets inside HTML, we'll use columns
+    # but make the banner span the full width with the language selector
     
-    # Create banner with language selector using columns
-    banner_col1, banner_col2 = st.columns([5, 1])
-    
-    with banner_col1:
-        st.markdown(
-            f"""
-            <div class="banner">
-                <div class="banner-content">
-                    <div class="banner-title">
-                        <h1>🌊 {t('dashboard_header')}</h1>
-                        <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-                        <div class="welcome">✨ {t('welcome_subtitle')}</div>
-                    </div>
+    # Create a full-width banner using st.markdown
+    st.markdown(
+        f"""
+        <div class="banner">
+            <div class="banner-inner">
+                <div class="banner-title">
+                    <h1>🌊 {t('dashboard_header')}</h1>
+                    <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+                    <div class="welcome">✨ {t('welcome_subtitle')}</div>
                 </div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     
-    with banner_col2:
-        # Language selector in banner
+    # Place language selector in a small column on the right, inside a container that looks like part of the banner
+    lang_col1, lang_col2, lang_col3 = st.columns([4, 1, 1])
+    with lang_col3:
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
