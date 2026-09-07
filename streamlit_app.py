@@ -822,9 +822,9 @@ def main():
             box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
         }
         
-        /* Click message font size - 0.90rem */
+        /* 🟡 CHANGED: Click message style - no font size change */
         .click-message {
-            font-size: 0.90rem !important;
+            font-size: inherit !important;
             color: rgba(255,255,255,0.8) !important;
             font-weight: 400 !important;
         }
@@ -1141,14 +1141,9 @@ def main():
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    st.markdown(
-                        f"""
-                        <h3>🗺️ {t('interactive_map')} 
-                        <span class="click-message">({t('click_map')})</span>
-                        </h3>
-                        """,
-                        unsafe_allow_html=True
-                    )
+                    # 🟡 CHANGED: Removed click message from Interactive Map title
+                    st.markdown(f"### 🗺️ {t('interactive_map')}")
+                    # 🟡 REMOVED: <span class="click-message">({t('click_map')})</span>
 
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
@@ -1234,8 +1229,9 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # 🟡 FIXED: Time Series Analysis - removed the duplicate click message
-                    st.markdown(f"### 📈 {t('time_series_analysis')}")
+                    # 🟡 CHANGED: Time Series Analysis with click message beside it
+                    st.markdown(f"### 📈 {t('time_series_analysis')} <span class='click-message'>({t('click_map')})</span>", unsafe_allow_html=True)
+                    
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
                         clicked_lng = st.session_state.last_clicked["lng"]
@@ -1257,8 +1253,6 @@ def main():
                         )
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
-                    # 🟡 REMOVED: else statement with duplicate click message
-                    # When no data is available, show nothing (the message is already in the map title)
 
                     # Regional Monthly Summary
                     st.markdown(f"### {t('regional_summary')}")
