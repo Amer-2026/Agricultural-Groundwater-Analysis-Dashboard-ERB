@@ -746,9 +746,9 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 CHANGED: ALL BUTTONS - New color #f4f269 */
+        /* 🟡 CHANGED: ALL BUTTONS - New color #cbff49 */
         .stButton > button {
-            background-color: #f4f269 !important;
+            background-color: #cbff49 !important;
             color: #1a0a2e !important;
             border: none !important;
             border-radius: 8px !important;
@@ -767,10 +767,10 @@ def main():
         }
         
         .stButton > button:hover {
-            background-color: #d4c94a !important;
+            background-color: #b0e63a !important;
             color: #1a0a2e !important;
             border: none !important;
-            box-shadow: 0 2px 15px rgba(244, 242, 105, 0.4) !important;
+            box-shadow: 0 2px 15px rgba(203, 255, 73, 0.4) !important;
             transform: translateY(-1px) !important;
         }
         
@@ -790,9 +790,9 @@ def main():
             font-weight: 400 !important;
         }
         
-        /* 🟡 CHANGED: LANGUAGE SELECTOR - New color #f4f269 */
+        /* 🟡 CHANGED: LANGUAGE SELECTOR - New color #cbff49 */
         .stSelectbox > div > div {
-            background-color: #f4f269 !important;
+            background-color: #cbff49 !important;
             color: #1a0a2e !important;
             border-radius: 8px !important;
             border: none !important;
@@ -806,7 +806,7 @@ def main():
         }
         
         .stSelectbox > div > div:hover {
-            background-color: #d4c94a !important;
+            background-color: #b0e63a !important;
         }
         
         .stSelectbox > div > div > div {
@@ -848,7 +848,7 @@ def main():
         }
         
         .stSelectbox > div > div ul li:hover {
-            background-color: #f4f269 !important;
+            background-color: #cbff49 !important;
             color: #1a0a2e !important;
         }
         
