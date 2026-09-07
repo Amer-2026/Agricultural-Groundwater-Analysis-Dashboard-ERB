@@ -784,15 +784,25 @@ def main():
         }
         
         /* 🟡 CHANGED: Generate Analysis button - special color #fc506e */
-        /* Target the specific button by its key */
-        button[data-testid="baseButton-secondary"][key="top_generate"],
-        button[kind="secondary"][key="top_generate"] {
+        /* Target the specific button by its key using a more specific selector */
+        button[data-testid="baseButton-secondary"][kind="secondary"][data-testid="baseButton-secondary"] {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+        }
+        
+        /* Override specifically for the generate button using its key attribute */
+        button[kind="secondary"] {
+            background-color: #a8f368 !important;
+            color: #1a0a2e !important;
+        }
+        
+        /* Target the generate button by the text content or by being in the last column */
+        div[data-testid="stHorizontalBlock"] div[data-testid="column"]:last-child button {
             background-color: #fc506e !important;
             color: white !important;
         }
         
-        button[data-testid="baseButton-secondary"][key="top_generate"]:hover,
-        button[kind="secondary"][key="top_generate"]:hover {
+        div[data-testid="stHorizontalBlock"] div[data-testid="column"]:last-child button:hover {
             background-color: #e0405e !important;
             color: white !important;
             box-shadow: 0 2px 15px rgba(252, 80, 110, 0.5) !important;
@@ -1046,7 +1056,7 @@ def main():
         except Exception as e:
             st.warning("Could not load dates")
     
-    # 🟡 CHANGED: Generate Analysis button - same location, different color via CSS
+    # 🟡 Generate Analysis button - same location, color changed via CSS
     with nav_col5:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
