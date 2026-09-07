@@ -1136,7 +1136,7 @@ def main():
                 st.metric(t('mean'), "—")
         else:
             try:
-                # 🟡 CHANGED: 50% / 50% split (1:1 ratio)
+                # 50% / 50% split
                 map_col, stats_col = st.columns([1, 1])
 
                 # ---- LEFT COLUMN: MAP ----
@@ -1234,7 +1234,7 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # Time Series Analysis
+                    # 🟡 CHANGED: Time Series Analysis - removed duplicate click message
                     st.markdown(f"### 📈 {t('time_series_analysis')}")
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
