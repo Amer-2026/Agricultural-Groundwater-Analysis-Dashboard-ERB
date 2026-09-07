@@ -590,65 +590,59 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with Digital Berry Colors ----
+    # ---- DARK THEME CSS ----
     st.markdown(
         """
         <style>
-        /* 🟡 FIXED: Only hide the Share, GitHub, Star buttons */
-        /* Target the header buttons specifically */
-        header .st-emotion-cache-1h9usn1 {
-            display: none !important;
-        }
-        
-        /* Hide the share, github, star icons in the top right */
-        header .st-emotion-cache-1r6slb0 {
-            justify-content: flex-end !important;
-        }
-        
-        /* Hide the entire top bar buttons container */
-        header [data-testid="stHeader"] {
-            background: transparent !important;
-        }
-        
-        /* Specifically hide the tool icons */
-        header .st-emotion-cache-1h9usn1,
-        header .st-emotion-cache-1vt4y43,
-        header .st-emotion-cache-1ld9dsq {
+        /* 🟡 HIDE STREAMLIT CLOUD TOP BAR BUTTONS */
+        /* Hide the Share, GitHub, Star buttons */
+        .stApp > header button {
             display: none !important;
         }
         
         /* Hide the "Manage app" button */
-        button[data-testid="baseButton-header"] {
+        header button {
             display: none !important;
         }
         
-        /* Hide the share button specifically */
-        button[data-testid="stHeader"] button {
+        /* Hide the entire header buttons container */
+        header div:has(button) {
             display: none !important;
         }
         
-        /* Keep the app header transparent but visible */
+        /* Hide the Share icon specifically */
+        header [data-testid="stHeader"] [data-testid="stToolbar"] {
+            display: none !important;
+        }
+        
+        /* Hide the top bar buttons */
+        .st-emotion-cache-1h9usn1 {
+            display: none !important;
+        }
+        
+        /* Keep the header transparent and minimal */
         .stApp > header {
             background: transparent !important;
             box-shadow: none !important;
-            height: 0 !important;
-            min-height: 0 !important;
-            padding: 0 !important;
+            height: 0px !important;
+            min-height: 0px !important;
+            padding: 0px !important;
         }
         
-        /* Remove the extra space created by hiding the header */
+        /* Remove extra space from header */
         .stApp {
             margin-top: 0 !important;
-        }
-        
-        .main .block-container {
-            padding-top: 0rem !important;
-            padding-bottom: 1rem !important;
         }
         
         /* Dark background for the entire app */
         .stApp {
             background-color: #0e1117 !important;
+        }
+        
+        /* Remove default padding at the top */
+        .main .block-container {
+            padding-top: 0rem !important;
+            padding-bottom: 1rem !important;
         }
         
         /* Dark background for all containers */
