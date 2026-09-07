@@ -590,27 +590,19 @@ def main():
         initial_sidebar_state="collapsed",
     )
 
-    # ---- DARK THEME CSS with Digital Berry Colors - Full Width ----
+    # ---- DARK THEME CSS with Digital Berry Colors ----
     st.markdown(
         """
         <style>
-        /* Remove ALL padding and margins to allow full-width */
+        /* Dark background for the entire app */
         .stApp {
             background-color: #0e1117 !important;
-            margin: 0 !important;
-            padding: 0 !important;
         }
         
-        /* Remove default padding at the top and sides */
+        /* Remove default padding at the top */
         .main .block-container {
-            padding: 0rem !important;
-            margin: 0rem !important;
-            max-width: 100% !important;
-        }
-        
-        /* Remove all side padding */
-        .st-emotion-cache-1r6slb0 {
-            padding: 0 !important;
+            padding-top: 0rem !important;
+            padding-bottom: 1rem !important;
         }
         
         /* Dark background for all containers */
@@ -618,7 +610,7 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* 🟡 DIGITAL BERRY: Full-width banner - spans entire screen */
+        /* 🟡 DIGITAL BERRY: Full-width banner */
         .banner {
             background: linear-gradient(135deg, 
                 #1a0a2e 0%,
@@ -631,19 +623,15 @@ def main():
                 #3d1b5e 90%,
                 #1a0a2e 100%
             );
-            padding: 2.5rem 4rem 2rem 4rem;
-            margin: 0 !important;
-            width: 100vw !important;
-            max-width: 100vw !important;
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
+            padding: 2rem 2rem 1.5rem 2rem;
+            margin: -1rem 0rem 1.5rem 0rem;
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.4);
             box-shadow: 0 4px 30px rgba(180, 41, 249, 0.3);
+            position: relative;
             overflow: hidden;
+            width: 100%;
+            border-radius: 0;
         }
         
         /* Digital sparkle overlay */
@@ -668,8 +656,6 @@ def main():
             gap: 1rem;
             position: relative;
             z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
         }
         
         .banner-title {
@@ -678,7 +664,7 @@ def main():
         }
         
         .banner-title h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
             margin: 0;
             padding: 0;
@@ -687,14 +673,14 @@ def main():
         }
         
         .banner-title .subtitle {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: rgba(255,255,255,0.85);
             margin: 0.25rem 0 0 0;
             padding: 0;
         }
         
         .banner-title .welcome {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
             color: rgba(255,255,255,0.9);
             margin: 0.5rem 0 0 0;
@@ -735,13 +721,6 @@ def main():
         
         .banner-language .stSelectbox > label {
             color: rgba(255,255,255,0.8) !important;
-        }
-        
-        /* Content wrapper with padding */
-        .content-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
         }
         
         /* Dark background for all containers */
@@ -950,29 +929,31 @@ def main():
     # ---- RTL support ----
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
-    # ---- 🟡 DIGITAL BERRY BANNER - Full Width ----
+    # ---- 🟡 DIGITAL BERRY BANNER ----
     lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
     current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
     
-    # Create the full-width banner with language selector
-    st.markdown(
-        f"""
-        <div class="banner">
-            <div class="banner-content">
-                <div class="banner-title">
-                    <h1>🌊 {t('dashboard_header')}</h1>
-                    <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-                    <div class="welcome">✨ {t('welcome_subtitle')}</div>
+    # Create banner with language selector using columns
+    banner_col1, banner_col2 = st.columns([5, 1])
+    
+    with banner_col1:
+        st.markdown(
+            f"""
+            <div class="banner">
+                <div class="banner-content">
+                    <div class="banner-title">
+                        <h1>🌊 {t('dashboard_header')}</h1>
+                        <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
+                        <div class="welcome">✨ {t('welcome_subtitle')}</div>
+                    </div>
                 </div>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
     
-    # Language selector in banner (using columns)
-    lang_col1, lang_col2 = st.columns([5, 1])
-    with lang_col2:
+    with banner_col2:
+        # Language selector in banner
         lang_options = {"English": "en", "العربية": "ar", "کوردی": "ku"}
         current_label = next(k for k, v in lang_options.items() if v == st.session_state.lang)
         selected_label = st.selectbox(
