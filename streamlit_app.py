@@ -591,9 +591,31 @@ def main():
     )
 
     # ---- DARK THEME CSS with Digital Berry Colors ----
+    # 🟡 ADDED: CSS to hide the Streamlit Cloud top bar (Share, GitHub, Star)
     st.markdown(
         """
         <style>
+        /* 🟡 HIDE STREAMLIT CLOUD TOP BAR */
+        /* Hide the entire top bar containing Share, GitHub, Star */
+        .stApp > header {
+            display: none !important;
+        }
+        
+        /* Remove the extra space created by hiding the header */
+        .stApp {
+            margin-top: 0 !important;
+        }
+        
+        /* Also hide the "Manage app" button and any other top bar elements */
+        .stApp > div:first-child {
+            display: none !important;
+        }
+        
+        /* Hide the Streamlit Cloud footer if present */
+        .st-emotion-cache-1r6slb0 {
+            padding-top: 0 !important;
+        }
+        
         /* Dark background for the entire app */
         .stApp {
             background-color: #0e1117 !important;
@@ -783,7 +805,7 @@ def main():
             width: 100% !important;
         }
         
-        /* 🟡 CHANGED: Generate Analysis button - color #696eff */
+        /* Generate Analysis button - color #696eff */
         .stButton > button[kind="primary"] {
             background-color: #696eff !important;
             color: white !important;
