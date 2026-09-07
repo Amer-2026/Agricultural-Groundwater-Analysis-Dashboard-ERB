@@ -783,16 +783,16 @@ def main():
             width: 100% !important;
         }
         
-        /* 🟡 CHANGED: Generate Analysis button - color #ee821a */
+        /* 🟡 CHANGED: Generate Analysis button - color #ff5858 */
         .stButton > button[kind="primary"] {
-            background-color: #ee821a !important;
+            background-color: #ff5858 !important;
             color: white !important;
         }
         
         .stButton > button[kind="primary"]:hover {
-            background-color: #d06e0f !important;
+            background-color: #e04040 !important;
             color: white !important;
-            box-shadow: 0 2px 15px rgba(238, 130, 26, 0.5) !important;
+            box-shadow: 0 2px 15px rgba(255, 88, 88, 0.5) !important;
         }
         
         /* Click message font size - 0.90rem */
@@ -1043,7 +1043,7 @@ def main():
         except Exception as e:
             st.warning("Could not load dates")
     
-    # Generate Analysis button - type="primary" so it gets the orange color
+    # Generate Analysis button - type="primary" so it gets the red color
     with nav_col5:
         if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
             st.session_state.map_generated = True
