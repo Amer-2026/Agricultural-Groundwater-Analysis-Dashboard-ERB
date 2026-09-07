@@ -103,7 +103,6 @@ For support or more information, please contact the development team.""",
         "last_update": "Last Update",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
-        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
     },
     "ar": {
@@ -182,7 +181,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "آخر تحديث",
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
-        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
     },
     "ku": {
@@ -260,7 +258,6 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "last_update": "دوایین نوێکردنەوە",
         "select_date": "بەروار هەڵبژێرە",
         "generate_analysis": "دروستکردنی شیکردنەوە",
-        # 🟡 FIXED: Removed one star (only one ✨ now)
         "welcome_subtitle": "✨ بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
     },
 }
@@ -689,6 +686,7 @@ def main():
             text-align: left;
         }
         
+        /* 🟡 FIXED: Removed extra star from welcome message */
         .banner-title .welcome {
             font-size: 0.9rem;
             font-weight: 500;
@@ -958,6 +956,7 @@ def main():
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
     # ---- DIGITAL BERRY BANNER - Full Width with Title Left ----
+    # 🟡 FIXED: Removed the extra ✨ from the welcome message in the banner
     st.markdown(
         f"""
         <div class="banner">
@@ -965,7 +964,7 @@ def main():
                 <div class="banner-title">
                     <h1>🌊 {t('dashboard_header')}</h1>
                     <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
-                    <div class="welcome">✨ {t('welcome_subtitle')}</div>
+                    <div class="welcome">{t('welcome_subtitle')}</div>
                 </div>
             </div>
         </div>
