@@ -746,7 +746,7 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 FIXED: ALL BUTTONS - Restored to original size (full width in columns) */
+        /* ALL BUTTONS - Restored to original size */
         .stButton > button {
             background: linear-gradient(135deg, #B429F9, #26C5F3) !important;
             color: white !important;
@@ -778,16 +778,15 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* 🟡 FIXED: Button container - full width */
         .stButton {
             display: block !important;
             width: 100% !important;
         }
         
-        /* 🟡 NEW: Smaller text for the click message in the title */
+        /* 🟡 CHANGED: Click message font size - 0.90rem */
         .click-message {
-            font-size: 0.75rem !important;
-            color: rgba(255,255,255,0.7) !important;
+            font-size: 0.90rem !important;
+            color: rgba(255,255,255,0.8) !important;
             font-weight: 400 !important;
         }
         
@@ -1102,7 +1101,7 @@ def main():
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    # 🟡 CHANGED: Interactive Map title with smaller click message
+                    # 🟡 CHANGED: Click message font size is now 0.90rem
                     st.markdown(
                         f"""
                         <h3>🗺️ {t('interactive_map')} 
