@@ -1234,7 +1234,7 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # 🟡 CHANGED: Time Series Analysis - removed duplicate click message
+                    # 🟡 FIXED: Time Series Analysis - removed the duplicate click message
                     st.markdown(f"### 📈 {t('time_series_analysis')}")
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
@@ -1257,8 +1257,8 @@ def main():
                         )
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
-                    else:
-                        st.info(t('click_map'))
+                    # 🟡 REMOVED: else statement with duplicate click message
+                    # When no data is available, show nothing (the message is already in the map title)
 
                     # Regional Monthly Summary
                     st.markdown(f"### {t('regional_summary')}")
