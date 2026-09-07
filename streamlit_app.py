@@ -591,14 +591,49 @@ def main():
     )
 
     # ---- DARK THEME CSS with Digital Berry Colors ----
-    # 🟡 ADDED: CSS to hide the Streamlit Cloud top bar (Share, GitHub, Star)
     st.markdown(
         """
         <style>
-        /* 🟡 HIDE STREAMLIT CLOUD TOP BAR */
-        /* Hide the entire top bar containing Share, GitHub, Star */
-        .stApp > header {
+        /* 🟡 FIXED: Only hide the Share, GitHub, Star buttons */
+        /* Target the header buttons specifically */
+        header .st-emotion-cache-1h9usn1 {
             display: none !important;
+        }
+        
+        /* Hide the share, github, star icons in the top right */
+        header .st-emotion-cache-1r6slb0 {
+            justify-content: flex-end !important;
+        }
+        
+        /* Hide the entire top bar buttons container */
+        header [data-testid="stHeader"] {
+            background: transparent !important;
+        }
+        
+        /* Specifically hide the tool icons */
+        header .st-emotion-cache-1h9usn1,
+        header .st-emotion-cache-1vt4y43,
+        header .st-emotion-cache-1ld9dsq {
+            display: none !important;
+        }
+        
+        /* Hide the "Manage app" button */
+        button[data-testid="baseButton-header"] {
+            display: none !important;
+        }
+        
+        /* Hide the share button specifically */
+        button[data-testid="stHeader"] button {
+            display: none !important;
+        }
+        
+        /* Keep the app header transparent but visible */
+        .stApp > header {
+            background: transparent !important;
+            box-shadow: none !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            padding: 0 !important;
         }
         
         /* Remove the extra space created by hiding the header */
@@ -606,25 +641,14 @@ def main():
             margin-top: 0 !important;
         }
         
-        /* Also hide the "Manage app" button and any other top bar elements */
-        .stApp > div:first-child {
-            display: none !important;
-        }
-        
-        /* Hide the Streamlit Cloud footer if present */
-        .st-emotion-cache-1r6slb0 {
-            padding-top: 0 !important;
+        .main .block-container {
+            padding-top: 0rem !important;
+            padding-bottom: 1rem !important;
         }
         
         /* Dark background for the entire app */
         .stApp {
             background-color: #0e1117 !important;
-        }
-        
-        /* Remove default padding at the top */
-        .main .block-container {
-            padding-top: 0rem !important;
-            padding-bottom: 1rem !important;
         }
         
         /* Dark background for all containers */
