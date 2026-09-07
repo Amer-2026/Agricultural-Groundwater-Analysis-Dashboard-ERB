@@ -746,7 +746,7 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* 🟡 CHANGED: ALL BUTTONS - New color #a8f368 */
+        /* 🟡 CHANGED: Parameter buttons - color #a8f368 */
         .stButton > button {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
@@ -783,6 +783,38 @@ def main():
             width: 100% !important;
         }
         
+        /* 🟡 CHANGED: Generate Analysis button - special color #fc506e */
+        .generate-btn > button {
+            background-color: #fc506e !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+            height: 38px !important;
+            line-height: 1.2 !important;
+        }
+        
+        .generate-btn > button:hover {
+            background-color: #e0405e !important;
+            color: white !important;
+            border: none !important;
+            box-shadow: 0 2px 15px rgba(252, 80, 110, 0.5) !important;
+            transform: translateY(-1px) !important;
+        }
+        
+        .generate-btn > button:active {
+            transform: translateY(0px) !important;
+        }
+        
         /* Click message font size - 0.90rem */
         .click-message {
             font-size: 0.90rem !important;
@@ -790,7 +822,7 @@ def main():
             font-weight: 400 !important;
         }
         
-        /* 🟡 CHANGED: LANGUAGE SELECTOR - New color #a8f368 */
+        /* LANGUAGE SELECTOR - color #a8f368 */
         .stSelectbox > div > div {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
@@ -1031,12 +1063,17 @@ def main():
         except Exception as e:
             st.warning("Could not load dates")
     
+    # 🟡 CHANGED: Generate Analysis button with special class and color
     with nav_col5:
-        if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True, type="primary"):
-            st.session_state.map_generated = True
-            st.session_state.current_parameter = st.session_state.selected_parameter
-            st.session_state.current_date = st.session_state.selected_date_str
-            st.rerun()
+        # Using a container with the generate-btn class
+        with st.container():
+            st.markdown('<div class="generate-btn">', unsafe_allow_html=True)
+            if st.button("🚀 " + t("generate_analysis"), key="top_generate", use_container_width=True):
+                st.session_state.map_generated = True
+                st.session_state.current_parameter = st.session_state.selected_parameter
+                st.session_state.current_date = st.session_state.selected_date_str
+                st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown("---")
 
