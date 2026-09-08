@@ -853,14 +853,14 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* Download as CSV button - WHITE */
+        /* Download as CSV button - WHITE, inside chart area */
         .stDownloadButton > button {
             background-color: #ffffff !important;
             color: #1a0a2e !important;
             border: 1px solid rgba(255,255,255,0.3) !important;
             border-radius: 8px !important;
             padding: 0.5rem 1rem !important;
-            font-size: 1rem !important;
+            font-size: 0.9rem !important;
             font-weight: 600 !important;
             width: 100% !important;
             transition: all 0.3s ease !important;
@@ -871,6 +871,8 @@ def main():
             display: flex !important;
             height: 38px !important;
             line-height: 1.2 !important;
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
         }
         
         .stDownloadButton > button:hover {
@@ -885,39 +887,45 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* Chart container with download button - vertical centering */
-        .chart-with-btn {
+        /* Chart container styling */
+        .chart-container {
+            background: rgba(255,255,255,0.03) !important;
+            border-radius: 10px !important;
+            padding: 10px !important;
+            border: 1px solid rgba(255,255,255,0.05) !important;
+        }
+        
+        .chart-container .btn-row {
             display: flex !important;
-            align-items: center !important;
-            gap: 10px !important;
-            height: 100% !important;
+            justify-content: flex-end !important;
+            padding-right: 10px !important;
+            margin-top: -40px !important;
+            position: relative !important;
+            z-index: 10 !important;
         }
         
-        .chart-with-btn .chart-col {
-            flex: 4 !important;
+        .chart-container .btn-row .stDownloadButton {
+            width: auto !important;
         }
         
-        .chart-with-btn .btn-col {
-            flex: 1 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            height: 100% !important;
-            min-height: 400px !important;
+        .chart-container .btn-row .stDownloadButton button {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            border-radius: 8px !important;
+            padding: 0.3rem 1rem !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+            width: auto !important;
+            min-width: 120px !important;
+            height: 32px !important;
         }
         
-        .chart-with-btn .btn-col > div {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            height: 100% !important;
-        }
-        
-        .chart-with-btn .btn-col button {
-            margin: 0 !important;
-            padding: 0.5rem 0.75rem !important;
-            font-size: 0.9rem !important;
-            min-width: 80px !important;
+        .chart-container .btn-row .stDownloadButton button:hover {
+            background-color: #f0f0f0 !important;
+            border: 1px solid rgba(255,255,255,0.5) !important;
+            box-shadow: 0 2px 15px rgba(255, 255, 255, 0.2) !important;
         }
         
         /* LANGUAGE SELECTOR - color #a8f368 */
@@ -1334,15 +1342,15 @@ def main():
                             clicked_lng,
                         )
                         
-                        # Use a container with custom class for vertical centering
-                        st.markdown('<div class="chart-with-btn">', unsafe_allow_html=True)
-                        chart_col, btn_col = st.columns([4, 1])
-                        with chart_col:
-                            st.plotly_chart(fig, use_container_width=True)
-                        with btn_col:
-                            # Add some vertical spacing to center the button
-                            st.write("")  # This helps with alignment
-                            st.write("")
+                        # Wrap chart in a container with the download button as an overlay
+                        st.markdown('<div class="chart-container">', unsafe_allow_html=True)
+                        
+                        # Display the chart
+                        st.plotly_chart(fig, use_container_width=True)
+                        
+                        # Add download button as an overlay/row below the chart title
+                        col1, col2, col3 = st.columns([6, 1, 1])
+                        with col2:
                             st.download_button(
                                 t("download_csv"),
                                 data=to_csv_bytes(st.session_state.time_series_data),
@@ -1350,6 +1358,7 @@ def main():
                                 f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
                                 mime="text/csv",
                             )
+                        
                         st.markdown('</div>', unsafe_allow_html=True)
                         
                         with st.expander(t("raw_data")):
