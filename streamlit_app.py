@@ -822,13 +822,17 @@ def main():
             width: 100% !important;
         }
         
-        /* Generate Analysis button - color #696eff */
-        .stButton > button[kind="primary"] {
+        /* Generate Analysis, Download CSV, and Compute Summary buttons - color #696eff */
+        .stButton > button[kind="primary"],
+        .stDownloadButton > button,
+        .stButton > button:has(div:contains("Compute regional summary")) {
             background-color: #696eff !important;
             color: white !important;
         }
         
-        .stButton > button[kind="primary"]:hover {
+        .stButton > button[kind="primary"]:hover,
+        .stDownloadButton > button:hover,
+        .stButton > button:has(div:contains("Compute regional summary")):hover {
             background-color: #4f54d4 !important;
             color: white !important;
             box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
