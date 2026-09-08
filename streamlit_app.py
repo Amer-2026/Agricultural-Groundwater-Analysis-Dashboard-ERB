@@ -615,7 +615,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
         
         fig.add_annotation(
             x=0.98,
-            y=0.98,
+            y=0.93,  # Changed from 0.98 to 0.93 to move the button up
             xref="paper",
             yref="paper",
             text=download_link,
