@@ -520,7 +520,10 @@ def get_regional_summary(parameter, assets, scale):
     return rows
 
 
-def create_time_series_plot(time_series_data, parameter, lat, lon):
+def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None, filename=None):
+    """Create time series plot with optional download button as annotation"""
+    import base64
+    
     df = pd.DataFrame(time_series_data)
     if df.empty:
         fig = go.Figure()
@@ -547,6 +550,26 @@ def create_time_series_plot(time_series_data, parameter, lat, lon):
             text=months,
         )
     )
+    
+    # Create download button as HTML annotation (overlay on chart)
+    if csv_data and filename:
+        b64 = base64.b64encode(csv_data).decode()
+        download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">📥 Download as CSV</a>'
+        
+        fig.add_annotation(
+            x=0.98,
+            y=0.98,
+            xref="paper",
+            yref="paper",
+            text=download_link,
+            showarrow=False,
+            font=dict(size=13),
+            bgcolor="rgba(0,0,0,0)",
+            borderpad=0,
+            xanchor="right",
+            yanchor="top",
+        )
+    
     fig.update_layout(
         title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
         xaxis=dict(
@@ -853,79 +876,9 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* Download as CSV button - WHITE, inside chart area */
-        .stDownloadButton > button {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border: 1px solid rgba(255,255,255,0.3) !important;
-            border-radius: 8px !important;
-            padding: 0.5rem 1rem !important;
-            font-size: 0.9rem !important;
-            font-weight: 600 !important;
-            width: 100% !important;
-            transition: all 0.3s ease !important;
-            cursor: pointer !important;
-            text-align: center !important;
-            justify-content: center !important;
-            align-items: center !important;
-            display: flex !important;
-            height: 38px !important;
-            line-height: 1.2 !important;
-            margin-top: 0.5rem !important;
-            margin-bottom: 0.5rem !important;
-        }
-        
-        .stDownloadButton > button:hover {
-            background-color: #f0f0f0 !important;
-            color: #1a0a2e !important;
-            border: 1px solid rgba(255,255,255,0.5) !important;
-            box-shadow: 0 2px 15px rgba(255, 255, 255, 0.2) !important;
-            transform: translateY(-1px) !important;
-        }
-        
-        .stDownloadButton > button:active {
-            transform: translateY(0px) !important;
-        }
-        
-        /* Chart container styling */
-        .chart-container {
-            background: rgba(255,255,255,0.03) !important;
-            border-radius: 10px !important;
-            padding: 10px !important;
-            border: 1px solid rgba(255,255,255,0.05) !important;
-        }
-        
-        .chart-container .btn-row {
-            display: flex !important;
-            justify-content: flex-end !important;
-            padding-right: 10px !important;
-            margin-top: -40px !important;
-            position: relative !important;
-            z-index: 10 !important;
-        }
-        
-        .chart-container .btn-row .stDownloadButton {
-            width: auto !important;
-        }
-        
-        .chart-container .btn-row .stDownloadButton button {
-            background-color: #ffffff !important;
-            color: #1a0a2e !important;
-            border: 1px solid rgba(255,255,255,0.3) !important;
-            border-radius: 8px !important;
-            padding: 0.3rem 1rem !important;
-            font-size: 0.85rem !important;
-            font-weight: 600 !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
-            width: auto !important;
-            min-width: 120px !important;
-            height: 32px !important;
-        }
-        
-        .chart-container .btn-row .stDownloadButton button:hover {
-            background-color: #f0f0f0 !important;
-            border: 1px solid rgba(255,255,255,0.5) !important;
-            box-shadow: 0 2px 15px rgba(255, 255, 255, 0.2) !important;
+        /* Download button inside chart - hide Streamlit's default download button */
+        .stDownloadButton {
+            display: none !important;
         }
         
         /* LANGUAGE SELECTOR - color #a8f368 */
@@ -1335,31 +1288,22 @@ def main():
                         clicked_lat = st.session_state.last_clicked["lat"]
                         clicked_lng = st.session_state.last_clicked["lng"]
 
+                        # Generate CSV data and filename
+                        csv_data = to_csv_bytes(st.session_state.time_series_data)
+                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv"
+                        
+                        # Create the chart with download button inside it
                         fig = create_time_series_plot(
                             st.session_state.time_series_data,
                             st.session_state.current_parameter,
                             clicked_lat,
                             clicked_lng,
+                            csv_data=csv_data,
+                            filename=filename,
                         )
                         
-                        # Wrap chart in a container with the download button as an overlay
-                        st.markdown('<div class="chart-container">', unsafe_allow_html=True)
-                        
-                        # Display the chart
+                        # Display the chart (the download button is now inside the chart)
                         st.plotly_chart(fig, use_container_width=True)
-                        
-                        # Add download button as an overlay/row below the chart title
-                        col1, col2, col3 = st.columns([6, 1, 1])
-                        with col2:
-                            st.download_button(
-                                t("download_csv"),
-                                data=to_csv_bytes(st.session_state.time_series_data),
-                                file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                                f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
-                                mime="text/csv",
-                            )
-                        
-                        st.markdown('</div>', unsafe_allow_html=True)
                         
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
