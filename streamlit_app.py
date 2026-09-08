@@ -822,9 +822,8 @@ def main():
             width: 100% !important;
         }
         
-        /* Generate Analysis, Download CSV, and Compute Summary buttons - color #696eff (PURPLE/BLUE) */
-        .stButton > button[kind="primary"],
-        .stDownloadButton > button {
+        /* Generate Analysis and Compute Summary buttons - color #696eff (PURPLE/BLUE) */
+        .stButton > button[kind="primary"] {
             background-color: #696eff !important;
             color: white !important;
             border: none !important;
@@ -843,15 +842,45 @@ def main():
             line-height: 1.2 !important;
         }
         
-        .stButton > button[kind="primary"]:hover,
-        .stDownloadButton > button:hover {
+        .stButton > button[kind="primary"]:hover {
             background-color: #4f54d4 !important;
             color: white !important;
             box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
             transform: translateY(-1px) !important;
         }
         
-        .stButton > button[kind="primary"]:active,
+        .stButton > button[kind="primary"]:active {
+            transform: translateY(0px) !important;
+        }
+        
+        /* Download as CSV button - WHITE */
+        .stDownloadButton > button {
+            background-color: #ffffff !important;
+            color: #1a0a2e !important;
+            border: 1px solid rgba(255,255,255,0.3) !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+            height: 38px !important;
+            line-height: 1.2 !important;
+        }
+        
+        .stDownloadButton > button:hover {
+            background-color: #f0f0f0 !important;
+            color: #1a0a2e !important;
+            border: 1px solid rgba(255,255,255,0.5) !important;
+            box-shadow: 0 2px 15px rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-1px) !important;
+        }
+        
         .stDownloadButton > button:active {
             transform: translateY(0px) !important;
         }
