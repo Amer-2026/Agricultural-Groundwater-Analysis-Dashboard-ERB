@@ -1,3 +1,5 @@
+[file name]: Pasted text.txt
+[file content begin]
 """
 Agricultural Groundwater Analysis Dashboard
 ============================================
@@ -317,7 +319,7 @@ def initialize_ee():
             )
             # Pass the Cloud project explicitly. Without it the newer
             # earthengine-api installed on Streamlit Cloud falls back to the
-            # "earthengine-legacy" project and mangles cloud asset paths
+            # "earthengine-legacy" project and mangled cloud asset paths
             # (e.g. projects/earthengine-legacy/assets/projects/<id>/...).
             project_id = credentials_dict.get("project_id")
             ee.Initialize(credentials, project=project_id)
@@ -531,7 +533,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
-            height=270,
+            height=265,
         )
         return fig
 
@@ -583,7 +585,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
         ),
         yaxis=dict(title=t(parameter), showgrid=True, zeroline=True),
         template="plotly_white",
-        height=270,
+        height=265,
         margin=dict(t=50, b=80, l=50, r=50),
     )
     return fig
@@ -600,7 +602,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
-            height=270,
+            height=265,
         )
         return fig
     
@@ -633,7 +635,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
         title=t("summary_title", parameter=t(parameter)),
         xaxis=dict(tickangle=45),
         template="plotly_white",
-        height=270,
+        height=265,
         margin=dict(t=50, b=80, l=50, r=50),
     )
     return fig
@@ -1120,7 +1122,7 @@ def main():
         <div class="banner">
             <div class="banner-inner">
                 <div class="banner-title">
-                    <h1>🌊 {t('dashboard_header')}</h1>
+                    <h1> {t('dashboard_header')}</h1>
                     <div class="subtitle">{cfg.get('name_en', '')} | {datetime.now().strftime('%Y')}</div>
                     <div class="welcome">{t('welcome_subtitle')}</div>
                 </div>
@@ -1431,3 +1433,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+[file content end]
