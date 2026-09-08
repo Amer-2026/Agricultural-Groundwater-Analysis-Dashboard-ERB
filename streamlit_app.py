@@ -935,6 +935,20 @@ def main():
             display: none !important;
         }
         
+        /* Add spacing between sections */
+        .stats-section {
+            margin-bottom: 20px !important;
+        }
+        
+        .time-series-section {
+            margin-top: 25px !important;
+            margin-bottom: 5px !important;
+        }
+        
+        .regional-summary-section {
+            margin-top: 25px !important;
+        }
+        
         /* LANGUAGE SELECTOR - color #a8f368 */
         .stSelectbox > div > div {
             background-color: #a8f368 !important;
@@ -1303,7 +1317,7 @@ def main():
                 # ---- RIGHT COLUMN: STATISTICS + Time Series + Regional Summary ----
                 with stats_col:
                     # Statistics
-                    st.markdown(f"### 📊 {t('statistics')}")
+                    st.markdown(f'<div class="stats-section">### 📊 {t("statistics")}</div>', unsafe_allow_html=True)
                     try:
                         stats = ee_image.reduceRegion(
                             reducer=ee.Reducer.mean().combine(ee.Reducer.minMax(), None, True),
@@ -1339,7 +1353,7 @@ def main():
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
                     # ---- Time Series Analysis ----
-                    st.markdown(f"### 📈 {t('time_series_analysis')} <span class='click-message'>({t('click_map')})</span>", unsafe_allow_html=True)
+                    st.markdown(f'<div class="time-series-section">### 📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></div>', unsafe_allow_html=True)
                     
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
@@ -1363,7 +1377,7 @@ def main():
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
 
                     # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
-                    st.markdown(f"### {t('regional_summary')}")
+                    st.markdown(f'<div class="regional-summary-section">### {t("regional_summary")}</div>', unsafe_allow_html=True)
                     
                     # Automatically compute regional summary when map is generated
                     if st.session_state.regional_summary_data is None:
