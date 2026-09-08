@@ -937,7 +937,7 @@ def main():
         
         /* Add spacing between sections - using h3 tags inside divs */
         .stats-section h3 {
-            margin-bottom: 15px !important;
+            margin-bottom: 5px !important;
         }
         
         .time-series-section h3 {
