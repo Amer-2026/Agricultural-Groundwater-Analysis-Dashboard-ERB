@@ -778,10 +778,10 @@ def main():
             font-size: 22px !important;
         }
         
-        /* Set click message to 18px */
+        /* Set click message to 16px with metric label color (#26C5F3) */
         .click-message {
-            font-size: 18px !important;
-            color: rgba(255,255,255,0.8) !important;
+            font-size: 16px !important;
+            color: #26C5F3 !important;
             font-weight: 400 !important;
         }
         
