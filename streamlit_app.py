@@ -773,9 +773,16 @@ def main():
             color: #e0e0e0 !important;
         }
         
-        /* Set h3 headers to 20px */
+        /* Set h3 headers to 22px */
         h3 {
-            font-size: 20px !important;
+            font-size: 22px !important;
+        }
+        
+        /* Set click message to 18px */
+        .click-message {
+            font-size: 18px !important;
+            color: rgba(255,255,255,0.8) !important;
+            font-weight: 400 !important;
         }
         
         /* Parameter buttons - color #a8f368 */
@@ -825,13 +832,6 @@ def main():
             background-color: #4f54d4 !important;
             color: white !important;
             box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
-        }
-        
-        /* 🟡 CHANGED: Click message style - no font size change */
-        .click-message {
-            font-size: inherit !important;
-            color: rgba(255,255,255,0.8) !important;
-            font-weight: 400 !important;
         }
         
         /* LANGUAGE SELECTOR - color #a8f368 */
