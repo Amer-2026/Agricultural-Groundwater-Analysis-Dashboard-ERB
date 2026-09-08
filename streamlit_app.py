@@ -897,7 +897,7 @@ def main():
             width: 100% !important;
         }
         
-        /* Generate Analysis and Compute Summary buttons - color #696eff (PURPLE/BLUE) */
+        /* Generate Analysis buttons - color #696eff (PURPLE/BLUE) */
         .stButton > button[kind="primary"] {
             background-color: #696eff !important;
             color: white !important;
@@ -928,7 +928,7 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* Hide Streamlit's default download button for time series (now embedded in chart) */
+        /* Hide Streamlit's default download button (now embedded in chart) */
         .stDownloadButton {
             display: none !important;
         }
@@ -1251,9 +1251,7 @@ def main():
 
                 # ---- LEFT COLUMN: MAP ----
                 with map_col:
-                    # 🟡 CHANGED: Removed click message from Interactive Map title
                     st.markdown(f"### 🗺️ {t('interactive_map')}")
-                    # 🟡 REMOVED: <span class="click-message">({t('click_map')})</span>
 
                     selected_date = datetime.strptime(st.session_state.current_date, "%Y-%m")
                     selected_year_month = selected_date.strftime("%Y_%m")
@@ -1319,7 +1317,6 @@ def main():
                         max_val = stats.get(f"{prefix}_max")
                         mean_val = stats.get(f"{prefix}_mean")
                         
-                        # HORIZONTAL STATISTICS: Display in 3 columns
                         stat_cols = st.columns(3)
                         with stat_cols[0]:
                             st.metric(
@@ -1339,18 +1336,16 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # 🟡 CHANGED: Time Series Analysis with click message beside it
+                    # ---- Time Series Analysis ----
                     st.markdown(f"### 📈 {t('time_series_analysis')} <span class='click-message'>({t('click_map')})</span>", unsafe_allow_html=True)
                     
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
                         clicked_lng = st.session_state.last_clicked["lng"]
 
-                        # Generate CSV data and filename
                         csv_data = to_csv_bytes(st.session_state.time_series_data)
                         filename = f"{cfg['key']}_{st.session_state.current_parameter}_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv"
                         
-                        # Create the chart with download button inside it
                         fig = create_time_series_plot(
                             st.session_state.time_series_data,
                             st.session_state.current_parameter,
@@ -1360,17 +1355,16 @@ def main():
                             filename=filename,
                         )
                         
-                        # Display the chart (the download button is now inside the chart)
                         st.plotly_chart(fig, use_container_width=True)
                         
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
 
-                    # ---- Regional Monthly Summary ----
+                    # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                     st.markdown(f"### {t('regional_summary')}")
                     
-                    # Always show the compute button, but only compute if clicked
-                    if st.button(t("compute_summary"), help=t("summary_help"), key="compute_summary_btn"):
+                    # Automatically compute regional summary when map is generated
+                    if st.session_state.regional_summary_data is None:
                         with st.spinner(t("computing")):
                             summary = get_regional_summary(
                                 st.session_state.current_parameter,
@@ -1380,7 +1374,7 @@ def main():
                             if summary:
                                 st.session_state.regional_summary_data = summary
                     
-                    # If we have summary data, display the chart with download button inside it
+                    # Display the chart if we have data
                     if st.session_state.regional_summary_data:
                         summary = st.session_state.regional_summary_data
                         csv_data = to_csv_bytes(summary, value_col="mean")
@@ -1397,6 +1391,17 @@ def main():
                         
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(summary))
+                    
+                    # ---- COMMENTED OUT: Compute regional summary button ----
+                    # if st.button(t("compute_summary"), help=t("summary_help"), key="compute_summary_btn"):
+                    #     with st.spinner(t("computing")):
+                    #         summary = get_regional_summary(
+                    #             st.session_state.current_parameter,
+                    #             tuple(assets),
+                    #             int(cfg.get("native_scale_m", 20)),
+                    #         )
+                    #         if summary:
+                    #             st.session_state.regional_summary_data = summary
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
