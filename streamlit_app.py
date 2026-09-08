@@ -1298,15 +1298,20 @@ def main():
                             clicked_lat,
                             clicked_lng,
                         )
-                        st.plotly_chart(fig, use_container_width=True)
-
-                        st.download_button(
-                            t("download_csv"),
-                            data=to_csv_bytes(st.session_state.time_series_data),
-                            file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                            f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
-                            mime="text/csv",
-                        )
+                        
+                        # Create columns to place download button inline with chart
+                        chart_col, btn_col = st.columns([4, 1])
+                        with chart_col:
+                            st.plotly_chart(fig, use_container_width=True)
+                        with btn_col:
+                            st.download_button(
+                                t("download_csv"),
+                                data=to_csv_bytes(st.session_state.time_series_data),
+                                file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
+                                f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
+                                mime="text/csv",
+                            )
+                        
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
 
