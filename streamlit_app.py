@@ -773,6 +773,11 @@ def main():
             color: #e0e0e0 !important;
         }
         
+        /* Set h3 headers to 20px */
+        h3 {
+            font-size: 20px !important;
+        }
+        
         /* Parameter buttons - color #a8f368 */
         .stButton > button {
             background-color: #a8f368 !important;
