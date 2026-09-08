@@ -714,26 +714,21 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* COSMIC BLOOM BANNER - Full-width vibrant space-inspired gradient */
+        /* COSMIC BLOOM BANNER - Static vibrant gradient */
         .banner {
             background: linear-gradient(135deg, 
                 #0a0a2e 0%,
-                #1a0533 8%,
-                #2d1b69 16%,
-                #4a1a8a 24%,
-                #7b2fbe 32%,
-                #B429F9 40%,
-                #FF6B9D 48%,
-                #FF9A9E 54%,
-                #26C5F3 62%,
-                #7B2FBE 70%,
-                #B429F9 78%,
-                #4a1a8a 86%,
-                #1a0533 94%,
-                #0a0a2e 100%
+                #1a0533 10%,
+                #2d1b69 20%,
+                #4a1a8a 30%,
+                #7b2fbe 40%,
+                #B429F9 50%,
+                #FF6B9D 60%,
+                #FF9A9E 70%,
+                #26C5F3 80%,
+                #7B2FBE 90%,
+                #4a1a8a 100%
             );
-            background-size: 300% 300%;
-            animation: cosmicBloom 12s ease-in-out infinite alternate;
             padding: 2rem 4rem 1.5rem 4rem;
             margin: 0 !important;
             color: white;
@@ -746,25 +741,7 @@ def main():
             display: block;
         }
         
-        @keyframes cosmicBloom {
-            0% {
-                background-position: 0% 50%;
-            }
-            25% {
-                background-position: 50% 0%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            75% {
-                background-position: 50% 100%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-        
-        /* Cosmic nebula sparkle overlay */
+        /* Simple sparkle overlay - static */
         .banner::before {
             content: '';
             position: absolute;
@@ -773,66 +750,10 @@ def main():
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 10% 20%, rgba(180, 41, 249, 0.2) 0%, transparent 35%),
-                radial-gradient(circle at 90% 80%, rgba(255, 107, 157, 0.15) 0%, transparent 30%),
-                radial-gradient(circle at 50% 50%, rgba(38, 197, 243, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 30% 70%, rgba(255, 154, 158, 0.1) 0%, transparent 25%),
-                radial-gradient(circle at 70% 30%, rgba(123, 47, 190, 0.12) 0%, transparent 30%);
+                radial-gradient(circle at 15% 25%, rgba(180, 41, 249, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(255, 107, 157, 0.08) 0%, transparent 35%),
+                radial-gradient(circle at 45% 50%, rgba(38, 197, 243, 0.06) 0%, transparent 50%);
             pointer-events: none;
-            animation: nebulaPulse 8s ease-in-out infinite alternate;
-        }
-        
-        @keyframes nebulaPulse {
-            0% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                opacity: 0.5;
-            }
-        }
-        
-        /* Cosmic stars */
-        .banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(2px 2px at 5% 10%, rgba(255,255,255,0.8), transparent),
-                radial-gradient(3px 3px at 15% 40%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,0.9), transparent),
-                radial-gradient(2px 2px at 35% 20%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 45% 85%, rgba(255,255,255,0.7), transparent),
-                radial-gradient(3px 3px at 55% 15%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 65% 55%, rgba(255,255,255,0.8), transparent),
-                radial-gradient(2px 2px at 75% 90%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 85% 30%, rgba(255,255,255,0.7), transparent),
-                radial-gradient(2px 2px at 92% 65%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(1px 1px at 50% 45%, rgba(255,255,255,0.4), transparent),
-                radial-gradient(2px 2px at 10% 60%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(1px 1px at 80% 5%, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 40% 95%, rgba(255,255,255,0.4), transparent),
-                radial-gradient(1px 1px at 95% 45%, rgba(255,255,255,0.5), transparent),
-                radial-gradient(2px 2px at 20% 5%, rgba(255,255,255,0.7), transparent);
-            pointer-events: none;
-            animation: starTwinkle 5s ease-in-out infinite alternate;
-        }
-        
-        @keyframes starTwinkle {
-            0% {
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                opacity: 0.4;
-            }
         }
         
         .banner-inner {
@@ -860,18 +781,8 @@ def main():
             margin: 0;
             padding: 0;
             color: white;
-            text-shadow: 0 2px 30px rgba(180, 41, 249, 0.5), 0 0 60px rgba(255, 107, 157, 0.3), 0 0 80px rgba(38, 197, 243, 0.2);
+            text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5);
             text-align: left;
-            animation: titleGlow 4s ease-in-out infinite alternate;
-        }
-        
-        @keyframes titleGlow {
-            0% {
-                text-shadow: 0 2px 30px rgba(180, 41, 249, 0.5), 0 0 60px rgba(255, 107, 157, 0.3), 0 0 80px rgba(38, 197, 243, 0.2);
-            }
-            100% {
-                text-shadow: 0 2px 40px rgba(180, 41, 249, 0.7), 0 0 80px rgba(255, 107, 157, 0.4), 0 0 100px rgba(38, 197, 243, 0.3);
-            }
         }
         
         .banner-title .subtitle {
@@ -880,7 +791,6 @@ def main():
             margin: 0.25rem 0 0 0;
             padding: 0;
             text-align: left;
-            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
         }
         
         .banner-title .welcome {
