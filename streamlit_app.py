@@ -714,19 +714,26 @@ def main():
             background-color: #0e1117 !important;
         }
         
-        /* DIGITAL BERRY: Full-width banner */
+        /* COSMIC BLOOM BANNER - Full-width vibrant space-inspired gradient */
         .banner {
             background: linear-gradient(135deg, 
-                #1a0a2e 0%,
-                #3d1b5e 10%,
-                #6b2fa0 20%,
-                #B429F9 35%,
-                #26C5F3 50%,
-                #B429F9 65%,
-                #6b2fa0 80%,
-                #3d1b5e 90%,
-                #1a0a2e 100%
+                #0a0a2e 0%,
+                #1a0533 8%,
+                #2d1b69 16%,
+                #4a1a8a 24%,
+                #7b2fbe 32%,
+                #B429F9 40%,
+                #6C2BD9 48%,
+                #1a8a8a 56%,
+                #26C5F3 64%,
+                #7B2FBE 72%,
+                #B429F9 80%,
+                #4a1a8a 88%,
+                #1a0533 95%,
+                #0a0a2e 100%
             );
+            background-size: 200% 200%;
+            animation: cosmicShift 8s ease-in-out infinite alternate;
             padding: 2rem 4rem 1.5rem 4rem;
             margin: 0 !important;
             color: white;
@@ -739,7 +746,19 @@ def main():
             display: block;
         }
         
-        /* Digital sparkle overlay */
+        @keyframes cosmicShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Cosmic sparkle overlay */
         .banner::before {
             content: '';
             position: absolute;
@@ -747,10 +766,53 @@ def main():
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(180, 41, 249, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(38, 197, 243, 0.08) 0%, transparent 40%),
-                        radial-gradient(circle at 50% 50%, rgba(107, 47, 160, 0.05) 0%, transparent 60%);
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(180, 41, 249, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 85% 75%, rgba(38, 197, 243, 0.12) 0%, transparent 35%),
+                radial-gradient(circle at 45% 50%, rgba(107, 47, 160, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 20%, rgba(255, 100, 200, 0.06) 0%, transparent 30%),
+                radial-gradient(circle at 30% 80%, rgba(100, 200, 255, 0.06) 0%, transparent 30%);
             pointer-events: none;
+            animation: sparklePulse 6s ease-in-out infinite alternate;
+        }
+        
+        @keyframes sparklePulse {
+            0% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        /* Floating stars */
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 30% 60%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(2px 2px at 70% 80%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(1px 1px at 90% 30%, rgba(255,255,255,0.5), transparent),
+                radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2px 2px at 60% 40%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.5), transparent);
+            pointer-events: none;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0.4;
+            }
+            100% {
+                opacity: 1;
+            }
         }
         
         .banner-inner {
@@ -778,7 +840,7 @@ def main():
             margin: 0;
             padding: 0;
             color: white;
-            text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5);
+            text-shadow: 0 2px 20px rgba(180, 41, 249, 0.5), 0 0 60px rgba(38, 197, 243, 0.2);
             text-align: left;
         }
         
@@ -788,6 +850,7 @@ def main():
             margin: 0.25rem 0 0 0;
             padding: 0;
             text-align: left;
+            text-shadow: 0 1px 10px rgba(0,0,0,0.3);
         }
         
         .banner-title .welcome {
@@ -1114,7 +1177,7 @@ def main():
     # ---- RTL support ----
     dir_attr = "rtl" if st.session_state.lang in ["ar", "ku"] else "ltr"
 
-    # ---- DIGITAL BERRY BANNER - Full Width with Title Left ----
+    # ---- COSMIC BLOOM BANNER - Full Width with Title Left ----
     st.markdown(
         f"""
         <div class="banner">
