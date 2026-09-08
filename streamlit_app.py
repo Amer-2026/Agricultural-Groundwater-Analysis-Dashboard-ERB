@@ -531,6 +531,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
+            height=350,
         )
         return fig
 
@@ -582,7 +583,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
         ),
         yaxis=dict(title=t(parameter), showgrid=True, zeroline=True),
         template="plotly_white",
-        height=400,
+        height=350,  # Changed from 400 to 350 to match Regional Summary
         margin=dict(t=50, b=80, l=50, r=50),
     )
     return fig
@@ -599,6 +600,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
+            height=350,
         )
         return fig
     
@@ -615,7 +617,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
         
         fig.add_annotation(
             x=0.98,
-            y=0.93,  # Changed from 0.98 to 0.93 to move the button up
+            y=0.93,
             xref="paper",
             yref="paper",
             text=download_link,
