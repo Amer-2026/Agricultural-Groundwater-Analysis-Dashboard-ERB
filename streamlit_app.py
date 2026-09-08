@@ -588,6 +588,55 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
     return fig
 
 
+def create_regional_summary_plot(summary_data, parameter, csv_data=None, filename=None, button_text="📥 Download as CSV"):
+    """Create regional summary bar chart with optional download button as annotation"""
+    import base64
+    
+    df = pd.DataFrame(summary_data)
+    if df.empty:
+        fig = go.Figure()
+        fig.update_layout(
+            title=t("no_data_location"),
+            xaxis_title=t("date"),
+            yaxis_title=t(parameter),
+        )
+        return fig
+    
+    months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
+    
+    fig = go.Figure(
+        go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
+    )
+    
+    # Create download button as HTML annotation (overlay on chart)
+    if csv_data and filename:
+        b64 = base64.b64encode(csv_data).decode()
+        download_link = f'<a href="data:text/csv;base64,{b64}" download="{filename}" style="background-color:#ffffff;color:#1a0a2e;padding:6px 14px;border-radius:6px;text-decoration:none;font-weight:600;font-size:13px;border:1px solid #ddd;box-shadow:0 2px 8px rgba(0,0,0,0.15);display:inline-block;font-family:sans-serif;">{button_text}</a>'
+        
+        fig.add_annotation(
+            x=0.98,
+            y=0.98,
+            xref="paper",
+            yref="paper",
+            text=download_link,
+            showarrow=False,
+            font=dict(size=13),
+            bgcolor="rgba(0,0,0,0)",
+            borderpad=0,
+            xanchor="right",
+            yanchor="top",
+        )
+    
+    fig.update_layout(
+        title=t("summary_title", parameter=t(parameter)),
+        xaxis=dict(tickangle=45),
+        template="plotly_white",
+        height=350,
+        margin=dict(t=50, b=80, l=50, r=50),
+    )
+    return fig
+
+
 def to_csv_bytes(rows, value_col="value"):
     df = pd.DataFrame(rows)
     if not df.empty:
@@ -605,6 +654,9 @@ def main():
     
     if "selected_date_str" not in st.session_state:
         st.session_state.selected_date_str = None
+    
+    if "regional_summary_data" not in st.session_state:
+        st.session_state.regional_summary_data = None
 
     st.set_page_config(
         page_title=t("page_title"),
@@ -876,7 +928,7 @@ def main():
             transform: translateY(0px) !important;
         }
         
-        /* Download button inside chart - hide Streamlit's default download button */
+        /* Hide Streamlit's default download button for time series (now embedded in chart) */
         .stDownloadButton {
             display: none !important;
         }
@@ -1085,18 +1137,21 @@ def main():
         if st.button(t("nav_abstraction_mm"), key="nav_mm", use_container_width=True):
             st.session_state.selected_parameter = "abstraction_mm"
             st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
             st.rerun()
     
     with nav_col2:
         if st.button(t("nav_abstraction_m3"), key="nav_m3", use_container_width=True):
             st.session_state.selected_parameter = "abstraction_m3"
             st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
             st.rerun()
     
     with nav_col3:
         if st.button(t("nav_recharge"), key="nav_recharge", use_container_width=True):
             st.session_state.selected_parameter = "recharge"
             st.session_state.map_generated = False
+            st.session_state.regional_summary_data = None
             st.rerun()
     
     # Date selector
@@ -1128,6 +1183,7 @@ def main():
             st.session_state.map_generated = True
             st.session_state.current_parameter = st.session_state.selected_parameter
             st.session_state.current_date = st.session_state.selected_date_str
+            st.session_state.regional_summary_data = None
             st.rerun()
     
     st.markdown("---")
@@ -1150,6 +1206,7 @@ def main():
         "current_date": None,
         "time_series_data": None,
         "current_country": selected_country,
+        "regional_summary_data": None,
     }
     for key, default in defaults.items():
         if key not in st.session_state:
@@ -1161,6 +1218,7 @@ def main():
         st.session_state.map_generated = False
         st.session_state.last_clicked = None
         st.session_state.time_series_data = None
+        st.session_state.regional_summary_data = None
 
     # ---- If no date is selected, set to latest available ----
     if st.session_state.selected_date_str is None:
@@ -1308,39 +1366,37 @@ def main():
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
 
-                    # Regional Monthly Summary
+                    # ---- Regional Monthly Summary ----
                     st.markdown(f"### {t('regional_summary')}")
-                    if st.button(t("compute_summary"), help=t("summary_help")):
+                    
+                    # Always show the compute button, but only compute if clicked
+                    if st.button(t("compute_summary"), help=t("summary_help"), key="compute_summary_btn"):
                         with st.spinner(t("computing")):
                             summary = get_regional_summary(
                                 st.session_state.current_parameter,
                                 tuple(assets),
                                 int(cfg.get("native_scale_m", 20)),
                             )
-                        if summary:
-                            df = pd.DataFrame(summary)
-                            months_lbl = [d.strftime("%Y-%m") for d in df["date"]]
-                            fig = go.Figure(
-                                go.Bar(x=months_lbl, y=df["mean"], marker_color="#B429F9")
-                            )
-                            fig.update_layout(
-                                title=t(
-                                    "summary_title",
-                                    parameter=t(st.session_state.current_parameter),
-                                ),
-                                xaxis=dict(tickangle=45),
-                                template="plotly_white",
-                                height=350,
-                            )
-                            st.plotly_chart(fig, use_container_width=True)
-                            st.download_button(
-                                t("download_csv"),
-                                data=to_csv_bytes(summary, value_col="mean"),
-                                file_name=f"{cfg['key']}_{st.session_state.current_parameter}"
-                                f"_regional_summary.csv",
-                                mime="text/csv",
-                                key="dl_summary",
-                            )
+                            if summary:
+                                st.session_state.regional_summary_data = summary
+                    
+                    # If we have summary data, display the chart with download button inside it
+                    if st.session_state.regional_summary_data:
+                        summary = st.session_state.regional_summary_data
+                        csv_data = to_csv_bytes(summary, value_col="mean")
+                        filename = f"{cfg['key']}_{st.session_state.current_parameter}_regional_summary.csv"
+                        
+                        fig = create_regional_summary_plot(
+                            summary,
+                            st.session_state.current_parameter,
+                            csv_data=csv_data,
+                            filename=filename,
+                            button_text="📥 Download as CSV",
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+                        
+                        with st.expander(t("raw_data")):
+                            st.dataframe(pd.DataFrame(summary))
 
             except Exception as e:
                 st.error(f"{t('error_map')}: {str(e)}")
