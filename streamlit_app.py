@@ -785,8 +785,8 @@ def main():
             font-weight: 400 !important;
         }
         
-        /* Parameter buttons - color #a8f368 */
-        .stButton > button {
+        /* Parameter buttons - color #a8f368 (GREEN) */
+        .stButton > button:not([kind="primary"]) {
             background-color: #a8f368 !important;
             color: #1a0a2e !important;
             border: none !important;
@@ -805,7 +805,7 @@ def main():
             line-height: 1.2 !important;
         }
         
-        .stButton > button:hover {
+        .stButton > button:not([kind="primary"]):hover {
             background-color: #8fd154 !important;
             color: #1a0a2e !important;
             border: none !important;
@@ -813,7 +813,7 @@ def main():
             transform: translateY(-1px) !important;
         }
         
-        .stButton > button:active {
+        .stButton > button:not([kind="primary"]):active {
             transform: translateY(0px) !important;
         }
         
@@ -822,20 +822,38 @@ def main():
             width: 100% !important;
         }
         
-        /* Generate Analysis, Download CSV, and Compute Summary buttons - color #696eff */
+        /* Generate Analysis, Download CSV, and Compute Summary buttons - color #696eff (PURPLE/BLUE) */
         .stButton > button[kind="primary"],
-        .stDownloadButton > button,
-        .stButton > button:has(div:contains("Compute regional summary")) {
+        .stDownloadButton > button {
             background-color: #696eff !important;
             color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 0.5rem 1rem !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            width: 100% !important;
+            transition: all 0.3s ease !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            justify-content: center !important;
+            align-items: center !important;
+            display: flex !important;
+            height: 38px !important;
+            line-height: 1.2 !important;
         }
         
         .stButton > button[kind="primary"]:hover,
-        .stDownloadButton > button:hover,
-        .stButton > button:has(div:contains("Compute regional summary")):hover {
+        .stDownloadButton > button:hover {
             background-color: #4f54d4 !important;
             color: white !important;
             box-shadow: 0 2px 15px rgba(105, 110, 255, 0.5) !important;
+            transform: translateY(-1px) !important;
+        }
+        
+        .stButton > button[kind="primary"]:active,
+        .stDownloadButton > button:active {
+            transform: translateY(0px) !important;
         }
         
         /* LANGUAGE SELECTOR - color #a8f368 */
