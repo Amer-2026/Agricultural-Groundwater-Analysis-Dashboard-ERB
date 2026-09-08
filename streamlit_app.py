@@ -533,7 +533,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
-            height=265,
+            height=263,
         )
         return fig
 
@@ -585,7 +585,7 @@ def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None
         ),
         yaxis=dict(title=t(parameter), showgrid=True, zeroline=True),
         template="plotly_white",
-        height=265,
+        height=263,
         margin=dict(t=50, b=80, l=50, r=50),
     )
     return fig
@@ -602,7 +602,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
             title=t("no_data_location"),
             xaxis_title=t("date"),
             yaxis_title=t(parameter),
-            height=265,
+            height=263,
         )
         return fig
     
@@ -635,7 +635,7 @@ def create_regional_summary_plot(summary_data, parameter, csv_data=None, filenam
         title=t("summary_title", parameter=t(parameter)),
         xaxis=dict(tickangle=45),
         template="plotly_white",
-        height=265,
+        height=263,
         margin=dict(t=50, b=80, l=50, r=50),
     )
     return fig
