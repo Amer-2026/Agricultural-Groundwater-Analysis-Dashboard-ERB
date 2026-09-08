@@ -885,6 +885,41 @@ def main():
             transform: translateY(0px) !important;
         }
         
+        /* Chart container with download button - vertical centering */
+        .chart-with-btn {
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            height: 100% !important;
+        }
+        
+        .chart-with-btn .chart-col {
+            flex: 4 !important;
+        }
+        
+        .chart-with-btn .btn-col {
+            flex: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 100% !important;
+            min-height: 400px !important;
+        }
+        
+        .chart-with-btn .btn-col > div {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 100% !important;
+        }
+        
+        .chart-with-btn .btn-col button {
+            margin: 0 !important;
+            padding: 0.5rem 0.75rem !important;
+            font-size: 0.9rem !important;
+            min-width: 80px !important;
+        }
+        
         /* LANGUAGE SELECTOR - color #a8f368 */
         .stSelectbox > div > div {
             background-color: #a8f368 !important;
@@ -1299,11 +1334,15 @@ def main():
                             clicked_lng,
                         )
                         
-                        # Create columns to place download button inline with chart
+                        # Use a container with custom class for vertical centering
+                        st.markdown('<div class="chart-with-btn">', unsafe_allow_html=True)
                         chart_col, btn_col = st.columns([4, 1])
                         with chart_col:
                             st.plotly_chart(fig, use_container_width=True)
                         with btn_col:
+                            # Add some vertical spacing to center the button
+                            st.write("")  # This helps with alignment
+                            st.write("")
                             st.download_button(
                                 t("download_csv"),
                                 data=to_csv_bytes(st.session_state.time_series_data),
@@ -1311,6 +1350,7 @@ def main():
                                 f"_timeseries_{clicked_lat:.4f}_{clicked_lng:.4f}.csv",
                                 mime="text/csv",
                             )
+                        st.markdown('</div>', unsafe_allow_html=True)
                         
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
