@@ -104,6 +104,7 @@ For support or more information, please contact the development team.""",
         "select_date": "Select Date",
         "generate_analysis": "Generate Analysis",
         "welcome_subtitle": "✨ Welcome! Select parameters and click 'Generate Map' to begin your analysis.",
+        "click_to_view": "Click on the map to view time series data",
     },
     "ar": {
         "page_title": "تحليل المياه الجوفية",
@@ -182,6 +183,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "select_date": "اختر التاريخ",
         "generate_analysis": "إنشاء التحليل",
         "welcome_subtitle": "✨ مرحباً! اختر المعاملات وانقر على 'إنشاء الخريطة' لبدء التحليل.",
+        "click_to_view": "انقر على الخريطة لعرض بيانات السلاسل الزمنية",
     },
     "ku": {
         "page_title": "شیکردنەوەی ئاوی ژێرزەوی",
@@ -259,6 +261,7 @@ OpenLandMap (خصائص التربة)، تمت المعالجة في Google Eart
         "select_date": "بەروار هەڵبژێرە",
         "generate_analysis": "دروستکردنی شیکردنەوە",
         "welcome_subtitle": "✨ بەخێربێیت! پارامەترەکان هەڵبژێرە و کلیک لە 'دروستکردنی نەخشە' بکە بۆ دەستپێکردنی شیکردنەوەکەت.",
+        "click_to_view": "کلیک لەسەر نەخشەکە بکە بۆ بینینی داتای زنجیرەکاتی",
     },
 }
 
@@ -520,20 +523,58 @@ def get_regional_summary(parameter, assets, scale):
     return rows
 
 
+def create_empty_time_series_plot(parameter, lat, lon):
+    """Create an empty time series plot with a message to click on the map"""
+    fig = go.Figure()
+    
+    # Add a trace with no data to show the chart
+    fig.add_trace(
+        go.Scatter(
+            x=[],
+            y=[],
+            mode="lines+markers",
+            line=dict(color="#B429F9", width=2),
+            marker=dict(size=8, color="#B429F9"),
+        )
+    )
+    
+    # Create a message annotation in the center
+    fig.add_annotation(
+        x=0.5,
+        y=0.5,
+        xref="paper",
+        yref="paper",
+        text=t("click_to_view"),
+        showarrow=False,
+        font=dict(size=16, color="#888888"),
+        align="center",
+    )
+    
+    fig.update_layout(
+        title=t("time_series_title", parameter=t(parameter), lat=f"{lat:.4f}", lon=f"{lon:.4f}"),
+        xaxis=dict(
+            title=t("date"),
+            tickmode="array",
+            tickvals=[],
+            ticktext=[],
+            tickangle=45,
+            showgrid=True,
+        ),
+        yaxis=dict(title=t(parameter), showgrid=True, zeroline=True),
+        template="plotly_white",
+        height=263,
+        margin=dict(t=50, b=80, l=50, r=50),
+    )
+    return fig
+
+
 def create_time_series_plot(time_series_data, parameter, lat, lon, csv_data=None, filename=None):
     """Create time series plot with optional download button as annotation"""
     import base64
     
     df = pd.DataFrame(time_series_data)
     if df.empty:
-        fig = go.Figure()
-        fig.update_layout(
-            title=t("no_data_location"),
-            xaxis_title=t("date"),
-            yaxis_title=t(parameter),
-            height=263,
-        )
-        return fig
+        return create_empty_time_series_plot(parameter, lat, lon)
 
     df = df.sort_values("date")
     months = [d.strftime("%Y-%m") for d in df["date"]]
@@ -1356,9 +1397,14 @@ def main():
                     except Exception as e:
                         st.error(f"{t('error_statistics')}: {str(e)}")
 
-                    # ---- Time Series Analysis ----
+                    # ---- Time Series Analysis (ALWAYS OPEN) ----
                     st.markdown(f'<div class="time-series-section"><h3>📈 {t("time_series_analysis")} <span class="click-message">({t("click_map")})</span></h3></div>', unsafe_allow_html=True)
                     
+                    # Get the current center coordinates for the empty chart
+                    center_lat = float(cfg["center_lat"])
+                    center_lon = float(cfg["center_lon"])
+                    
+                    # Always show the time series chart
                     if st.session_state.time_series_data:
                         clicked_lat = st.session_state.last_clicked["lat"]
                         clicked_lng = st.session_state.last_clicked["lng"]
@@ -1379,6 +1425,14 @@ def main():
                         
                         with st.expander(t("raw_data")):
                             st.dataframe(pd.DataFrame(st.session_state.time_series_data))
+                    else:
+                        # Show empty chart with click message
+                        fig = create_empty_time_series_plot(
+                            st.session_state.current_parameter,
+                            center_lat,
+                            center_lon
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
 
                     # ---- Regional Monthly Summary (AUTOMATICALLY OPENS) ----
                     st.markdown(f'<div class="regional-summary-section"><h3>📊 {t("regional_summary")}</h3></div>', unsafe_allow_html=True)
